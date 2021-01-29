@@ -4,7 +4,7 @@ setup(
     name='discrete_fuzzy_operators',
     version='1.0',
     packages=['discrete_fuzzy_operators'],
-    url='',
+    url='https://github.com/mmunar97/discrete-fuzzy-operators',
     license='mit',
     author='marcmunar',
     author_email='marc.munar@uib.es',
