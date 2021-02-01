@@ -137,7 +137,7 @@ def generate_copulas(n: int, save_results: bool, saving_path: str) -> Tuple[
             if operator.is_divisible():
                 copulas_divisible.append(operator_matrix)
 
-                if operator.is_divisible():
+                if operator.is_archimedean():
                     copulas_archimedean_divisible.append(operator_matrix)
 
             if operator.is_commutative():

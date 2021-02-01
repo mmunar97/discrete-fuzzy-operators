@@ -1,9 +1,12 @@
 from discrete_fuzzy_operators.base.fuzzy_operator import DiscreteFuzzyOperator
 from discrete_fuzzy_operators.utils.fuzzy_implication_template_generator import generate_tnorms, generate_copulas
 
+from typing import Set
+import numpy
+
 if __name__ == "__main__":
 
-    """
+    r"""
     # EXAMPLE 1 : Check if Lukasiewicz and minimum t-norms verify some of the properties.
     lukasiewicz = numpy.array([[0, 0, 0, 0],
                                [0, 0, 0, 1],
@@ -29,7 +32,9 @@ if __name__ == "__main__":
     print(f"2-increasing: {operator.checks_two_increasing_condition()}")
     """
 
-    # EXAMPLE 2: Number of t-norms in L (size n) with properties
+    r"""
+    # EXAMPLE 2: Number of t-norms in L (size n) with properties. 
+    # WARNING: The program will not end for values of n greater than or equal to 5, due to the whole number of combinations.
     saving_path = r"C:\Users\Usuario\OneDrive - Universitat de les Illes Balears\UIB\Tesi\Experiments\E1"
     for n in range(2, 15):
         t_norms, t_norms_divisible, t_norms_archimedean, t_norms_archimedean_divisible = generate_tnorms(n=n, save_results=True, saving_path=saving_path)
@@ -46,5 +51,26 @@ if __name__ == "__main__":
         print(f"\t NUMBER OF ASSOCIATIVE COPULAS: {len(copulas_associative)}")
         print(f"\t NUMBER OF ARCHIMEDEAN COPULAS: {len(copulas_archimedean)}")
         print(f"\t NUMBER OF DIVISIBLE ARCHIMEDEAN COPULAS: {len(copulas_archimedean_divisible)}")
+    """
 
+    # EXAMPLE 3: Load the generated data as a set in order to be able to find intersections, unions and complements.
+    def load_set(file_path: str) -> Set:
+        operators = list(numpy.load(file_path))
+        operators = [operator_matrix.flatten() for operator_matrix in operators]
+        operators = {tuple(operator) for operator in operators}
+
+        return operators
+
+    root_path = r"C:\Users\Usuario\OneDrive - Universitat de les Illes Balears\UIB\Tesi\Experiments\E1\N=4\\"
+
+    copulas = load_set(file_path=root_path+"copulas.npy")
+    copulas_associative = load_set(file_path=root_path+"copulas_associative.npy")
+    copulas_commutative = load_set(file_path=root_path+"copulas_commutatuve.npy")
+    copulas_divisible = load_set(file_path=root_path+"copulas_divisible.npy")
+    copulas_archimedean = load_set(file_path=root_path+"copulas_archimedean.npy")
+    copulas_archimedean_divisible = load_set(file_path=root_path+"copulas_archimedean.npy")
+
+    tnorms = load_set(file_path=root_path+"tnorms.npy")
+    tnorms_archimedean = load_set(file_path=root_path+"t_norms_archimedean.npy")
+    tnorms_divisible = load_set(file_path=root_path+"t_norms_divisible.npy")
 
