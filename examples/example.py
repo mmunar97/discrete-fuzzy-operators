@@ -1,8 +1,4 @@
-from discrete_fuzzy_operators.base.fuzzy_operator import DiscreteFuzzyOperator
-from discrete_fuzzy_operators.utils.fuzzy_implication_template_generator import generate_tnorms, generate_copulas
-
-from typing import Set
-import numpy
+from discrete_fuzzy_operators.generators.tnorms.fuzzy_tnorms_generator import generate_tnorms
 
 if __name__ == "__main__":
 
@@ -32,19 +28,28 @@ if __name__ == "__main__":
     print(f"2-increasing: {operator.checks_two_increasing_condition()}")
     """
 
-    r"""
-    # EXAMPLE 2: Number of t-norms in L (size n) with properties. 
-    # WARNING: The program will not end for values of n greater than or equal to 5, due to the whole number of combinations.
-    saving_path = r"C:\Users\Usuario\OneDrive - Universitat de les Illes Balears\UIB\Tesi\Experiments\E1"
+    # EXAMPLE 2: Number of t-norms in L (size n) with additional properties.
+    # WARNING: This program is computationally intensive for large n values.
+    saving_path = r"C:\Users\Usuario\OneDrive - Universitat de les Illes Balears\UIB\Tesi\Experiments\E3 (Python)"
     for n in range(2, 15):
         t_norms, t_norms_divisible, t_norms_archimedean, t_norms_archimedean_divisible = generate_tnorms(n=n, save_results=True, saving_path=saving_path)
-        copulas, copulas_divisible, copulas_commutatuve, copulas_associative, copulas_archimedean, copulas_archimedean_divisible = generate_copulas(n=n, save_results=True, saving_path=saving_path)
 
-        print(f"COMPUTING NUMBER OF FUZZY OPERATORS WITH n={n}")
+        print(f"COMPUTING NUMBER OF T-NORMS WITH n={n}")
         print(f"\t NUMBER OF T-NORMS: {len(t_norms)}")
         print(f"\t NUMBER OF DIVISIBLE T-NORMS: {len(t_norms_divisible)}")
         print(f"\t NUMBER OF ARCHIMEDEAN T-NORMS: {len(t_norms_archimedean)}")
         print(f"\t NUMBER OF DIVISIBLE ARCHIMEDEAN T-NORMS: {len(t_norms_archimedean_divisible)}")
+
+    r"""
+    # EXAMPLE 3: Numer of copulas in L (size n) with additional properties.
+    # WARNING: This program is computationally very expensive, and will not end for values of n grater than 6.
+    saving_path = r"C:\Users\Usuario\OneDrive - Universitat de les Illes Balears\UIB\Tesi\Experiments\E1"
+    for n in range(2, 15):
+
+        copulas, copulas_divisible, copulas_commutatuve, copulas_associative, copulas_archimedean, copulas_archimedean_divisible = generate_copulas(
+            n=n, save_results=True, saving_path=saving_path)
+
+        print(f"COMPUTING NUMBER OF COPULAS WITH n={n}")
         print(f"\t NUMBER OF COPULAS: {len(copulas)}")
         print(f"\t NUMBER OF DIVISIBLE COPULAS: {len(copulas_divisible)}")
         print(f"\t NUMBER OF COMMUTATIVE COPULAS: {len(copulas_commutatuve)}")
@@ -53,7 +58,8 @@ if __name__ == "__main__":
         print(f"\t NUMBER OF DIVISIBLE ARCHIMEDEAN COPULAS: {len(copulas_archimedean_divisible)}")
     """
 
-    # EXAMPLE 3: Load the generated data as a set in order to be able to find intersections, unions and complements.
+    r"""
+    # EXAMPLE 4: Load the generated data as a set in order to be able to find intersections, unions and complements.
     def load_set(file_path: str) -> Set:
         operators = list(numpy.load(file_path))
         operators = [operator_matrix.flatten() for operator_matrix in operators]
@@ -73,4 +79,6 @@ if __name__ == "__main__":
     tnorms = load_set(file_path=root_path+"tnorms.npy")
     tnorms_archimedean = load_set(file_path=root_path+"t_norms_archimedean.npy")
     tnorms_divisible = load_set(file_path=root_path+"t_norms_divisible.npy")
+    """
+
 
