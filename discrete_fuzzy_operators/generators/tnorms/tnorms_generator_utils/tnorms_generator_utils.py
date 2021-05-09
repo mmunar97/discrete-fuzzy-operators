@@ -2,7 +2,8 @@ import numpy
 from typing import List
 
 
-def generate_increasing_rows(min_value: int,
+def generate_increasing_rows(previous_row: List,
+                             min_value: int,
                              max_value: int,
                              max_vector_size: int,
                              recursive_step: int = 0,
@@ -27,10 +28,16 @@ def generate_increasing_rows(min_value: int,
     if recursive_step == max_vector_size:
         yield row_list
     else:
-        for i in range(min_value, max_value + 1):
+        minimum_row_value = min_value
+
+        if len(previous_row) > 0:
+            minimum_row_value = max(min_value, previous_row[recursive_step+1])
+
+        for i in range(minimum_row_value, max_value + 1):
             new_row = row_list.copy()
             new_row.append(i)
-            yield from generate_increasing_rows(min_value=i,
+            yield from generate_increasing_rows(previous_row=previous_row,
+                                                min_value=i,
                                                 max_value=max_value,
                                                 max_vector_size=max_vector_size,
                                                 recursive_step=recursive_step + 1,
@@ -69,24 +76,3 @@ def generate_upper_triangular_matrix_from_rows(rows: List) -> numpy.ndarray:
         matrix[i, i:len(rows[0])] = rows[i]
     return matrix
 
-
-def columns_are_increasing(rows: List) -> bool:
-    """
-    Checks if all columns of a certain matrix are increasing from a list of lists with increasing elements.
-    The growth should not be checked against the rows, as it is expected that the lists forming rows have already
-    been generated in increasing order.
-
-    Args:
-        rows: A list of lists, containing the staggered rows of the matrix; that is, the first list has k elements,
-        the second list has k-1, and so on.
-
-    Returns:
-        A boolean, indicating whether the matrix formed by the row vectors of lists, right-aligned and
-        filled with zeros in the remaining space, is column-growing.
-    """
-    upper_triangular_matrix = generate_upper_triangular_matrix_from_rows(rows)
-
-    for i in range(0, len(rows[0])):
-        if not numpy.all(numpy.diff(upper_triangular_matrix[0:i + 1, i]) >= 0):
-            return False
-    return True

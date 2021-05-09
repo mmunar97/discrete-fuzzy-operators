@@ -3,7 +3,7 @@ import os
 
 from discrete_fuzzy_operators.base.fuzzy_operator import DiscreteFuzzyOperator
 from discrete_fuzzy_operators.generators.tnorms.tnorms_generator_utils.tnorms_generator_utils import generate_increasing_rows, \
-    columns_are_increasing, generate_symmetric_matrix
+    generate_symmetric_matrix
 from typing import List, Tuple
 
 
@@ -81,14 +81,17 @@ def generate_candidate_tnorms(n: int, recursive_step: int = 1, matrix: List[List
         # The list of lists is converted into a symmetric matrix.
         yield generate_tnorm_matrix(n=n, inner_matrix=matrix)
     else:
-        for row in generate_increasing_rows(min_value=0, max_value=recursive_step, max_vector_size=n - recursive_step):
+        previous_row = []
+        if matrix != []:
+            previous_row = matrix[-1]
+        for row in generate_increasing_rows(previous_row=previous_row, min_value=0, max_value=recursive_step,
+                                            max_vector_size=n - recursive_step):
             mat1 = matrix.copy()
             mat1.append(row)
 
-            if columns_are_increasing(mat1):
-                yield from generate_candidate_tnorms(n, recursive_step + 1, mat1)
-            else:
-                continue
+            previous_row = row
+
+            yield from generate_candidate_tnorms(n, recursive_step + 1, mat1)
 
 
 def generate_tnorm_matrix(n: int, inner_matrix: List[List]) -> numpy.ndarray:
