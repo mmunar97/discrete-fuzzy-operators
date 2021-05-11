@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='discrete_fuzzy_operators',
-    version='1.1',
+    version='1.2',
     packages=['discrete_fuzzy_operators'],
     url='https://github.com/mmunar97/discrete-fuzzy-operators',
     license='mit',
