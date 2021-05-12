@@ -2,7 +2,7 @@ import itertools
 import numpy
 import os
 
-from discrete_fuzzy_operators.base.fuzzy_operator import DiscreteFuzzyOperator
+from discrete_fuzzy_operators.base.fuzzy_aggregation_operator import DiscreteFuzzyAggregationOperator
 
 from typing import List, Tuple
 
@@ -57,7 +57,7 @@ def generate_copulas(n: int, save_results: bool, saving_path: str) -> Tuple[
         operator_matrix = template.copy()
         operator_matrix[1:n, 1:n] = matrix_kernel
 
-        operator = DiscreteFuzzyOperator(operator_matrix=operator_matrix)
+        operator = DiscreteFuzzyAggregationOperator(operator_matrix=operator_matrix)
 
         # The follwing condition filters for the operators that verifies the double boundary condition and the
         # two-increasing condition; that is, searches all the copulas.

@@ -1,10 +1,14 @@
+from discrete_fuzzy_operators.base.fuzzy_aggregation_operator import DiscreteFuzzyAggregationOperator
 from discrete_fuzzy_operators.generators.tconorms.fuzzy_tconorms_generator import generate_tconorms_from_tnorms
 from discrete_fuzzy_operators.generators.tnorms.fuzzy_tnorms_generator import generate_tnorms
+import numpy
+
+from discrete_fuzzy_operators.operators.tnorms import Tnorm, get_tnorm
 
 if __name__ == "__main__":
 
-    r"""
     # EXAMPLE 1 : Check if Lukasiewicz and minimum t-norms verify some of the properties.
+    """
     lukasiewicz = numpy.array([[0, 0, 0, 0],
                                [0, 0, 0, 1],
                                [0, 0, 1, 2],
@@ -14,7 +18,7 @@ if __name__ == "__main__":
                            [0, 1, 2, 2],
                            [0, 1, 2, 3]])
 
-    operator = DiscreteFuzzyOperator(operator_matrix=minimum)
+    operator = DiscreteFuzzyAggregationOperator(n=3, operator_matrix=minimum)
 
     print(f"Annihilator: {operator.checks_annihilator_element(element=0)}")
     print(f"Boundary condition: {operator.checks_boundary_condition(element=3)}")
@@ -29,6 +33,17 @@ if __name__ == "__main__":
     print(f"2-increasing: {operator.checks_two_increasing_condition()}")
     """
 
+    lukasiewicz_operator = get_tnorm(tnorm=Tnorm.LUKASIEWICZ, n=7)
+    lukasiewicz_operator.plot_operator(figure_size=(700, 700), figure_title="Lukasiewicz t-norm")
+
+    drastic_operator = get_tnorm(tnorm=Tnorm.DRASTIC, n=7)
+    drastic_operator.plot_operator(figure_size=(700, 700), figure_title="Drastic t-norm")
+
+    nilpotent_operator = get_tnorm(tnorm=Tnorm.NILPOTENT_MINIMUM, n=7)
+    nilpotent_operator.plot_operator(figure_size=(700, 700), figure_title="Nilpotent minimum t-norm")
+
+
+    r"""
     # EXAMPLE 2: Number of t-norms and t-conorms in L (size n) with additional properties.
     # WARNING: This program is computationally intensive for large n values.
     saving_path = r"C:\Users\Usuario\OneDrive - Universitat de les Illes Balears\UIB\Tesi\Experiments\E3 (Python)"
@@ -41,6 +56,7 @@ if __name__ == "__main__":
         print(f"\t NUMBER OF DIVISIBLE T-NORMS: {len(t_norms_divisible)}")
         print(f"\t NUMBER OF ARCHIMEDEAN T-NORMS: {len(t_norms_archimedean)}")
         print(f"\t NUMBER OF DIVISIBLE ARCHIMEDEAN T-NORMS: {len(t_norms_archimedean_divisible)}")
+    """
 
     r"""
     # EXAMPLE 3: Numer of copulas in L (size n) with additional properties.

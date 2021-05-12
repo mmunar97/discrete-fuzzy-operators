@@ -1,12 +1,15 @@
+from typing import Callable
+
 import numpy
 
-from discrete_fuzzy_operators.base.exceptions.operator_image_invalid import FuzzyOperatorImageRangeException
-from discrete_fuzzy_operators.base.exceptions.operator_size_exception import FuzzyOperatorSizeException
+from discrete_fuzzy_operators.base.fuzzy_discrete_operator import FuzzyDiscreteOperator
 
 
-class DiscreteFuzzyOperator:
+class DiscreteFuzzyAggregationOperator(FuzzyDiscreteOperator):
 
-    def __init__(self, operator_matrix: numpy.ndarray):
+    def __init__(self, n: int,
+                 operator_matrix: numpy.ndarray = None,
+                 operator_expression: Callable[[int, int], int] = None):
         """
         Initializes the object that represents a binary fuzzy operator F: L x L -> L over a finite chain
         L={0, 1, ..., n} from its matrix.
@@ -15,15 +18,7 @@ class DiscreteFuzzyOperator:
             operator_matrix: A two-dimensional matrix of integers, representing the images of the operator; that is,
                              in the row x and column y, the entry (x,y) represents the value of F(x, y).
         """
-        if not (len(operator_matrix.shape) == 2 and operator_matrix.shape[0] == operator_matrix.shape[1]):
-            raise FuzzyOperatorSizeException()
-
-        n = operator_matrix.shape[0] - 1
-        if not ((operator_matrix >= 0).all() and (operator_matrix <= n).all()):
-            raise FuzzyOperatorImageRangeException()
-
-        self.operator = operator_matrix
-        self.n = n
+        super(DiscreteFuzzyAggregationOperator, self).__init__(n, operator_matrix, operator_expression)
 
     def checks_annihilator_element(self, element: int) -> bool:
         """
@@ -37,7 +32,7 @@ class DiscreteFuzzyOperator:
             A boolean, indicating if the given element is an annihilator.
         """
         for x in range(0, self.n+1):
-            if not (self.operator[x, element] == self.operator[element, x] == element):
+            if not (self.evaluate_operator(x, element) == self.evaluate_operator(element, x) == element):
                 return False
         return True
 
@@ -52,7 +47,7 @@ class DiscreteFuzzyOperator:
             A boolean, indicating if the given element verifies the boundary condition.
         """
         for x in range(0, self.n+1):
-            if not (self.operator[x, element] == x):
+            if not (self.evaluate_operator(x, element) == x):
                 return False
         return True
 
@@ -68,8 +63,8 @@ class DiscreteFuzzyOperator:
             for y1 in range(0, self.n+1):
                 for x2 in range(x1, self.n+1):
                     for y2 in range(y1, self.n+1):
-                        if not self.operator[x1, y1]+self.operator[x2, y2] >= \
-                               self.operator[x1, y2]+self.operator[x2, y1]:
+                        if not self.evaluate_operator(x1, y1)+self.evaluate_operator(x2, y2) >= \
+                               self.evaluate_operator(x1, y2)+self.evaluate_operator(x2, y1):
                             return False
         return True
 
@@ -82,8 +77,8 @@ class DiscreteFuzzyOperator:
             A boolean, indicating if the operator verifies the double boundary condition.
         """
         for x in range(0, self.n+1):
-            if not self.operator[x, 0] == self.operator[0, x] == 0 and \
-                    self.operator[x, self.n] == self.operator[self.n, x] == x:
+            if not self.evaluate_operator(x, 0) == self.evaluate_operator(0, x) == 0 and \
+                    self.evaluate_operator(x, self.n) == self.evaluate_operator(self.n, x) == x:
                 return False
         return True
 
@@ -95,7 +90,7 @@ class DiscreteFuzzyOperator:
         Returns:
             A boolean, indicating if the operator is commutative.
         """
-        return numpy.allclose(self.operator, self.operator.T)
+        return numpy.allclose(self.operator_matrix, self.operator_matrix.T)
 
     def is_associative(self) -> bool:
         """
@@ -108,7 +103,8 @@ class DiscreteFuzzyOperator:
         for x in range(0, self.n+1):
             for y in range(0, self.n+1):
                 for z in range(0, self.n+1):
-                    if not self.operator[self.operator[x, y], z] == self.operator[x, self.operator[y, z]]:
+                    if not self.evaluate_operator(self.evaluate_operator(x, y), z) == \
+                           self.evaluate_operator(x, self.evaluate_operator(y, z)):
                         return False
         return True
 
@@ -130,10 +126,10 @@ class DiscreteFuzzyOperator:
                 for z in range(0, self.n + 1):
                     if y <= z:
                         if first_argument:
-                            if not self.operator[x, y] <= self.operator[x, z]:
+                            if not self.evaluate_operator(x, y) <= self.evaluate_operator(x, z):
                                 return False
                         else:
-                            if not self.operator[y, x] <= self.operator[z, x]:
+                            if not self.evaluate_operator(y, x) <= self.evaluate_operator(z, x):
                                 return False
                     else:
                         continue
@@ -172,10 +168,10 @@ class DiscreteFuzzyOperator:
         for y in range(0, self.n + 1):
             for x in range(0, self.n):
                 if first_argument:
-                    if not abs(self.operator[x+1, y]-self.operator[x, y]) <= step:
+                    if not abs(self.evaluate_operator(x+1, y)-self.evaluate_operator(x, y)) <= step:
                         return False
                 else:
-                    if not abs(self.operator[y, x+1]-self.operator[y, x]) <= step:
+                    if not abs(self.evaluate_operator(y, x+1)-self.evaluate_operator(y, x)) <= step:
                         return False
         return True
 
@@ -206,7 +202,7 @@ class DiscreteFuzzyOperator:
             A boolean, indicating if the operator is idempotent-free.
         """
         for x in range(1, self.n):
-            if self.operator[x, x] == x:
+            if self.evaluate_operator(x, x) == x:
                 return False
         return True
 
@@ -228,11 +224,11 @@ class DiscreteFuzzyOperator:
                     found = False
                     for z in range(0, self.n+1):
                         if tnorm_condition:
-                            if x == self.operator[y, z]:
+                            if x == self.evaluate_operator(y, z):
                                 found = True
                                 break
                         else:
-                            if y == self.operator[x, z]:
+                            if y == self.evaluate_operator(x, z):
                                 found = True
                                 break
                     if not found:
@@ -261,7 +257,7 @@ class DiscreteFuzzyOperator:
             if m == 1:
                 return x
             else:
-                return self.operator[archimedean_operator(x, m-1), x]
+                return self.evaluate_operator(archimedean_operator(x, m-1), x)
 
         for x in range(1, self.n):
             for y in range(1, self.n):
@@ -297,10 +293,10 @@ class DiscreteFuzzyOperator:
                 if z >= x:
                     for y in range(0, self.n + 1):
                         if first_argument:
-                            if not self.operator[z, y] - self.operator[x, y] <= z-x:
+                            if not self.evaluate_operator(z, y) - self.evaluate_operator(x, y) <= z-x:
                                 return False
                         else:
-                            if not self.operator[y, z] - self.operator[y, x] <= z-x:
+                            if not self.evaluate_operator(y, z) - self.evaluate_operator(y, x) <= z-x:
                                 return False
                 else:
                     continue
