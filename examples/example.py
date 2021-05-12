@@ -3,6 +3,7 @@ from discrete_fuzzy_operators.generators.tconorms.fuzzy_tconorms_generator impor
 from discrete_fuzzy_operators.generators.tnorms.fuzzy_tnorms_generator import generate_tnorms
 import numpy
 
+from discrete_fuzzy_operators.operators.tconorms import get_tconorm, Tconorm
 from discrete_fuzzy_operators.operators.tnorms import Tnorm, get_tnorm
 
 if __name__ == "__main__":
@@ -33,6 +34,8 @@ if __name__ == "__main__":
     print(f"2-increasing: {operator.checks_two_increasing_condition()}")
     """
 
+    """
+    # EXAMPLE 2: Plot of some known t-norms.
     lukasiewicz_operator = get_tnorm(tnorm=Tnorm.LUKASIEWICZ, n=7)
     lukasiewicz_operator.plot_operator(figure_size=(700, 700), figure_title="Lukasiewicz t-norm")
 
@@ -41,10 +44,22 @@ if __name__ == "__main__":
 
     nilpotent_operator = get_tnorm(tnorm=Tnorm.NILPOTENT_MINIMUM, n=7)
     nilpotent_operator.plot_operator(figure_size=(700, 700), figure_title="Nilpotent minimum t-norm")
+    """
+
+
+    # EXAMPLE 3: Plot of some known t-conorms.
+    lukasiewicz_operator = get_tconorm(tconorm=Tconorm.LUKASIEWICZ, n=7)
+    lukasiewicz_operator.plot_operator(figure_size=(700, 700), figure_title="Lukasiewicz t-conorm")
+
+    drastic_operator = get_tconorm(tconorm=Tconorm.DRASTIC, n=7)
+    drastic_operator.plot_operator(figure_size=(700, 700), figure_title="Drastic t-conorm")
+
+    nilpotent_operator = get_tconorm(tconorm=Tconorm.NILPOTENT_MAXIMUM, n=7)
+    nilpotent_operator.plot_operator(figure_size=(700, 700), figure_title="Nilpotent maximum t-conorm")
 
 
     r"""
-    # EXAMPLE 2: Number of t-norms and t-conorms in L (size n) with additional properties.
+    # EXAMPLE 4: Number of t-norms and t-conorms in L (size n) with additional properties.
     # WARNING: This program is computationally intensive for large n values.
     saving_path = r"C:\Users\Usuario\OneDrive - Universitat de les Illes Balears\UIB\Tesi\Experiments\E3 (Python)"
     for n in range(2, 15):
@@ -59,7 +74,7 @@ if __name__ == "__main__":
     """
 
     r"""
-    # EXAMPLE 3: Numer of copulas in L (size n) with additional properties.
+    # EXAMPLE 5: Numer of copulas in L (size n) with additional properties.
     # WARNING: This program is computationally very expensive, and will not end for values of n grater than 6.
     saving_path = r"C:\Users\Usuario\OneDrive - Universitat de les Illes Balears\UIB\Tesi\Experiments\E1"
     for n in range(2, 15):
@@ -77,7 +92,7 @@ if __name__ == "__main__":
     """
 
     r"""
-    # EXAMPLE 4: Load the generated data as a set in order to be able to find intersections, unions and complements.
+    # EXAMPLE 6: Load the generated data as a set in order to be able to find intersections, unions and complements.
     def load_set(file_path: str) -> Set:
         operators = list(numpy.load(file_path))
         operators = [operator_matrix.flatten() for operator_matrix in operators]
