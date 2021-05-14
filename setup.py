@@ -8,7 +8,7 @@ setup(
     license='mit',
     author='marcmunar',
     author_email='marc.munar@uib.es',
-    description='Set of algorithms for generating fuzzy example_operators in a finite chain',
+    description='Set of algorithms for generating fuzzy operators in a finite chain',
     include_package_data=True,
     install_requires=[
         "numpy",
