@@ -1,11 +1,11 @@
 from enum import Enum
-from discrete_fuzzy_operators.base.fuzzy_aggregation_operator import DiscreteFuzzyAggregationOperator
+from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import DiscreteFuzzyAggregationBinaryOperator
 
 
-# region Declaration of the avaliable t-norm
+# region Declaration of some t-norms.
 class Tnorm(Enum):
     """
-    Object that stores the values of the different t-norms which analytical expression is available.
+    Object that stores the values of the most known t-norms.
     """
     MINIMUM = "minimum_tnorm"
     DRASTIC = "drastic_tnorm"
@@ -15,7 +15,7 @@ class Tnorm(Enum):
 
 
 # region Declaration of the getter of the t-norm
-def get_tnorm(tnorm: Tnorm, n: int) -> DiscreteFuzzyAggregationOperator:
+def get_tnorm(tnorm: Tnorm, n: int) -> DiscreteFuzzyAggregationBinaryOperator:
     """
     Returns a DiscreteFuzzyAggregationOperator object representing the selected t-norm.
 
@@ -27,13 +27,13 @@ def get_tnorm(tnorm: Tnorm, n: int) -> DiscreteFuzzyAggregationOperator:
         A DiscreteFuzzyAggregationOperator object.
     """
     if tnorm == Tnorm.MINIMUM:
-        return DiscreteFuzzyAggregationOperator(n=n, operator_expression=minimum_tnorm)
+        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=minimum_tnorm)
     elif tnorm == Tnorm.DRASTIC:
-        return DiscreteFuzzyAggregationOperator(n=n, operator_expression=drastic_tnorm)
+        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=drastic_tnorm)
     elif tnorm == Tnorm.NILPOTENT_MINIMUM:
-        return DiscreteFuzzyAggregationOperator(n=n, operator_expression=nilpotent_minimum)
+        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=nilpotent_minimum)
     elif tnorm == Tnorm.LUKASIEWICZ:
-        return DiscreteFuzzyAggregationOperator(n=n, operator_expression=lukasiewicz)
+        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=lukasiewicz)
 
 
 def minimum_tnorm(x: int, y: int, n: int) -> int:

@@ -1,24 +1,23 @@
-from typing import Callable
-
 import numpy
 
-from discrete_fuzzy_operators.base.fuzzy_discrete_operator import FuzzyDiscreteOperator
+from discrete_fuzzy_operators.base.operators.binary_operators.fuzzy_discrete_binary_operator import FuzzyDiscreteBinaryOperator
+from typing import Callable
 
 
-class DiscreteFuzzyAggregationOperator(FuzzyDiscreteOperator):
+class DiscreteFuzzyAggregationBinaryOperator(FuzzyDiscreteBinaryOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,
                  operator_expression: Callable[[int, int], int] = None):
         """
-        Initializes the object that represents a binary fuzzy operator F: L x L -> L over a finite chain
+        Initializes the object that represents a binary fuzzy aggregation function F: L x L -> L over a finite chain
         L={0, 1, ..., n} from its matrix.
 
         Args:
             operator_matrix: A two-dimensional matrix of integers, representing the images of the operator; that is,
                              in the row x and column y, the entry (x,y) represents the value of F(x, y).
         """
-        super(DiscreteFuzzyAggregationOperator, self).__init__(n, operator_matrix, operator_expression)
+        super(DiscreteFuzzyAggregationBinaryOperator, self).__init__(n, operator_matrix, operator_expression)
 
     def checks_annihilator_element(self, element: int) -> bool:
         """

@@ -1,11 +1,11 @@
 from enum import Enum
-from discrete_fuzzy_operators.base.fuzzy_aggregation_operator import DiscreteFuzzyAggregationOperator
+from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import DiscreteFuzzyAggregationBinaryOperator
 
 
-# region Declaration of the avaliable t-conorm
+# region Declaration of some t-conorms.
 class Tconorm(Enum):
     """
-    Object that stores the values of the different t-conorms which analytical expression is available.
+    Object that stores the values of the most known t-conorms.
     """
     MAXIMUM = "maximum_tconorm"
     DRASTIC = "drastic_tconorm"
@@ -15,7 +15,7 @@ class Tconorm(Enum):
 
 
 # region Declaration of the getter of the t-conorm
-def get_tconorm(tconorm: Tconorm, n: int) -> DiscreteFuzzyAggregationOperator:
+def get_tconorm(tconorm: Tconorm, n: int) -> DiscreteFuzzyAggregationBinaryOperator:
     """
     Returns a DiscreteFuzzyAggregationOperator object representing the selected t-conorm.
 
@@ -27,13 +27,13 @@ def get_tconorm(tconorm: Tconorm, n: int) -> DiscreteFuzzyAggregationOperator:
         A DiscreteFuzzyAggregationOperator object.
     """
     if tconorm == Tconorm.MAXIMUM:
-        return DiscreteFuzzyAggregationOperator(n=n, operator_expression=maximum_tconorm)
+        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=maximum_tconorm)
     elif tconorm == Tconorm.DRASTIC:
-        return DiscreteFuzzyAggregationOperator(n=n, operator_expression=drastic_tconorm)
+        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=drastic_tconorm)
     elif tconorm == Tconorm.NILPOTENT_MAXIMUM:
-        return DiscreteFuzzyAggregationOperator(n=n, operator_expression=nilpotent_maximum)
+        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=nilpotent_maximum)
     elif tconorm == Tconorm.LUKASIEWICZ:
-        return DiscreteFuzzyAggregationOperator(n=n, operator_expression=lukasiewicz)
+        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=lukasiewicz)
 
 
 def maximum_tconorm(x: int, y: int, n: int) -> int:

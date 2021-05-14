@@ -8,7 +8,7 @@ from discrete_fuzzy_operators.base.exceptions.operator_size_exception import Fuz
 from typing import Callable, Tuple
 
 
-class FuzzyDiscreteOperator:
+class FuzzyDiscreteBinaryOperator:
 
     def __init__(self, n: int, operator_matrix: numpy.ndarray = None,
                  operator_expression: Callable[[int, int, int], int] = None):
@@ -40,9 +40,6 @@ class FuzzyDiscreteOperator:
     def generate_operator_matrix(self):
         """
         Generates the matrix expression from the analytic function.
-
-        Args:
-            method: A function, representing the analytical expression.
 
         Returns:
             A numpy array, representing the matrix expression of the operator.
