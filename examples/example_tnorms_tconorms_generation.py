@@ -9,6 +9,9 @@ from discrete_fuzzy_operators.generators.tnorms.fuzzy_tnorms_recursive_generator
 
 import numpy
 import time
+import os
+import pandas
+
 
 if __name__ == "__main__":
 
@@ -29,6 +32,8 @@ if __name__ == "__main__":
 
     # EXAMPLE: Number of t-norms and t-conorms in L (size n) generated recursively.
     # WARNING: This program is computationally intensive for large n values.
+    saving_path = "/home/marc/Escritorio/operators2"
+    results_dataframe = pandas.DataFrame(columns=["N", "NUMBER_TNORMS", "ELAPSED_TIME"])
 
     initial_seed = [numpy.array([[0, 0], [0, 1]])]
     generation_limit = 80
@@ -38,11 +43,19 @@ if __name__ == "__main__":
 
     while n != generation_limit:
         t = time.time()
-
         new_generation = []
+
         for new_tnorm in generate_tnorms(n=n+1, tnorms_previous_step=tnorms):
             new_generation.append(new_tnorm)
         print(f"WITH N={n+1} THERE ARE {len(new_generation)} T-NORMS. ELAPSED TIME: {round(time.time()-t, 4)}")
+        results_dataframe.loc[len(results_dataframe)] = [n, len(new_generation), round(time.time()-t, 4)]
+
+        experiment_path = os.path.join(saving_path, f"N={n}")
+        if not os.path.exists(experiment_path):
+            os.mkdir(experiment_path)
+
+        numpy.save(os.path.join(experiment_path, "tnorms.npy"), new_generation)
+        results_dataframe.to_csv(saving_path+"/summary.txt", index=False)
 
         n = n+1
         tnorms = new_generation
