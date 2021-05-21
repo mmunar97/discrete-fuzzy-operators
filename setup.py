@@ -13,6 +13,7 @@ setup(
     install_requires=[
         "numpy",
         "plotly",
-        "pandas"
+        "pandas",
+        "numba"
     ]
 )

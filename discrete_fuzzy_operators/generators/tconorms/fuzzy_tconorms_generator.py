@@ -4,7 +4,7 @@ from typing import List, Tuple
 import numpy
 
 from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import DiscreteFuzzyAggregationBinaryOperator
-from discrete_fuzzy_operators.generators.tnorms.fuzzy_tnorms_generator import generate_candidate_tnorms
+from discrete_fuzzy_operators.generators.tnorms.fuzzy_tnorms_iterative_generator import generate_candidate_tnorms
 
 
 def generate_tconorms(n: int, save_results: bool, saving_path: str) -> Tuple[List, List, List, List]:

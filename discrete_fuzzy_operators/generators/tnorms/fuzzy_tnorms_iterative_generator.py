@@ -2,7 +2,7 @@ import numpy
 import os
 
 from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import DiscreteFuzzyAggregationBinaryOperator
-from discrete_fuzzy_operators.generators.tnorms.tnorms_generator_utils.tnorms_generator_utils import generate_increasing_rows, \
+from discrete_fuzzy_operators.generators.tnorms.tnorms_iterative_generator_utils.tnorms_iterative_generator_utils import generate_increasing_rows, \
     generate_symmetric_matrix
 from typing import List, Tuple
 
@@ -88,8 +88,6 @@ def generate_candidate_tnorms(n: int, recursive_step: int = 1, matrix: List[List
                                             max_vector_size=n - recursive_step):
             mat1 = matrix.copy()
             mat1.append(row)
-
-            previous_row = row
 
             yield from generate_candidate_tnorms(n, recursive_step + 1, mat1)
 
