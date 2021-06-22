@@ -16,7 +16,7 @@ import pandas
 if __name__ == "__main__":
 
     r"""
-    # EXAMPLE: Number of t-norms and t-conorms in L (size n) with additional properties.
+    # EXAMPLE: Number of t-norms and t-conorms in L (size n) with additional properties generated iteratively.
     # WARNING: This program is computationally intensive for large n values.
     saving_path = r"C:\Users\Usuario\OneDrive - Universitat de les Illes Balears\UIB\Tesi\Experiments\E3 (Python)"
     for n in range(2, 15):

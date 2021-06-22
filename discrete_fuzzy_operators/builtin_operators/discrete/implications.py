@@ -4,7 +4,7 @@ from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy
 
 
 # region Declaration of some implications
-class Implication(Enum):
+class DiscreteImplication(Enum):
     """
     Object that stores the values of the most known implications.
     """
@@ -18,32 +18,32 @@ class Implication(Enum):
 
 
 # region Implications
-def get_implication(implication: Implication, n: int) -> DiscreteFuzzyImplicationOperator:
+def get_discrete_implication(implication: DiscreteImplication, n: int) -> DiscreteFuzzyImplicationOperator:
     """
     Returns a DiscreteFuzzyImplicationOperator object representing the selected implication.
 
     Args:
-        implication: An Implication value, representing the chosen implication.
+        implication: An DiscreteImplication value, representing the chosen implication.
         n: An integer, representing the dimension of the domain where the t-norm is defined.
 
     Returns:
         A DiscreteFuzzyImplicationOperator object.
     """
-    if implication == Implication.LARGEST:
-        return DiscreteFuzzyImplicationOperator(n=n, operator_expression=largest_implication)
-    elif implication == Implication.LUKASIEWICZ:
-        return DiscreteFuzzyImplicationOperator(n=n, operator_expression=lukasiewicz_implication)
-    elif implication == Implication.GODEL:
-        return DiscreteFuzzyImplicationOperator(n=n, operator_expression=godel_implication)
-    elif implication == Implication.RESCHER:
-        return DiscreteFuzzyImplicationOperator(n=n, operator_expression=rescher_implication)
-    elif implication == Implication.WEBER:
-        return DiscreteFuzzyImplicationOperator(n=n, operator_expression=weber_implication)
-    elif implication == Implication.FODOR:
-        return DiscreteFuzzyImplicationOperator(n=n, operator_expression=fodor_implication)
+    if implication == DiscreteImplication.LARGEST:
+        return DiscreteFuzzyImplicationOperator(n=n, operator_expression=__largest_implication)
+    elif implication == DiscreteImplication.LUKASIEWICZ:
+        return DiscreteFuzzyImplicationOperator(n=n, operator_expression=__lukasiewicz_implication)
+    elif implication == DiscreteImplication.GODEL:
+        return DiscreteFuzzyImplicationOperator(n=n, operator_expression=__godel_implication)
+    elif implication == DiscreteImplication.RESCHER:
+        return DiscreteFuzzyImplicationOperator(n=n, operator_expression=__rescher_implication)
+    elif implication == DiscreteImplication.WEBER:
+        return DiscreteFuzzyImplicationOperator(n=n, operator_expression=__weber_implication)
+    elif implication == DiscreteImplication.FODOR:
+        return DiscreteFuzzyImplicationOperator(n=n, operator_expression=__fodor_implication)
 
 
-def largest_implication(x: int, y: int, n: int) -> int:
+def __largest_implication(x: int, y: int, n: int) -> int:
     """
     Implementation of the largest implication.
 
@@ -61,7 +61,7 @@ def largest_implication(x: int, y: int, n: int) -> int:
         return n
 
 
-def lukasiewicz_implication(x: int, y: int, n: int) -> int:
+def __lukasiewicz_implication(x: int, y: int, n: int) -> int:
     """
     Implementation of the Lukasiewicz implication.
 
@@ -76,7 +76,7 @@ def lukasiewicz_implication(x: int, y: int, n: int) -> int:
     return min(n, n-x+y)
 
 
-def godel_implication(x: int, y: int, n: int) -> int:
+def __godel_implication(x: int, y: int, n: int) -> int:
     """
     Implementation of the Godel implication.
 
@@ -94,7 +94,7 @@ def godel_implication(x: int, y: int, n: int) -> int:
         return y
 
 
-def rescher_implication(x: int, y: int, n: int) -> int:
+def __rescher_implication(x: int, y: int, n: int) -> int:
     """
     Implementation of the Rescher implication.
 
@@ -112,7 +112,7 @@ def rescher_implication(x: int, y: int, n: int) -> int:
         return 0
 
 
-def weber_implication(x: int, y: int, n: int) -> int:
+def __weber_implication(x: int, y: int, n: int) -> int:
     """
     Implementation of the Weber implication.
 
@@ -130,7 +130,7 @@ def weber_implication(x: int, y: int, n: int) -> int:
         return y
 
 
-def fodor_implication(x: int, y: int, n: int) -> int:
+def __fodor_implication(x: int, y: int, n: int) -> int:
     """
     Implementation of the Fodor implication.
 

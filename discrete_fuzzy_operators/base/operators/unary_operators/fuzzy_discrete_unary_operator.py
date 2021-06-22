@@ -1,11 +1,11 @@
 import numpy
 import plotly.express as plot_express
 
-from discrete_fuzzy_operators.base.exceptions.operator_bad_definition import FuzzyOperatorBadDefinition
-from discrete_fuzzy_operators.base.exceptions.operator_image_invalid import FuzzyOperatorImageRangeException
-from discrete_fuzzy_operators.base.exceptions.operator_size_exception import FuzzyOperatorSizeException
+from discrete_fuzzy_operators.base.exceptions.operators.operator_bad_definition import FuzzyOperatorBadDefinition
+from discrete_fuzzy_operators.base.exceptions.operators.operator_image_invalid import FuzzyOperatorImageRangeException
+from discrete_fuzzy_operators.base.exceptions.operators.operator_size_exception import FuzzyOperatorSizeException
 
-from typing import Callable, List, Tuple
+from typing import Callable, Tuple
 
 
 class FuzzyDiscreteUnaryOperator:

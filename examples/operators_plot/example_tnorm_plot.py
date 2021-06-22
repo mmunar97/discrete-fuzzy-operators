@@ -1,4 +1,4 @@
-from discrete_fuzzy_operators.example_operators.tnorms import get_tnorm, Tnorm
+from discrete_fuzzy_operators.builtin_operators.discrete.tnorms import get_tnorm, Tnorm
 
 if __name__ == "__main__":
 

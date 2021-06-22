@@ -1,5 +1,5 @@
-from discrete_fuzzy_operators.example_operators.negations import get_negation, Negation
-from discrete_fuzzy_operators.example_operators.tconorms import get_tconorm, Tconorm
+from discrete_fuzzy_operators.builtin_operators.discrete.negations import get_negation, Negation
+from discrete_fuzzy_operators.builtin_operators.discrete.tconorms import get_tconorm, Tconorm
 
 if __name__ == "__main__":
 

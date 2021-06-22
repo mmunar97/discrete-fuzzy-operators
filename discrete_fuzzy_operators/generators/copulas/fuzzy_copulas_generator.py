@@ -59,7 +59,7 @@ def generate_copulas(n: int, save_results: bool, saving_path: str) -> Tuple[
 
         operator = DiscreteFuzzyAggregationBinaryOperator(operator_matrix=operator_matrix)
 
-        # The follwing condition filters for the example_operators that verifies the double boundary condition and the
+        # The follwing condition filters for the operators that verifies the double boundary condition and the
         # two-increasing condition; that is, searches all the copulas.
         if operator.checks_double_boundary_condition() and operator.checks_two_increasing_condition():
             copulas.append(operator_matrix)
