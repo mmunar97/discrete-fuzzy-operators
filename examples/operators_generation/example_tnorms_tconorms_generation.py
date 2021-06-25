@@ -7,11 +7,11 @@ from discrete_fuzzy_operators.generators.tnorms.fuzzy_tnorms_iterative_generator
 # IMPORT FOR RECURSIVE GENERATION
 from discrete_fuzzy_operators.generators.tnorms.fuzzy_tnorms_recursive_generator import generate_tnorms
 
+import math
 import numpy
 import time
 import os
 import pandas
-
 
 if __name__ == "__main__":
 
@@ -32,8 +32,9 @@ if __name__ == "__main__":
 
     # EXAMPLE: Number of t-norms and t-conorms in L (size n) generated recursively.
     # WARNING: This program is computationally intensive for large n values.
-    saving_path = "/home/marc/Escritorio/operators2"
-    results_dataframe = pandas.DataFrame(columns=["N", "NUMBER_TNORMS", "ELAPSED_TIME"])
+    saving_path = r"C:\Users\Usuario\Desktop\operators"
+    tnorms_results_dataframe = pandas.DataFrame(columns=["N", "NUMBER_TNORMS", "ELAPSED_TIME"])
+    non_associative_results_dataframe = pandas.DataFrame(columns=["N", "NUMBER_NON_ASSOCIATIVE", "ELAPSED_TIME"])
 
     initial_seed = [numpy.array([[0, 0], [0, 1]])]
     generation_limit = 80
@@ -44,18 +45,26 @@ if __name__ == "__main__":
     while n != generation_limit:
         t = time.time()
         new_generation = []
+        non_associative = []
 
-        for new_tnorm in generate_tnorms(n=n+1, tnorms_previous_step=tnorms):
-            new_generation.append(new_tnorm)
-        print(f"WITH N={n+1} THERE ARE {len(new_generation)} T-NORMS. ELAPSED TIME: {round(time.time()-t, 4)}")
-        results_dataframe.loc[len(results_dataframe)] = [n, len(new_generation), round(time.time()-t, 4)]
+        for new_tnorm, is_associative in generate_tnorms(n=n+1, tnorms_previous_step=tnorms):
+            if is_associative:
+                new_generation.append(new_tnorm)
+            else:
+                non_associative.append(new_tnorm)
+        print(f"WITH N={n+2} THERE ARE {len(new_generation)} T-NORMS. ELAPSED TIME: {round(time.time()-t, 4)}")
+        tnorms_results_dataframe.loc[len(tnorms_results_dataframe)] = [n+2, len(new_generation), round(time.time()-t, 4)]
+        non_associative_results_dataframe.loc[len(non_associative_results_dataframe)] = [n+2, len(non_associative), round(time.time()-t, 4)]
 
-        experiment_path = os.path.join(saving_path, f"N={n}")
+        experiment_path = os.path.join(saving_path, f"N={n+2}")
         if not os.path.exists(experiment_path):
             os.mkdir(experiment_path)
 
         numpy.save(os.path.join(experiment_path, "tnorms.npy"), new_generation)
-        results_dataframe.to_csv(saving_path+"/summary.txt", index=False)
+        numpy.save(os.path.join(experiment_path, "non_associative.npy"), non_associative)
+
+        tnorms_results_dataframe.to_csv(saving_path+"/summary_tnorms.txt", index=False)
+        non_associative_results_dataframe.to_csv(saving_path + "/summary_non_associative.txt", index=False)
 
         n = n+1
         tnorms = new_generation

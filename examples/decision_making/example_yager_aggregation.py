@@ -26,7 +26,7 @@ def pessimistic_aggregation(alternative_assessment: List[int]) -> int:
 
 
 if __name__ == "__main__":
-    assessments = [[0, 2, 3, 3], [2, 1, 0, 3], [2, 0, 2, 1], [1, 3, 2, 1]]
+    assessments = [[4, 3, 1, 4, 0], [1, 0, 4, 1, 3], [1, 4, 4, 2, 4], [2, 4, 0, 3, 4], [1, 2, 1, 2, 4], [3, 4, 3, 4, 2]]
 
     optimistic_yager_decision = yager_aggregation_decision_making(assessments=assessments,
                                                                   aggregation_function=optimistic_aggregation)

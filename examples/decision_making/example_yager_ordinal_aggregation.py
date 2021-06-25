@@ -14,8 +14,8 @@ if __name__ == "__main__":
     print(f"\t Using the ordinal Yager aggregation function the value  is {yager_decision[1]}.")
 
     # EXAMPLE 2: Decision making
-    assessments = [[0, 2, 3, 3], [2, 1, 0, 3], [2, 0, 2, 1], [1, 3, 2, 1]]
-    weights = [1, 3, 5, 5]
+    assessments = [[4, 3, 1, 4, 0], [1, 0, 4, 1, 3], [1, 4, 4, 2, 4], [2, 4, 0, 3, 4], [1, 2, 1, 2, 4], [3, 4, 3, 4, 2]]
+    weights = [0, 2, 2, 4, 4, 4]
 
     yager_decision = yager_ordinal_decision_making(assessments=assessments, weights=weights)
     print("EXAMPLE 2:")
