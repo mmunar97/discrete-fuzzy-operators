@@ -30,7 +30,7 @@ if __name__ == "__main__":
         print(f"\t NUMBER OF DIVISIBLE ARCHIMEDEAN T-NORMS: {len(t_norms_archimedean_divisible)}")
     """
 
-    # EXAMPLE: Number of t-norms and t-conorms in L (size n) generated recursively.
+    # EXAMPLE: Generation of t-norms and t-conorms in L (size n) generated recursively.
     # WARNING: This program is computationally intensive for large n values.
     saving_path = r"C:\Users\Usuario\Desktop\operators"
     tnorms_results_dataframe = pandas.DataFrame(columns=["N", "NUMBER_TNORMS", "ELAPSED_TIME"])

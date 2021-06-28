@@ -46,7 +46,7 @@ def check_fixed_associativity(tnorm_candidate_matrix: numpy.ndarray, n: int) -> 
         n: An integer, representing the size of the finite chain where the new t-norm is defined.
 
     Returns:
-
+        A boolean, indicating if the passed t-norm is associative checking the property in the selected point.
     """
     for x in range(0, n + 1):
         for y in range(0, n + 1):
