@@ -8,7 +8,7 @@ class DiscreteFuzzyAggregationBinaryOperator(FuzzyDiscreteBinaryOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,
-                 operator_expression: Callable[[int, int], int] = None):
+                 operator_expression: Callable[[int, int, int], int] = None):
         """
         Initializes the object that represents a binary fuzzy aggregation function F: L x L -> L over a finite chain
         L={0, 1, ..., n} from its matrix.
@@ -18,6 +18,11 @@ class DiscreteFuzzyAggregationBinaryOperator(FuzzyDiscreteBinaryOperator):
                              in the row x and column y, the entry (x,y) represents the value of F(x, y).
         """
         super(DiscreteFuzzyAggregationBinaryOperator, self).__init__(n, operator_matrix, operator_expression)
+
+        if not(self.is_increasing() and self.evaluate_operator(0, 0) == 0 and
+               self.evaluate_operator(self.n, self.n) == self.n):
+            raise Exception("With the input arguments, the generated operator is not a discrete aggregation function"
+                            "since is not increasing or the the boundary conditions are not verified.")
 
     def checks_annihilator_element(self, element: int) -> bool:
         """
@@ -35,9 +40,32 @@ class DiscreteFuzzyAggregationBinaryOperator(FuzzyDiscreteBinaryOperator):
                 return False
         return True
 
+    def absorbing_element(self, element: int) -> bool:
+        """
+        Checks if the given element is an absorbing element; that is, if G(x,k)=k for all x in L, and satisfies
+        G(0,x)=x for all x <= k and G(n, x)=x for all x>=k.
+
+        Args:
+            element: An integer, representing the element to check if is absorbing.
+
+        Returns:
+            A boolean, indicating if the given element is absorbing.
+        """
+        for x in range(0, self.n+1):
+            if not self.evaluate_operator(x, element) == element:
+                return False
+
+            if x <= element:
+                if not self.evaluate_operator(0, x) == x:
+                    return False
+            else:
+                if not self.evaluate_operator(self.n, x) == x:
+                    return False
+        return True
+
     def checks_boundary_condition(self, element: int) -> bool:
         """
-        Checks if the given element verifies the boundary condition: that is, if F(x,element)=x.
+        Checks if the given element verifies the boundary condition: that is, if F(x,element)=x, for all x in L.
 
         Args:
             element: An integer, representing the element to check if verifies the boundary condition.
@@ -76,8 +104,8 @@ class DiscreteFuzzyAggregationBinaryOperator(FuzzyDiscreteBinaryOperator):
             A boolean, indicating if the operator verifies the double boundary condition.
         """
         for x in range(0, self.n+1):
-            if not self.evaluate_operator(x, 0) == self.evaluate_operator(0, x) == 0 and \
-                    self.evaluate_operator(x, self.n) == self.evaluate_operator(self.n, x) == x:
+            if not (self.evaluate_operator(x, 0) == self.evaluate_operator(0, x) == 0 and
+                    self.evaluate_operator(x, self.n) == self.evaluate_operator(self.n, x) == x):
                 return False
         return True
 
@@ -102,9 +130,103 @@ class DiscreteFuzzyAggregationBinaryOperator(FuzzyDiscreteBinaryOperator):
         for x in range(0, self.n+1):
             for y in range(0, self.n+1):
                 for z in range(0, self.n+1):
-                    if not self.evaluate_operator(self.evaluate_operator(x, y), z) == \
-                           self.evaluate_operator(x, self.evaluate_operator(y, z)):
+                    if not(self.evaluate_operator(self.evaluate_operator(x, y), z) ==
+                           self.evaluate_operator(x, self.evaluate_operator(y, z))):
                         return False
+        return True
+
+    def is_idempotent_free(self) -> bool:
+        """
+        Checks if the operator is idempotent-free; that is, if the unique idempotent elements are 0 and n.
+
+        Returns:
+            A boolean, indicating if the operator is idempotent-free.
+        """
+        for x in range(1, self.n):
+            if self.evaluate_operator(x, x) == x:
+                return False
+        return True
+
+    def is_divisible(self, tnorm_condition: bool = True) -> bool:
+        """
+        Checks if the operator is divisible; that is, if for all x,y in L with x<=y, there is z in L such that
+        x=F(y,z) (with tnorm condition) or y=F(x,z) (with tconorm condition).
+
+        Args:
+            tnorm_condition: A boolean, indicating if the t-norm condition must be used (if True) or the t-conorm must
+            be used (if False).
+
+        Returns:
+            A boolean, indicating if the operator is divisible.
+        """
+        for x in range(0, self.n+1):
+            for y in range(0, self.n+1):
+                if x <= y:
+                    found = False
+                    for z in range(0, self.n+1):
+                        if tnorm_condition:
+                            if x == self.evaluate_operator(y, z):
+                                found = True
+                                break
+                        else:
+                            if y == self.evaluate_operator(x, z):
+                                found = True
+                                break
+                    if not found:
+                        return False
+                else:
+                    continue
+        return True
+
+    def is_archimedean(self, tnorm_condition: bool = True, integer_limit: int = 100) -> bool:
+        """
+        Checks if the operator is archimedean; that is, if for all x,y in L, there is a natural number m such that
+        x^m < y, where x^m represents the archimedean operator.
+
+        Args:
+            tnorm_condition: A boolean, indicating if the t-norm condition must be used (if True) or the t-conorm must
+            be used (if False).
+            integer_limit: An integer, representing the maximum number to try when checking the archimedean property.
+
+        Returns:
+            A boolean, indicating if the operator is archimedean.
+        """
+        def archimedean_operator(x: int, m: int):
+            """
+            Computes the archimedean operator, defined by induction.
+            """
+            if m == 1:
+                return x
+            else:
+                return self.evaluate_operator(archimedean_operator(x, m-1), x)
+
+        for x in range(1, self.n):
+            for y in range(1, self.n):
+                found = False
+                for m in range(1, integer_limit+1):
+                    if tnorm_condition:
+                        if archimedean_operator(x, m) < y:
+                            found = True
+                            break
+                    else:
+                        if archimedean_operator(x, m) > y:
+                            found = True
+                            break
+                if not found:
+                    return False
+        return True
+
+    def is_minimum_internal(self) -> bool:
+        """
+        Checks if the operator is minimum-internal; that is, if for all x,y in L, it verifies that M(x,y)<=min(x,y).
+
+        Returns:
+            A boolean, representing if the operator is minimum-internal.
+        """
+        for x in range(0, self.n+1):
+            for y in range(0, self.n+1):
+                if not self.evaluate_operator(x, y) <= min(x, y):
+                    return False
         return True
 
     # region Increasing property
@@ -192,87 +314,6 @@ class DiscreteFuzzyAggregationBinaryOperator(FuzzyDiscreteBinaryOperator):
             return self.is_smooth_argument(step=step, first_argument=True) and \
                    self.is_smooth_argument(step=step, first_argument=False)
     # endregion
-
-    def is_idempotent_free(self) -> bool:
-        """
-        Checks if the operator is idempotent-free; that is, if the unique idempotent elements are 0 and n.
-
-        Returns:
-            A boolean, indicating if the operator is idempotent-free.
-        """
-        for x in range(1, self.n):
-            if self.evaluate_operator(x, x) == x:
-                return False
-        return True
-
-    def is_divisible(self, tnorm_condition: bool = True) -> bool:
-        """
-        Checks if the operator is divisible; that is, if for all x,y in L with x<=y, there is z in L such that
-        x=F(y,z) (with tnorm condition) or y=F(x,z) (with tconorm condition).
-
-        Args:
-            tnorm_condition: A boolean, indicating if the t-norm condition must be used (if True) or the t-conorm must
-            be used (if False).
-
-        Returns:
-            A boolean, indicating if the operator is divisible.
-        """
-        for x in range(0, self.n+1):
-            for y in range(0, self.n+1):
-                if x <= y:
-                    found = False
-                    for z in range(0, self.n+1):
-                        if tnorm_condition:
-                            if x == self.evaluate_operator(y, z):
-                                found = True
-                                break
-                        else:
-                            if y == self.evaluate_operator(x, z):
-                                found = True
-                                break
-                    if not found:
-                        return False
-                else:
-                    continue
-        return True
-
-    def is_archimedean(self, tnorm_condition: bool = True, integer_limit: int = 100) -> bool:
-        """
-        Checks if the operator is archimedean; that is, if for all x,y in L, there is a natural number m such that
-        x^m < y, where x^m represents the archimedean operator.
-
-        Args:
-            tnorm_condition: A boolean, indicating if the t-norm condition must be used (if True) or the t-conorm must
-            be used (if False).
-            integer_limit: An integer, representing the maximum number to try when checking the archimedean property.
-
-        Returns:
-            A boolean, indicating if the operator is archimedean.
-        """
-        def archimedean_operator(x: int, m: int):
-            """
-            Computes the archimedean operator, defined by induction.
-            """
-            if m == 1:
-                return x
-            else:
-                return self.evaluate_operator(archimedean_operator(x, m-1), x)
-
-        for x in range(1, self.n):
-            for y in range(1, self.n):
-                found = False
-                for m in range(1, integer_limit+1):
-                    if tnorm_condition:
-                        if archimedean_operator(x, m) < y:
-                            found = True
-                            break
-                    else:
-                        if archimedean_operator(x, m) > y:
-                            found = True
-                            break
-                if not found:
-                    return False
-        return True
 
     # region Lipschitz property
     def is_lipschitz_argument(self, first_argument: bool = True) -> bool:

@@ -1,9 +1,8 @@
 from enum import Enum
-from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import DiscreteFuzzyAggregationBinaryOperator
+from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_suboperators.tconorm import Tconorm
 
 
-# region Declaration of some t-conorms.
-class Tconorm(Enum):
+class TconormExamples(Enum):
     """
     Object that stores the values of the most known t-conorms.
     """
@@ -11,91 +10,88 @@ class Tconorm(Enum):
     DRASTIC = "drastic_tconorm"
     NILPOTENT_MAXIMUM = "nilpotent_maximum_tconorm"
     LUKASIEWICZ = "lukasiewicz_tconorm"
-# endregion
 
+    @staticmethod
+    def get_tconorm(tconorm: "TconormExamples", n: int) -> Tconorm:
+        """
+        Returns a DiscreteFuzzyAggregationOperator object representing the selected t-conorm.
 
-# region Declaration of the getter of the t-conorm
-def get_tconorm(tconorm: Tconorm, n: int) -> DiscreteFuzzyAggregationBinaryOperator:
-    """
-    Returns a DiscreteFuzzyAggregationOperator object representing the selected t-conorm.
+        Args:
+            tconorm: A Tconorm value, representing the chosen t-conorm.
+            n: An integer, representing the dimension of the domain where the t-conorm is defined.
 
-    Args:
-        tnorm: A Tconorm value, representing the chosen t-conorm.
-        n: An integer, representing the dimension of the domain where the t-conorm is defined.
+        Returns:
+            A DiscreteFuzzyAggregationOperator object.
+        """
+        if tconorm == TconormExamples.MAXIMUM:
+            return Tconorm(n=n, operator_expression=TconormExamples.__maximum_tconorm)
+        elif tconorm == TconormExamples.DRASTIC:
+            return Tconorm(n=n, operator_expression=TconormExamples.__drastic_tconorm)
+        elif tconorm == TconormExamples.NILPOTENT_MAXIMUM:
+            return Tconorm(n=n, operator_expression=TconormExamples.__nilpotent_maximum)
+        elif tconorm == TconormExamples.LUKASIEWICZ:
+            return Tconorm(n=n, operator_expression=TconormExamples.__lukasiewicz)
 
-    Returns:
-        A DiscreteFuzzyAggregationOperator object.
-    """
-    if tconorm == Tconorm.MAXIMUM:
-        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=maximum_tconorm)
-    elif tconorm == Tconorm.DRASTIC:
-        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=drastic_tconorm)
-    elif tconorm == Tconorm.NILPOTENT_MAXIMUM:
-        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=nilpotent_maximum)
-    elif tconorm == Tconorm.LUKASIEWICZ:
-        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=lukasiewicz)
+    @staticmethod
+    def __maximum_tconorm(x: int, y: int, n: int) -> int:
+        """
+        Implementation of the discrete minimum t-conorm.
 
+        Args:
+            x: An integer, representing the first coordinate of the evaluation point.
+            y: An integer, representing the second coordinate of the evaluation point.
+            n: n integer, representing the dimension of the domain where the t-norm is defined.
 
-def maximum_tconorm(x: int, y: int, n: int) -> int:
-    """
-    Implementation of the discrete minimum t-conorm.
+        Returns:
+            An integer, representing the value of the t-conorm in the point (x,y).
+        """
+        return max(x, y)
 
-    Args:
-        x: An integer, representing the first coordinate of the evaluation point.
-        y: An integer, representing the second coordinate of the evaluation point.
-        n: n integer, representing the dimension of the domain where the t-norm is defined.
+    @staticmethod
+    def __drastic_tconorm(x: int, y: int, n: int):
+        """
+        Implementation of the discrete drastic t-conorm.
 
-    Returns:
-        An integer, representing the value of the t-conorm in the point (x,y).
-    """
-    return max(x, y)
+        Args:
+            x: An integer, representing the first coordinate of the evaluation point.
+            y: An integer, representing the second coordinate of the evaluation point.
+            n: n integer, representing the dimension of the domain where the t-norm is defined.
 
+        Returns:
+            An integer, representing the value of the t-conorm in the point (x,y).
+        """
+        if x != 0 and y != 0:
+            return n
+        return max(x, y)
 
-def drastic_tconorm(x: int, y: int, n: int):
-    """
-    Implementation of the discrete drastic t-conorm.
+    @staticmethod
+    def __nilpotent_maximum(x: int, y: int, n: int):
+        """
+        Implementation of the discrete nilpotent maximum t-conorm.
 
-    Args:
-        x: An integer, representing the first coordinate of the evaluation point.
-        y: An integer, representing the second coordinate of the evaluation point.
-        n: n integer, representing the dimension of the domain where the t-norm is defined.
+        Args:
+            x: An integer, representing the first coordinate of the evaluation point.
+            y: An integer, representing the second coordinate of the evaluation point.
+            n: n integer, representing the dimension of the domain where the t-norm is defined.
 
-    Returns:
-        An integer, representing the value of the t-conorm in the point (x,y).
-    """
-    if x != 0 and y != 0:
-        return n
-    return max(x, y)
+        Returns:
+            An integer, representing the value of the t-conorm in the point (x,y).
+        """
+        if x + y >= n:
+            return n
+        return max(x, y)
 
+    @staticmethod
+    def __lukasiewicz(x: int, y: int, n: int):
+        """
+        Implementation of the discrete Lukasiewicz t-conorm.
 
-def nilpotent_maximum(x: int, y: int, n: int):
-    """
-    Implementation of the discrete nilpotent maximum t-conorm.
+        Args:
+            x: An integer, representing the first coordinate of the evaluation point.
+            y: An integer, representing the second coordinate of the evaluation point.
+            n: n integer, representing the dimension of the domain where the t-norm is defined.
 
-    Args:
-        x: An integer, representing the first coordinate of the evaluation point.
-        y: An integer, representing the second coordinate of the evaluation point.
-        n: n integer, representing the dimension of the domain where the t-norm is defined.
-
-    Returns:
-        An integer, representing the value of the t-conorm in the point (x,y).
-    """
-    if x+y >= n:
-        return n
-    return max(x, y)
-
-
-def lukasiewicz(x: int, y: int, n: int):
-    """
-    Implementation of the discrete Lukasiewicz t-conorm.
-
-    Args:
-        x: An integer, representing the first coordinate of the evaluation point.
-        y: An integer, representing the second coordinate of the evaluation point.
-        n: n integer, representing the dimension of the domain where the t-norm is defined.
-
-    Returns:
-        An integer, representing the value of the t-conorm in the point (x,y).
-    """
-    return min(n, x+y)
-# endregion
+        Returns:
+            An integer, representing the value of the t-conorm in the point (x,y).
+        """
+        return min(n, x + y)

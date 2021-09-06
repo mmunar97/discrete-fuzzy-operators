@@ -5,7 +5,7 @@ from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unar
 from typing import Callable
 
 
-class DiscreteFuzzyNegationOperator(FuzzyDiscreteUnaryOperator):
+class DiscreteFuzzyNegation(FuzzyDiscreteUnaryOperator):
 
     def __init__(self, n: int,
                  operator_vector: numpy.array = None,
@@ -19,7 +19,7 @@ class DiscreteFuzzyNegationOperator(FuzzyDiscreteUnaryOperator):
             operator_vector: A list of integers, representing the vector in its vector expression.
             operator_expression: A function, representing the analytical expression.
         """
-        super(DiscreteFuzzyNegationOperator, self).__init__(n, operator_vector, operator_expression)
+        super(DiscreteFuzzyNegation, self).__init__(n, operator_vector, operator_expression)
 
     # region Basic properties of negations
     def is_negation(self):

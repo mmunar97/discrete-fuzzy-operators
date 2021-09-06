@@ -1,4 +1,4 @@
-from discrete_fuzzy_operators.base.decision_making.two_tuple import TwoTuple, LinguisticTermSet
+from discrete_fuzzy_operators.base.decision_making.two_tuple.two_tuple import LinguisticTermSet
 from discrete_fuzzy_operators.decision_making.two_tuple_aggregation import *
 
 if __name__ == "__main__":

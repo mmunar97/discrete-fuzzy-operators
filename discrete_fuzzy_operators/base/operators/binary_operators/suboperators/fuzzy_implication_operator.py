@@ -8,7 +8,7 @@ from typing import Callable
 from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import \
     DiscreteFuzzyAggregationBinaryOperator
 from discrete_fuzzy_operators.base.operators.unary_operators.suboperators.fuzzy_negation_operator import \
-    DiscreteFuzzyNegationOperator
+    DiscreteFuzzyNegation
 
 
 class DiscreteFuzzyImplicationOperator(FuzzyDiscreteBinaryOperator):
@@ -34,8 +34,8 @@ class DiscreteFuzzyImplicationOperator(FuzzyDiscreteBinaryOperator):
         Returns:
             A boolean, indicating if the operator is an implication function.
         """
-        return self.is_decreasing_first_argument() and self.is_increasing_first_argument() and \
-               self.verifies_boundary_conditions()
+        return (self.is_decreasing_first_argument() and self.is_increasing_first_argument() and
+                self.verifies_boundary_conditions())
 
     def is_decreasing_first_argument(self) -> bool:
         """
@@ -110,7 +110,7 @@ class DiscreteFuzzyImplicationOperator(FuzzyDiscreteBinaryOperator):
                 return False
         return True
 
-    def verifies_contrapositive_symmetry(self, negation: DiscreteFuzzyNegationOperator) -> bool:
+    def verifies_contrapositive_symmetry(self, negation: DiscreteFuzzyNegation) -> bool:
         """
         Checks if the operator verifies the contrapositive symmetry with respect to a fuzzy negation; that is, if
         I(x,y)=I(N(y),N(x)) for all x,y in the domain.
@@ -170,7 +170,7 @@ class DiscreteFuzzyImplicationOperator(FuzzyDiscreteBinaryOperator):
                     return False
         return True
 
-    def verifies_modus_tollens(self, negation: DiscreteFuzzyNegationOperator,
+    def verifies_modus_tollens(self, negation: DiscreteFuzzyNegation,
                                t_norm: DiscreteFuzzyAggregationBinaryOperator) -> bool:
         """
         Checks if the operator verifies the modus tollens with respect to a discrete t-norm T and a discrete negation N;

@@ -18,4 +18,3 @@ if __name__ == "__main__":
 
     with open("results.txt", "wb") as file:
         pickle.dump(count, file)
-

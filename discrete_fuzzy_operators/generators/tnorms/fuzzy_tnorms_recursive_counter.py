@@ -1,12 +1,11 @@
 import numpy
 
-from typing import List, Tuple
-
+from typing import List
 from discrete_fuzzy_operators.generators.tnorms.tnorms_recursive_generator_utils.tnorms_recursive_generator_utils import \
     check_fixed_associativity, generate_tnorm_candidate
 
 
-def count_tnorms(depth_max: int):
+def count_tnorms(depth_max: int) -> [int]:
     """
     Determine the number of t-norms for certain values of n. Instead of generating all possible t-norms for each n,
     the t-norm tree is generated for successive n values.

@@ -2,7 +2,7 @@ import numpy
 import plotly.express as plot_express
 
 from discrete_fuzzy_operators.base.exceptions.operators.operator_bad_definition import FuzzyOperatorBadDefinition
-from discrete_fuzzy_operators.base.exceptions.operators.operator_image_invalid import FuzzyOperatorImageRangeException
+from discrete_fuzzy_operators.base.exceptions.operators.operator_range_invalid import FuzzyOperatorImageRangeException
 from discrete_fuzzy_operators.base.exceptions.operators.operator_size_exception import FuzzyOperatorSizeException
 
 from typing import Callable, Tuple
@@ -17,7 +17,7 @@ class FuzzyDiscreteUnaryOperator:
         expression.
 
         Args:
-            n: n: An integer, representing the size of the finite chain.
+            n: An integer, representing the size of the finite chain.
             operator_vector: A list of integers, representing the vector in its vector expression.
             operator_expression: A function, representing the analytical expression.
         """
@@ -46,6 +46,21 @@ class FuzzyDiscreteUnaryOperator:
             A numpy array, representing the matrix expression of the operator.
         """
         return [self.operator_expression(x, self.n) for x in range(0, self.n+1)]
+
+    def is_smooth(self, step: int = 1) -> bool:
+        """
+        Checks if the operator is k-smooth.
+
+        Args:
+            step: An integer, representing the step of smoothness.
+
+        Returns:
+            A boolean, indicating if the operator verifies the k-smoothness condition.
+        """
+        for x in range(0, self.n):
+            if not abs(self.evaluate_operator(x + 1) - self.evaluate_operator(x)) <= step:
+                return False
+        return True
 
     def evaluate_operator(self, x: int) -> int:
         """

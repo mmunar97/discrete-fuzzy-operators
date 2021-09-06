@@ -1,9 +1,10 @@
 from enum import Enum
-from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import DiscreteFuzzyAggregationBinaryOperator
+
+from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_suboperators.tnorm import \
+    Tnorm
 
 
-# region Declaration of some t-norms.
-class Tnorm(Enum):
+class TnormExamples(Enum):
     """
     Object that stores the values of the most known t-norms.
     """
@@ -11,91 +12,88 @@ class Tnorm(Enum):
     DRASTIC = "drastic_tnorm"
     NILPOTENT_MINIMUM = "nilpotent_minimum_tnorm"
     LUKASIEWICZ = "lukasiewicz_tnorm"
-# endregion
 
+    @staticmethod
+    def get_tnorm(tnorm: "TnormExamples", n: int) -> Tnorm:
+        """
+        Returns a DiscreteFuzzyAggregationOperator object representing the selected t-norm.
 
-# region Declaration of the getter of the t-norm
-def get_tnorm(tnorm: Tnorm, n: int) -> DiscreteFuzzyAggregationBinaryOperator:
-    """
-    Returns a DiscreteFuzzyAggregationOperator object representing the selected t-norm.
+        Args:
+            tnorm: A Tnorm value, representing the chosen t-norm.
+            n: An integer, representing the dimension of the domain where the t-norm is defined.
 
-    Args:
-        tnorm: A Tnorm value, representing the chosen t-norm.
-        n: An integer, representing the dimension of the domain where the t-norm is defined.
+        Returns:
+            A DiscreteFuzzyAggregationOperator object.
+        """
+        if tnorm == TnormExamples.MINIMUM:
+            return Tnorm(n=n, operator_expression=TnormExamples.__minimum_tnorm)
+        elif tnorm == TnormExamples.DRASTIC:
+            return Tnorm(n=n, operator_expression=TnormExamples.__drastic_tnorm)
+        elif tnorm == TnormExamples.NILPOTENT_MINIMUM:
+            return Tnorm(n=n, operator_expression=TnormExamples.__nilpotent_minimum)
+        elif tnorm == TnormExamples.LUKASIEWICZ:
+            return Tnorm(n=n, operator_expression=TnormExamples.__lukasiewicz)
 
-    Returns:
-        A DiscreteFuzzyAggregationOperator object.
-    """
-    if tnorm == Tnorm.MINIMUM:
-        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=minimum_tnorm)
-    elif tnorm == Tnorm.DRASTIC:
-        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=drastic_tnorm)
-    elif tnorm == Tnorm.NILPOTENT_MINIMUM:
-        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=nilpotent_minimum)
-    elif tnorm == Tnorm.LUKASIEWICZ:
-        return DiscreteFuzzyAggregationBinaryOperator(n=n, operator_expression=lukasiewicz)
+    @staticmethod
+    def __minimum_tnorm(x: int, y: int, n: int) -> int:
+        """
+        Implementation of the discrete minimum t-norm.
 
+        Args:
+            x: An integer, representing the first coordinate of the evaluation point.
+            y: An integer, representing the second coordinate of the evaluation point.
+            n: n integer, representing the dimension of the domain where the t-norm is defined.
 
-def minimum_tnorm(x: int, y: int, n: int) -> int:
-    """
-    Implementation of the discrete minimum t-norm.
+        Returns:
+            An integer, representing the value of the t-norm in the point (x,y).
+        """
+        return min(x, y)
 
-    Args:
-        x: An integer, representing the first coordinate of the evaluation point.
-        y: An integer, representing the second coordinate of the evaluation point.
-        n: n integer, representing the dimension of the domain where the t-norm is defined.
+    @staticmethod
+    def __drastic_tnorm(x: int, y: int, n: int):
+        """
+        Implementation of the discrete drastic t-norm.
 
-    Returns:
-        An integer, representing the value of the t-norm in the point (x,y).
-    """
-    return min(x, y)
+        Args:
+            x: An integer, representing the first coordinate of the evaluation point.
+            y: An integer, representing the second coordinate of the evaluation point.
+            n: n integer, representing the dimension of the domain where the t-norm is defined.
 
+        Returns:
+            An integer, representing the value of the t-norm in the point (x,y).
+        """
+        if x != n and y != n:
+            return 0
+        return min(x, y)
 
-def drastic_tnorm(x: int, y: int, n: int):
-    """
-    Implementation of the discrete drastic t-norm.
+    @staticmethod
+    def __nilpotent_minimum(x: int, y: int, n: int):
+        """
+        Implementation of the discrete nilpotent minimum t-norm.
 
-    Args:
-        x: An integer, representing the first coordinate of the evaluation point.
-        y: An integer, representing the second coordinate of the evaluation point.
-        n: n integer, representing the dimension of the domain where the t-norm is defined.
+        Args:
+            x: An integer, representing the first coordinate of the evaluation point.
+            y: An integer, representing the second coordinate of the evaluation point.
+            n: n integer, representing the dimension of the domain where the t-norm is defined.
 
-    Returns:
-        An integer, representing the value of the t-norm in the point (x,y).
-    """
-    if x != n and y != n:
-        return 0
-    return min(x, y)
+        Returns:
+            An integer, representing the value of the t-norm in the point (x,y).
+        """
+        if x + y <= n:
+            return 0
+        return min(x, y)
 
+    @staticmethod
+    def __lukasiewicz(x: int, y: int, n: int):
+        """
+        Implementation of the discrete Lukasiewicz t-norm.
 
-def nilpotent_minimum(x: int, y: int, n: int):
-    """
-    Implementation of the discrete nilpotent minimum t-norm.
+        Args:
+            x: An integer, representing the first coordinate of the evaluation point.
+            y: An integer, representing the second coordinate of the evaluation point.
+            n: n integer, representing the dimension of the domain where the t-norm is defined.
 
-    Args:
-        x: An integer, representing the first coordinate of the evaluation point.
-        y: An integer, representing the second coordinate of the evaluation point.
-        n: n integer, representing the dimension of the domain where the t-norm is defined.
-
-    Returns:
-        An integer, representing the value of the t-norm in the point (x,y).
-    """
-    if x+y <= n:
-        return 0
-    return min(x, y)
-
-
-def lukasiewicz(x: int, y: int, n: int):
-    """
-    Implementation of the discrete Lukasiewicz t-norm.
-
-    Args:
-        x: An integer, representing the first coordinate of the evaluation point.
-        y: An integer, representing the second coordinate of the evaluation point.
-        n: n integer, representing the dimension of the domain where the t-norm is defined.
-
-    Returns:
-        An integer, representing the value of the t-norm in the point (x,y).
-    """
-    return max(0, x+y-n)
-# endregion
+        Returns:
+            An integer, representing the value of the t-norm in the point (x,y).
+        """
+        return max(0, x + y - n)

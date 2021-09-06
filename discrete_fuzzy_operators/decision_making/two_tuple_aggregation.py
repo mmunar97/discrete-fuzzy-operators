@@ -1,8 +1,8 @@
 from typing import List
 
-from discrete_fuzzy_operators.base.decision_making.two_tuple import TwoTuple
-from discrete_fuzzy_operators.base.exceptions.decision_making.owa_bad_weight_definition import OwaBadDefinition
-from discrete_fuzzy_operators.base.exceptions.decision_making.owa_bad_weight_length import OwaBadLength
+from discrete_fuzzy_operators.base.decision_making.two_tuple.two_tuple import TwoTuple
+from discrete_fuzzy_operators.base.exceptions.decision_making.owa.owa_bad_weight_definition import OwaBadDefinition
+from discrete_fuzzy_operators.base.exceptions.decision_making.owa.owa_bad_weight_length import OwaBadLength
 
 
 def two_tuple_arithmetic_mean_aggregation(tuples: List[TwoTuple]) -> TwoTuple:
