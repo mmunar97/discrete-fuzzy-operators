@@ -2,9 +2,9 @@ import collections
 import plotly.express as plot_express
 import plotly.graph_objects as go
 
-from discrete_fuzzy_operators.base.exceptions.decision_making.discrete_fuzzy_numbers.discrete_fuzzy_number_bad_dimension import \
+from discrete_fuzzy_operators.base.exceptions.decision_making.discrete_fuzzy_numbers.dfn_bad_dimension import \
     DiscreteFuzzyNumberBadDimension
-from discrete_fuzzy_operators.base.exceptions.decision_making.discrete_fuzzy_numbers.discrete_fuzzy_number_membership_out_bounds import \
+from discrete_fuzzy_operators.base.exceptions.decision_making.discrete_fuzzy_numbers.dfn_membership_out_bounds import \
     DiscreteFuzzyNumberMembershipOutOfBounds
 from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import \
     DiscreteFuzzyAggregationBinaryOperator
