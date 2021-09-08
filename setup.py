@@ -8,19 +8,19 @@ try:
     import pypandoc
 
     here = path.abspath(path.dirname(__file__))
-    long_description = pypandoc.convert("README.md", "rst")
+    long_description = pypandoc.convert("PROJECT_DESCRIPTION.md", "rst")
 
 except ImportError:
     here = path.abspath(path.dirname(__file__))
 
     # Get the long description from the relevant file
-    with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+    with open(path.join(here, 'PROJECT_DESCRIPTION.md'), encoding='utf-8') as f:
         long_description = f.read()
 
 
 setup(
     name='discrete_fuzzy_operators',
-    version='1.8',
+    version='1.8.1',
     packages=['discrete_fuzzy_operators'],
     url='https://github.com/mmunar97/discrete-fuzzy-operators',
     license='mit',
@@ -30,6 +30,7 @@ setup(
 
     description='Pure Python implementation of the main fuzzy discrete operators defined in a finite chain',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     keywords='discrete fuzzy operators, discrete connectives, discrete fuzzy numbers, ordinal decision making',
 
     include_package_data=True,
