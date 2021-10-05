@@ -1,11 +1,12 @@
 import numpy
 import plotly.express as plot_express
+import warnings
 
 from discrete_fuzzy_operators.base.exceptions.operators.operator_bad_definition import FuzzyOperatorBadDefinition
 from discrete_fuzzy_operators.base.exceptions.operators.operator_range_invalid import FuzzyOperatorImageRangeException
 from discrete_fuzzy_operators.base.exceptions.operators.operator_size_exception import FuzzyOperatorSizeException
 
-from typing import Callable, Tuple
+from typing import Callable, List, Tuple
 
 
 class FuzzyDiscreteUnaryOperator:
@@ -37,6 +38,48 @@ class FuzzyDiscreteUnaryOperator:
             self.operator_vector = operator_vector
         else:
             self.operator_vector = self.generate_operator_vector()
+
+    def compute_completed_graph(self) -> List[Tuple[int, int]]:
+        """
+        Computes the completed graph of a decreasing function. The completed graph is defined as the set
+        ({0}x[f(0), n])u({n}x[0, f(0)])u({(x,y) in [0, n-1]x[0, n] such that f(x+1) <= y <= f(x)}).
+
+        Returns:
+            A list of points, representing the coordinates of the completed graph.
+        """
+        if not self.is_decreasing():
+            warnings.warn("The operator is not decreasing, so the completed graph will not correspond to its "
+                          "theoretical formulation")
+
+        completed_graph_points: List[Tuple[int, int]] = []
+        for x in range(self.evaluate_operator(0), self.n+1):
+            completed_graph_points.append((0, x))
+
+        for x in range(0, self.evaluate_operator(self.n)+1):
+            completed_graph_points.append((self.n, x))
+
+        for x in range(0, self.n):
+            for y in range(0, self.n+1):
+                if self.evaluate_operator(x+1) <= y <= self.evaluate_operator(x):
+                    completed_graph_points.append((x, y))
+
+        return completed_graph_points
+
+    def plot_completed_graph(self, figure_size: Tuple[int, int]):
+        """
+        Plots the completed graph of a decreasing function.
+
+        Args:
+            figure_size: A tuple of two integers, representing the size of the figure. The order is WIDTH and HEIGHT.
+        """
+        completed_graph = self.compute_completed_graph()
+
+        x = [point[0] for point in completed_graph]
+        y = [point[1] for point in completed_graph]
+
+        figure = plot_express.scatter(x=x, y=self.operator_vector)
+        figure.update_layout(autosize=True, width=figure_size[0], height=figure_size[1])
+        figure.show()
 
     def generate_operator_vector(self) -> numpy.array:
         """
