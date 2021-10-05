@@ -21,7 +21,7 @@ class DiscreteFuzzyAggregationBinaryOperator(FuzzyDiscreteBinaryOperator):
 
         if not(self.is_increasing() and self.evaluate_operator(0, 0) == 0 and
                self.evaluate_operator(self.n, self.n) == self.n):
-            raise Exception("With the input arguments, the generated operator is not a discrete aggregation function"
+            raise Exception("With the input arguments, the generated operator is not a discrete aggregation function "
                             "since is not increasing or the the boundary conditions are not verified.")
 
     def checks_annihilator_element(self, element: int) -> bool:

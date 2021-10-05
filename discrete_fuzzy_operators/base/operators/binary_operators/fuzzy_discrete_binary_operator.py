@@ -94,7 +94,7 @@ class FuzzyDiscreteBinaryOperator:
             marker=dict(size=12, color=['rgb(0,0,0)'], opacity=0.9)
         )
 
-        figure = go.Figure(data=[discrete_scatter]+self.__generate_cube_contour(draw_diagonal=False))
+        figure = go.Figure(data=[discrete_scatter]+self.generate_discrete_cube_contour(draw_diagonal=False))
         figure.update_layout(autosize=True, width=figure_size[0], height=figure_size[1],
                              legend=dict(yanchor="bottom", xanchor="center"))
         figure.show()
@@ -140,12 +140,12 @@ class FuzzyDiscreteBinaryOperator:
             marker=dict(size=12, color=values, opacity=0.9)
         )
 
-        figure = go.Figure(data=[discrete_scatter]+self.__generate_cube_contour(draw_diagonal=draw_diagonal))
+        figure = go.Figure(data=[discrete_scatter]+self.generate_discrete_cube_contour(draw_diagonal=draw_diagonal))
         figure.update_layout(autosize=True, width=figure_size[0], height=figure_size[1],
                              legend=dict(yanchor="bottom", xanchor="center"))
         figure.show()
 
-    def __generate_cube_contour(self, draw_diagonal: bool) -> List[go.Scatter3d]:
+    def generate_discrete_cube_contour(self, draw_diagonal: bool) -> List[go.Scatter3d]:
         """
         Generates the contour of the cube which embeds the plot inside.
 
@@ -174,6 +174,52 @@ class FuzzyDiscreteBinaryOperator:
             coordinates_diagonal_x = [0, n]
             coordinates_diagonal_y = [0, n]
             coordinates_diagonal_z = [0, n]
+
+            diagonal_scatter = go.Scatter3d(
+                x=coordinates_diagonal_x,
+                y=coordinates_diagonal_y,
+                z=coordinates_diagonal_z,
+                name="Diagonal",
+                line=dict(color="red", width=5),
+                marker=dict(size=0, color=['rgb(0,0,0)'], opacity=0)
+            )
+
+            return [lower_scatter, diagonal_scatter]
+
+        return [lower_scatter]
+
+    def generate_unit_cube_contour(self, draw_diagonal: bool) -> List[go.Scatter3d]:
+        """
+        Generates the contour of the cube which embeds the plot inside.
+
+        Args:
+            draw_diagonal: A boolean, indicating if the main diagonal of the cube has to be drawn; that is, if the
+                           line which joins the point (n, n, n) with (0, 0, 0).
+
+        Returns:
+            A Scatter3d object, representing the shape of the cube.
+        """
+        n = self.n
+        coordinates_x = [0, n, n, 0, 0, 0, n, n, n, n, n, n, 0, 0, 0, 0]
+        coordinates_x = [x / n for x in coordinates_x]
+        coordinates_y = [0, 0, n, n, 0, 0, 0, 0, 0, n, n, n, n, n, n, 0]
+        coordinates_y = [y / n for y in coordinates_y]
+        coordinates_z = [0, 0, 0, 0, 0, n, n, 0, n, n, 0, n, n, 0, n, n]
+        coordinates_z = [z / n for z in coordinates_z]
+
+        lower_scatter = go.Scatter3d(
+            x=coordinates_x,
+            y=coordinates_y,
+            z=coordinates_z,
+            name="Contour",
+            line=dict(color="red", width=3),
+            marker=dict(size=0, color=['rgb(0,0,0)'], opacity=0)
+        )
+
+        if draw_diagonal:
+            coordinates_diagonal_x = [0, 1]
+            coordinates_diagonal_y = [0, 1]
+            coordinates_diagonal_z = [0, 1]
 
             diagonal_scatter = go.Scatter3d(
                 x=coordinates_diagonal_x,

@@ -29,7 +29,7 @@ class FuzzyDiscreteUnaryOperator:
             self.operator_expression = operator_expression
 
         if operator_vector is not None:
-            if not len(operator_vector) == self.n:
+            if not len(operator_vector) == self.n+1:
                 raise FuzzyOperatorSizeException()
 
             if not ((operator_vector >= 0).all() and (operator_vector <= n).all()):
@@ -46,6 +46,15 @@ class FuzzyDiscreteUnaryOperator:
             A numpy array, representing the matrix expression of the operator.
         """
         return [self.operator_expression(x, self.n) for x in range(0, self.n+1)]
+
+    def is_decreasing(self):
+        """
+        Checks if the operator is decreasing.
+        """
+        for x in range(0, self.n):
+            if self.operator_vector[x+1] > self.operator_vector[x]:
+                return False
+        return True
 
     def is_smooth(self, step: int = 1) -> bool:
         """

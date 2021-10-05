@@ -9,7 +9,7 @@ from discrete_fuzzy_operators.base.exceptions.decision_making.discrete_fuzzy_num
 from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import \
     DiscreteFuzzyAggregationBinaryOperator
 from numpy import linspace
-from typing import Dict, Set, Tuple
+from typing import Callable, Dict, List, Set, Tuple
 
 
 class DiscreteFuzzyNumber:
@@ -42,6 +42,13 @@ class DiscreteFuzzyNumber:
 
     def __str__(self):
         return str(dict(self.fuzzy_number))
+
+    @property
+    def membership_values(self) -> List[float]:
+        """
+        Returns the membership values as a list of floats.
+        """
+        return list(self.fuzzy_number.values())
     # endregion
 
     # region Utils
@@ -132,6 +139,11 @@ class DiscreteFuzzyNumber:
         Computes the pseudo-intersection of the two supports, also known as wedge operation. The pseudo-intersection
         is defined as the set supp A ^ supp B = {min(x, y) | x in supp A, y in supp B}.
 
+        References:
+            Massanet S & Riera JV & Torrens J (2014)
+            A new linguistic computational model based on discrete fuzzy numbers for computing with words.
+            Information Sciences, Volume 258, Pages 277-290.
+
         Args:
             dfn1: A DiscreteFuzzyNumber object.
             dfn2: A DiscreteFuzzyNumber object.
@@ -146,6 +158,11 @@ class DiscreteFuzzyNumber:
     def minimum_cut(dfn1: "DiscreteFuzzyNumber", dfn2: "DiscreteFuzzyNumber", alpha: float) -> Set:
         """
         Computes the alpha-cuts of the minimum of two discrete fuzzy numbers.
+
+        References:
+            Massanet S & Riera JV & Torrens J (2014)
+            A new linguistic computational model based on discrete fuzzy numbers for computing with words.
+            Information Sciences, Volume 258, Pages 277-290.
 
         Args:
             dfn1: A DiscreteFuzzyNumber object.
@@ -165,11 +182,16 @@ class DiscreteFuzzyNumber:
         return set(final_minimum_cuts)
 
     @staticmethod
-    def minimum(dfn1: "DiscreteFuzzyNumber", dfn2: "DiscreteFuzzyNumber",
-                 number_trials: int = 100) -> "DiscreteFuzzyNumber":
+    def partial_minimum(dfn1: "DiscreteFuzzyNumber", dfn2: "DiscreteFuzzyNumber",
+                        number_trials: int = 100) -> "DiscreteFuzzyNumber":
         """
         Computes the minimum between two discrete fuzzy numbers. A range of possible alpha values is generated, and for
-        each of them the corresponding cut is calculated.
+        each of them the corresponding cut is calculated. This minimum induces a partial order.
+
+        References:
+            Massanet S & Riera JV & Torrens J (2014)
+            A new linguistic computational model based on discrete fuzzy numbers for computing with words.
+            Information Sciences, Volume 258, Pages 277-290.
 
         Args:
             dfn1: A DiscreteFuzzyNumber object.
@@ -201,6 +223,11 @@ class DiscreteFuzzyNumber:
         Computes the pseudo-union of the two supports, also known as vee operation. The pseudo-union
         is defined as the set supp A v supp B = {max(x, y) | x in supp A, y in supp B}.
 
+        References:
+            Massanet S & Riera JV & Torrens J (2014)
+            A new linguistic computational model based on discrete fuzzy numbers for computing with words.
+            Information Sciences, Volume 258, Pages 277-290.
+
         Args:
             dfn1: A DiscreteFuzzyNumber object.
             dfn2: A DiscreteFuzzyNumber object.
@@ -215,6 +242,11 @@ class DiscreteFuzzyNumber:
     def maximum_cut(dfn1: "DiscreteFuzzyNumber", dfn2: "DiscreteFuzzyNumber", alpha: float) -> Set:
         """
         Computes the alpha-cuts of the maximum of two discrete fuzzy numbers.
+
+        References:
+            Massanet S & Riera JV & Torrens J (2014)
+            A new linguistic computational model based on discrete fuzzy numbers for computing with words.
+            Information Sciences, Volume 258, Pages 277-290.
 
         Args:
             dfn1: A DiscreteFuzzyNumber object.
@@ -234,11 +266,11 @@ class DiscreteFuzzyNumber:
         return set(final_maximum_cuts)
 
     @staticmethod
-    def maximum(dfn1: "DiscreteFuzzyNumber", dfn2: "DiscreteFuzzyNumber",
-                number_trials: int = 100) -> "DiscreteFuzzyNumber":
+    def partial_maximum(dfn1: "DiscreteFuzzyNumber", dfn2: "DiscreteFuzzyNumber",
+                        number_trials: int = 100) -> "DiscreteFuzzyNumber":
         """
         Computes the maximum between two discrete fuzzy numbers. A range of possible alpha values is generated, and for
-        each of them the corresponding cut is calculated.
+        each of them the corresponding cut is calculated. This maximum induces a partial order.
 
         Args:
             dfn1: A DiscreteFuzzyNumber object.
@@ -251,6 +283,7 @@ class DiscreteFuzzyNumber:
         maximum_fuzzy_number = {}
 
         completed_labels = set()
+
         for alpha in linspace(1, 0, num=number_trials + 1):
             cuts = DiscreteFuzzyNumber.maximum_cut(dfn1, dfn2, alpha)
             new_labels = cuts.difference(completed_labels)
@@ -322,6 +355,97 @@ class DiscreteFuzzyNumber:
             completed_labels = completed_labels.union(cuts)
 
         return DiscreteFuzzyNumber(fuzzy_number=aggregation_fuzzy_number, n=self.n)
+    # endregion
+
+    # region Total order
+    def total_order_equal(self, other: "DiscreteFuzzyNumber") -> bool:
+        """
+        Computes if two discrete fuzzy numbers are equal following the criteria established in the Riera-Massanet
+        total order. Two discrete fuzzy numbers are equal if, for each alpha, the alpha-cuts are equal.
+
+        References:
+            Riera JV & Massanet S & Bustince H & Fernandez J (2021).
+            On Admissible Orders on the Set of Discrete Fuzzy Numbers for Application in Decision Making Problems.
+            Mathematics, Volume 9, Number 1.
+
+        Args:
+            other: Another discrete fuzzy number.
+
+        Returns:
+            A boolean, indicating if the two discrete fuzzy numbers are equal.
+        """
+        memberships1 = set(self.membership_values)
+        memberships2 = set(other.membership_values)
+
+        for gamma in memberships1.union(memberships2):
+            if not self.cut(gamma) == other.cut(gamma):
+                return False
+        return True
+
+    def total_order_less(self, other: "DiscreteFuzzyNumber",
+                         order: Callable[[Tuple[int, int], Tuple[int, int]], bool]) -> bool:
+        """
+        Computes if the first discrete fuzzy numbers is less strict than the second one following the criteria
+        established in the Riera-Massanet total order.
+
+        References:
+            Riera JV & Massanet S & Bustince H & Fernandez J (2021).
+            On Admissible Orders on the Set of Discrete Fuzzy Numbers for Application in Decision Making Problems.
+            Mathematics, Volume 9, Number 1.
+
+        Args:
+            other: Another discrete fuzzy number.
+            order: A callable method, representing the admissible order applied to two intervals. Returns a boolean
+                   indicating if the first interval is less than the second interval.
+
+        Returns:
+            A boolean, indicating if the first discrete fuzzy number is less strict than the second one.
+        """
+        if self.total_order_equal(other):
+            return False
+
+        memberships = list(set(self.membership_values).union(set(other.membership_values)))
+        memberships.sort()
+
+        for j in range(len(memberships)):
+            interval_1 = (min(self.cut(memberships[j])), max(self.cut(memberships[j])))
+            interval_2 = (min(other.cut(memberships[j])), max(other.cut(memberships[j])))
+
+            if order(interval_1, interval_2):
+
+                flag = True
+                for i in range(0, j):
+                    interval_1 = (min(self.cut(memberships[i])), max(self.cut(memberships[i])))
+                    interval_2 = (min(other.cut(memberships[i])), max(other.cut(memberships[i])))
+
+                    if not order(interval_1, interval_2):
+                        flag = False
+
+                if flag:
+                    return True
+        return False
+
+    def total_order_less_equal(self, other: "DiscreteFuzzyNumber",
+                               order: Callable[[Tuple[int, int], Tuple[int, int]], bool]):
+        """
+        Computes if the first discrete fuzzy numbers is less than or equal to the second one following the criteria
+        established in the Riera-Massanet total order.
+
+        References:
+            Riera JV & Massanet S & Bustince H & Fernandez J (2021).
+            On Admissible Orders on the Set of Discrete Fuzzy Numbers for Application in Decision Making Problems.
+            Mathematics, Volume 9, Number 1.
+
+        Args:
+            other: Another discrete fuzzy number.
+            order: A callable method, representing the admissible order applied to two intervals. Returns a boolean
+                   indicating if the first interval is less than the second interval.
+
+        Returns:
+            A boolean, indicating if the first discrete fuzzy number is less than or equal to the second one.
+        """
+        return self.total_order_equal(other) or self.total_order_less(other, order)
+
     # endregion
 
     # endregion

@@ -16,7 +16,7 @@ class DiscreteFuzzyNegation(FuzzyDiscreteUnaryOperator):
 
         Args:
             n: n: An integer, representing the size of the finite chain.
-            operator_vector: A list of integers, representing the vector in its vector expression.
+            operator_vector: A list of integers, representing the operator in its vector expression.
             operator_expression: A function, representing the analytical expression.
         """
         super(DiscreteFuzzyNegation, self).__init__(n, operator_vector, operator_expression)
@@ -27,15 +27,6 @@ class DiscreteFuzzyNegation(FuzzyDiscreteUnaryOperator):
         Chechs if the operator is a fuzzy negation.
         """
         return self.is_decreasing() and self.verifies_boundary_conditions()
-
-    def is_decreasing(self):
-        """
-        Checks if the operator is decreasing.
-        """
-        for x in range(0, self.n):
-            if self.operator_vector[x+1] > self.operator_vector[x]:
-                return False
-        return True
 
     def verifies_boundary_conditions(self):
         """

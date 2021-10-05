@@ -4,6 +4,7 @@ from discrete_fuzzy_operators.base.decision_making.discrete_fuzzy_numbers.discre
 from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import \
     DiscreteFuzzyAggregationBinaryOperator
 from discrete_fuzzy_operators.builtin_operators.discrete.tnorms import TnormExamples
+from typing import Tuple
 
 
 def custom_idempotent_uninorm(x, y, n) -> int:
@@ -18,6 +19,15 @@ def custom_idempotent_uninorm_global(x, y, n) -> int:
         return max(x, y)
     else:
         return min(x, y)
+
+
+def xu_yager_order(interval1: Tuple[int, int], interval2: Tuple[int, int]) -> bool:
+    a, b = interval1
+    c, d = interval2
+
+    if (a+b < c+d) or (a+b == c+d and b-a <= d-c):
+        return True
+    return False
 
 
 if __name__ == "__main__":
@@ -105,3 +115,7 @@ if __name__ == "__main__":
     global_evaluation = u1.aggregate(u2.aggregate(u3, discrete_aggregation_function=uninorm2),
                                      discrete_aggregation_function=uninorm2)
     print(f"Overall aggregation of U1, U2 and U3: {global_evaluation}")
+
+    print(f"The evaluation U1 is equal to the evaluation U2: {u1.total_order_equal(u2)}")
+    print(f"The evaluation U1 is less than the evaluation U2: {u1.total_order_less(u2, order=xu_yager_order)}")
+    print(f"The evaluation U1 is less than or equal to the evaluation U2: {u1.total_order_less_equal(u2, order=xu_yager_order)}")

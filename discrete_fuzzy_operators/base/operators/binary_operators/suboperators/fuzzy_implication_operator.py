@@ -1,21 +1,21 @@
 import numpy
+import plotly.graph_objects as go
 import warnings
 
 from discrete_fuzzy_operators.base.operators.binary_operators.fuzzy_discrete_binary_operator import \
     FuzzyDiscreteBinaryOperator
-from typing import Callable
-
 from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import \
     DiscreteFuzzyAggregationBinaryOperator
 from discrete_fuzzy_operators.base.operators.unary_operators.suboperators.fuzzy_negation_operator import \
     DiscreteFuzzyNegation
+from typing import Callable, List, Tuple
 
 
 class DiscreteFuzzyImplicationOperator(FuzzyDiscreteBinaryOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,
-                 operator_expression: Callable[[int, int], int] = None):
+                 operator_expression: Callable[[int, int, int], int] = None):
         """
         Initializes the object that represents a binary fuzzy implication I: L x L -> L over a finite chain
         L={0, 1, ..., n} from its matrix.
@@ -201,4 +201,97 @@ class DiscreteFuzzyImplicationOperator(FuzzyDiscreteBinaryOperator):
                            self.evaluate_operator(x, self.evaluate_operator(y, z))):
                         return False
         return True
+    # endregion
+
+    # region Plot of the continuous extension
+    def __generate_discrete_points(self) -> Tuple[List[float], List[float], List[float]]:
+        """
+        Generates the three-dimensional points of the implications and applies a linear transformation to embed the 
+        points in the unit cube.
+        
+        Returns:
+            A tuple of three lists, containing the pairs of points (x,y,z) to be plotted.
+        """
+        x = []
+        y = []
+        z = []
+        for i in range(0, self.n+1):
+            for j in range(0, self.n+1):
+                x.append(i/self.n)
+                y.append(j/self.n)
+                z.append(self.evaluate_operator(i, j)/self.n)
+
+        return x, y, z
+
+    def __extend_continually_implication(self, x_point: int, y_point: int, intermediate_steps: int = 20) -> Tuple[List[float], List[float], numpy.ndarray]:
+        """
+        Computes the continuous extension of a discrete implication. In the square generated with the point
+        (x_point/n, y_point/n) and size 1/n, two planes are computed; the first one is located in the upper triangle
+        respect the diagonal, and the second one is located in the lower triangle respect the diagonal.
+
+        Args:
+            x_point: An integer, representing the first component of the point to carry out the interpolation.
+            y_point: An integer, representing the second component of the point to carry out the interpolation.
+            intermediate_steps: An integer, representing the number of steps to plot the continuous plot.
+
+        Returns:
+            A tuple of three elements: two lists containing the components of the points and a matrix representing the
+            mapping to be plotted.
+        """
+        x_values = numpy.linspace(x_point/self.n, (x_point+1)/self.n, intermediate_steps)
+        y_values = numpy.linspace(y_point/self.n, (y_point+1)/self.n, intermediate_steps)
+        continuous_function_values = numpy.zeros((len(x_values), len(y_values)))
+        for x_idx, x in enumerate(x_values):
+            for y_idx, y in enumerate(y_values):
+                adv_i1_j1 = self.evaluate_operator(x_point+1, y_point+1)/self.n
+                adv_i_j1 = self.evaluate_operator(x_point, y_point+1)/self.n
+                adv_i1_j = self.evaluate_operator(x_point+1, y_point)/self.n
+                adv_i_j = self.evaluate_operator(x_point, y_point)/self.n
+
+                if y-y_point/self.n >= x-x_point/self.n:
+                    z = adv_i_j + self.n * (x - x_point / self.n) * (adv_i1_j1 - adv_i_j1) + self.n * (
+                                y - y_point / self.n) * (adv_i_j1 - adv_i_j)
+                else:
+                    z = adv_i_j + self.n * (x - x_point / self.n) * (adv_i1_j - adv_i_j) + self.n * (
+                                y - y_point / self.n) * (adv_i1_j1 - adv_i1_j)
+
+                continuous_function_values[y_idx, x_idx] = z
+
+        return x_values, y_values, continuous_function_values
+
+    def plot_continuous_extension(self, figure_size: Tuple[int, int], figure_title: str,
+                                  show_contour: bool = True, **kwargs):
+        """
+        Plots the continuous extension of a discrete implication; that is, the continuous implication defined in the
+        unit interval such that its discretization is the given discrete implication.
+
+        Args:
+            figure_size: A tuple of two integers, representing the size of the figure. The order is WIDTH and HEIGHT.
+            figure_title: A string, representing the label of the operator.
+            show_contour: A boolean, indicating if the contour of the cube has to be shown.
+        """
+        x_discrete, y_discrete, z_discrete = self.__generate_discrete_points()
+
+        plot = []
+
+        for i in range(0, self.n):
+            for j in range(0, self.n):
+                x_continuous, y_continuous, z_continuous = self.__extend_continually_implication(x_point=i, y_point=j, **kwargs)
+                plot.append(go.Surface(x=x_continuous, y=y_continuous, z=z_continuous, showscale=False, cmin=0, cmax=1))
+
+        plot.append(go.Scatter3d(x=x_discrete, y=y_discrete, z=z_discrete,
+                                 mode="markers", name=figure_title,
+                                 marker=dict(size=12, color=['rgb(0,0,0)'], opacity=0.9)))
+
+        if show_contour:
+            plot = plot+self.generate_unit_cube_contour(draw_diagonal=False)
+
+        fig = go.Figure(data=plot)
+        fig.update_layout(
+            autosize=True,
+            width=figure_size[0],
+            height=figure_size[1]
+        )
+
+        fig.show()
     # endregion

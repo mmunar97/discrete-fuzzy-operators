@@ -29,13 +29,13 @@ class DOperator(DiscreteFuzzyImplicationOperator):
             operator_tnorm: A Tnorm object, representing the t-norm.
             operator_tconorm: A Tconorm object, representing the t-conorm.
         """
-        if operator_matrix is None and operator_expression is None and operator_tnorm:
+        if operator_matrix is None and operator_expression is None and operator_tnorm and operator_tconorm is None:
             raise Exception("To initialise a D-implication it is necessary to provide its matrix expression, a "
                             "callable method or a t-norm.")
 
         if not (operator_matrix is None or operator_expression is None):
             super(DOperator, self).__init__(n, operator_matrix, operator_expression)
-        if not (operator_tnorm is None):
+        if not (operator_tnorm is None and operator_tconorm is None):
             super(DOperator, self).__init__(n, DOperator.__generate_implication_matrix_from_components(n, operator_tnorm,
                                                                                                        operator_tconorm))
 
