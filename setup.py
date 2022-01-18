@@ -8,7 +8,7 @@ try:
     import pypandoc
 
     here = path.abspath(path.dirname(__file__))
-    long_description = pypandoc.convert("PROJECT_DESCRIPTION.md", "rst")
+    long_description = pypandoc.convert_file("PROJECT_DESCRIPTION.md", "rst")
 
 except ImportError:
     here = path.abspath(path.dirname(__file__))
