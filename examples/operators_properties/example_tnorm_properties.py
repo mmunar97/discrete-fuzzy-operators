@@ -1,6 +1,6 @@
 import numpy
 
-from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import \
+from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_operator import \
     DiscreteFuzzyAggregationBinaryOperator
 
 if __name__ == "__main__":

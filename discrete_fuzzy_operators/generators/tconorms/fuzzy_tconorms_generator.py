@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 import numpy
 
-from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import DiscreteFuzzyAggregationBinaryOperator
+from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_operator import DiscreteFuzzyAggregationBinaryOperator
 from discrete_fuzzy_operators.generators.tnorms.fuzzy_tnorms_iterative_generator import generate_candidate_tnorms
 
 

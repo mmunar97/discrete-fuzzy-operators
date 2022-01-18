@@ -2,7 +2,7 @@ import itertools
 import numpy
 import os
 
-from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_suboperators.copula import \
+from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_suboperators.copula import \
     Copula
 from typing import List, Tuple
 

@@ -1,5 +1,5 @@
 from enum import Enum
-from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_implication_operator import \
+from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_implication_operator import \
     DiscreteFuzzyImplicationOperator
 
 

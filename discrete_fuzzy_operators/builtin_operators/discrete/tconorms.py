@@ -1,5 +1,5 @@
 from enum import Enum
-from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_suboperators.tconorm import Tconorm
+from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_suboperators.tconorm import Tconorm
 
 
 class TconormExamples(Enum):

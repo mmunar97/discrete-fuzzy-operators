@@ -77,7 +77,7 @@ class FuzzyDiscreteUnaryOperator:
         x = [point[0] for point in completed_graph]
         y = [point[1] for point in completed_graph]
 
-        figure = plot_express.scatter(x=x, y=self.operator_vector)
+        figure = plot_express.scatter(x=x, y=y)
         figure.update_layout(autosize=True, width=figure_size[0], height=figure_size[1])
         figure.show()
 
@@ -95,7 +95,7 @@ class FuzzyDiscreteUnaryOperator:
         Checks if the operator is decreasing.
         """
         for x in range(0, self.n):
-            if self.operator_vector[x+1] > self.operator_vector[x]:
+            if not self.operator_vector[x+1] <= self.operator_vector[x]:
                 return False
         return True
 

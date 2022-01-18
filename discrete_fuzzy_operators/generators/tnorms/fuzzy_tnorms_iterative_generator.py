@@ -1,7 +1,7 @@
 import numpy
 import os
 
-from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import DiscreteFuzzyAggregationBinaryOperator
+from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_operator import DiscreteFuzzyAggregationBinaryOperator
 from discrete_fuzzy_operators.generators.tnorms.tnorms_iterative_generator_utils.tnorms_iterative_generator_utils import generate_increasing_rows, \
     generate_symmetric_matrix
 from typing import List, Tuple

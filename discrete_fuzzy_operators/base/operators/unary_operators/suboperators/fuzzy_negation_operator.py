@@ -1,4 +1,5 @@
 import numpy
+import warnings
 
 from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unary_operator import \
     FuzzyDiscreteUnaryOperator
@@ -21,6 +22,10 @@ class DiscreteFuzzyNegation(FuzzyDiscreteUnaryOperator):
         """
         super(DiscreteFuzzyNegation, self).__init__(n, operator_vector, operator_expression)
 
+        if not self.is_negation():
+            warnings.warn("With the input arguments, the generated operator is not a discrete negation since it is "
+                          "not decreasing and satisfies the boundary conditions.")
+
     # region Basic properties of negations
     def is_negation(self):
         """
@@ -33,7 +38,7 @@ class DiscreteFuzzyNegation(FuzzyDiscreteUnaryOperator):
         Checks if the operator verifies the boundary conditions of a discrete fuzzy negation; that is, if N(0)=n and
         N(n)=0.
         """
-        if self.operator_vector[0] == self.n and self.operator_vector[self.n] == 0:
+        if self.evaluate_operator(0) == self.n and self.evaluate_operator(self.n) == 0:
             return True
         return False
     # endregion

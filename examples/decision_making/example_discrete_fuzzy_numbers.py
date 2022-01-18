@@ -1,9 +1,3 @@
-from discrete_fuzzy_operators.base.decision_making.discrete_fuzzy_numbers.discrete_fuzzy_number import \
-    DiscreteFuzzyNumber
-
-from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_operator import \
-    DiscreteFuzzyAggregationBinaryOperator
-from discrete_fuzzy_operators.builtin_operators.discrete.tnorms import TnormExamples
 from typing import Tuple
 
 
@@ -32,6 +26,7 @@ def xu_yager_order(interval1: Tuple[int, int], interval2: Tuple[int, int]) -> bo
 
 if __name__ == "__main__":
 
+    r"""
     # EXAMPLE 1
     dfn1 = DiscreteFuzzyNumber(fuzzy_number={3: 0.3, 4: 1, 5: 1, 6: 0.75, 7: 0.5}, n=8)
     dfn2 = DiscreteFuzzyNumber(fuzzy_number={2: 0.3, 3: 0.5, 4: 1, 5: 0.75, 6: 0.3}, n=8)
@@ -119,3 +114,20 @@ if __name__ == "__main__":
     print(f"The evaluation U1 is equal to the evaluation U2: {u1.total_order_equal(u2)}")
     print(f"The evaluation U1 is less than the evaluation U2: {u1.total_order_less(u2, order=xu_yager_order)}")
     print(f"The evaluation U1 is less than or equal to the evaluation U2: {u1.total_order_less_equal(u2, order=xu_yager_order)}")
+    """
+
+    from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unary_operator import \
+        FuzzyDiscreteUnaryOperator
+
+    def g(x, n):
+        if x == 0 or x == 1:
+            return 6
+        elif x == 2:
+            return 5
+        elif x == 3 or x == 4 or x == 5:
+            return 2
+        else:
+            return 0
+
+    func = FuzzyDiscreteUnaryOperator(n=6, operator_expression=g)
+    print(func.compute_completed_graph())

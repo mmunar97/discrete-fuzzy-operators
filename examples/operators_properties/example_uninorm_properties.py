@@ -1,6 +1,6 @@
 import numpy
 
-from discrete_fuzzy_operators.base.operators.binary_operators.suboperators.fuzzy_aggregation_suboperators.uninorm import \
+from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_suboperators.uninorm import \
     Uninorm
 from discrete_fuzzy_operators.builtin_operators.discrete.tconorms import TconormExamples
 from discrete_fuzzy_operators.builtin_operators.discrete.tnorms import TnormExamples
