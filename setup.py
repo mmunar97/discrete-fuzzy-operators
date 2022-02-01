@@ -3,24 +3,23 @@ from os import path
 from setuptools import setup
 
 try:
+    import pypandoc
     # Depend on pypandoc for turning markdown readme into RST because
     # PyPI doesn't yet support this.
-    import pypandoc
-
-    here = path.abspath(path.dirname(__file__))
-    long_description = pypandoc.convert_file("PROJECT_DESCRIPTION.md", "rst")
+    long_description = pypandoc.convert_file(r'PROJECT_DESCRIPTION.md', "rst", format='md')
 
 except ImportError:
+    import pypandoc
     here = path.abspath(path.dirname(__file__))
 
     # Get the long description from the relevant file
-    with open(path.join(here, 'PROJECT_DESCRIPTION.md'), encoding='utf-8') as f:
+    with open(path.join(here, r'PROJECT_DESCRIPTION.md'), encoding='utf-8') as f:
         long_description = f.read()
 
 
 setup(
     name='discrete_fuzzy_operators',
-    version='1.9',
+    version='1.10',
     packages=['discrete_fuzzy_operators'],
     url='https://github.com/mmunar97/discrete-fuzzy-operators',
     license='mit',
@@ -35,6 +34,7 @@ setup(
 
     include_package_data=True,
     install_requires=[
+        "pypandoc",
         "numpy",
         "plotly",
         "pandas",
