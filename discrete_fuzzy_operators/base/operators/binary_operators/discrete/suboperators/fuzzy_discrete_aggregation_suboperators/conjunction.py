@@ -28,7 +28,7 @@ class Conjunction(DiscreteFuzzyAggregationBinaryOperator):
 
         if not self.is_conjunction():
             warnings.warn("With the input arguments, the generated operator is not a conjunction since not verifies "
-                          "the boundary conditions.")
+                          "the boundary conditions or is not monotone increasing.")
 
     def is_conjunction(self):
         """

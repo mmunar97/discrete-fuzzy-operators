@@ -13,7 +13,7 @@ class DiscreteAggregationFunctionsCounter(DiscreteOperatorCounter):
         super(DiscreteAggregationFunctionsCounter, self).__init__(n)
         self.n = n
 
-    def count_operators(self) -> int:
+    def count_operators(self, **kwargs) -> int:
         """
         Counts the number of discrete aggregation functions defined over the finite chain Ln.
 

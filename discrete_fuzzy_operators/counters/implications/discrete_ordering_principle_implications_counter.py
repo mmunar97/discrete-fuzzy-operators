@@ -2,7 +2,7 @@ from discrete_fuzzy_operators.base.generators.discrete_operator_counter import D
 from discrete_fuzzy_operators.counters.conjunctions.discrete_ordering_conjunctions_counter import DiscreteOrderingPrincipleConjunctionsCounter
 
 
-class DiscreteOrderingImplicationsCounter(DiscreteOperatorCounter):
+class DiscreteOrderingPrincipleImplicationsCounter(DiscreteOperatorCounter):
 
     def __init__(self, n: int):
         """
@@ -13,7 +13,7 @@ class DiscreteOrderingImplicationsCounter(DiscreteOperatorCounter):
         Args:
             n: An integer, representing the dimension of the finite chain.
         """
-        super(DiscreteOrderingImplicationsCounter, self).__init__(n)
+        super(DiscreteOrderingPrincipleImplicationsCounter, self).__init__(n)
         self.n = n
 
     def count_operators(self) -> int:

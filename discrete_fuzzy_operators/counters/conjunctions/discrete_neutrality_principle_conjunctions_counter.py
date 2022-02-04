@@ -1,5 +1,5 @@
 from discrete_fuzzy_operators.counters.aggregation_functions.discrete_aggregation_function_counter import DiscreteAggregationFunctionsCounter
-from math import comb, factorial
+from math import comb
 from typing import Generator, List
 
 import numpy
@@ -29,7 +29,6 @@ class DiscreteNeutralityPrincipleConjunctionsCounter(DiscreteAggregationFunction
         identity = [i for i in range(self.n, 0, -1)]
         return DiscreteNeutralityPrincipleConjunctionsCounter.__fixed_column_counter(n=self.n, restrictions=identity)
 
-
     @staticmethod
     def __fixed_column_counter(n: int, restrictions: List[int]) -> int:
         """
@@ -54,7 +53,7 @@ class DiscreteNeutralityPrincipleConjunctionsCounter(DiscreteAggregationFunction
             return sum_value
 
     @staticmethod
-    def __bounded_plane_partition_counter(n: int, restrictions: List[int]):
+    def __bounded_plane_partition_counter(n: int, restrictions: List[int]) -> int:
         """
         Counts the number of plane partitions whose first column is upper-bounded by a vector.
 

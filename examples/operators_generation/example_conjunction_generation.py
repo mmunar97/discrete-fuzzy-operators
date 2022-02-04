@@ -2,13 +2,15 @@ from discrete_fuzzy_operators.counters.aggregation_functions.discrete_aggregatio
 from discrete_fuzzy_operators.counters.aggregation_functions.discrete_commutative_aggregation_function_counter import DiscreteCommutativeAggregationFunctionsCounter
 from discrete_fuzzy_operators.counters.conjunctions.discrete_commutative_conjunctions_counter import DiscreteCommutativeConjunctionsCounter
 from discrete_fuzzy_operators.counters.conjunctions.discrete_conjunctions_counter import DiscreteConjunctionsCounter
+from discrete_fuzzy_operators.counters.conjunctions.discrete_identity_principle_conjunctions_counter import DiscreteIdentityPrincipleConjunctionsCounter
 from discrete_fuzzy_operators.counters.conjunctions.discrete_neutrality_principle_conjunctions_counter import DiscreteNeutralityPrincipleConjunctionsCounter
 from discrete_fuzzy_operators.counters.conjunctions.discrete_ordering_conjunctions_counter import DiscreteOrderingPrincipleConjunctionsCounter
-from discrete_fuzzy_operators.counters.implications.discrete_ordering_implications_counter import DiscreteOrderingImplicationsCounter
+from discrete_fuzzy_operators.counters.implications.discrete_identity_principle_implications_counter import DiscreteIdentityPrincipleImplicationsCounter
+from discrete_fuzzy_operators.counters.implications.discrete_ordering_principle_implications_counter import DiscreteOrderingPrincipleImplicationsCounter
 
 if __name__ == "__main__":
 
-    n = 4
+    n = 3
 
     aggregation_function_counter = DiscreteAggregationFunctionsCounter(n=n)
     print(f"Number of discrete aggregation functions with n={n}: {aggregation_function_counter.count_operators()}")
@@ -25,8 +27,14 @@ if __name__ == "__main__":
     op_conjunctions_counter = DiscreteOrderingPrincipleConjunctionsCounter(n=n)
     print(f"Number of discrete conjunctions which satisfy OP with n={n}: {op_conjunctions_counter.count_operators()}")
 
-    op_implications_counter = DiscreteOrderingImplicationsCounter(n=n)
+    op_implications_counter = DiscreteOrderingPrincipleImplicationsCounter(n=n)
     print(f"Number of discrete implications which satisfy OP with n={n}: {op_implications_counter.count_operators()}")
+
+    ip_conjunctions_counter = DiscreteIdentityPrincipleConjunctionsCounter(n=n)
+    print(f"Number of discrete conjunctions which satisfy IP with n={n}: {ip_conjunctions_counter.count_operators()}")
+
+    ip_implications_counter = DiscreteIdentityPrincipleImplicationsCounter(n=n)
+    print(f"Number of discrete implications which satisfy IP with n={n}: {ip_implications_counter.count_operators()}")
 
     np_conjunctions_counter = DiscreteNeutralityPrincipleConjunctionsCounter(n=n)
     print(f"Number of discrete conjunctions which satisfy NP with n={n}: {np_conjunctions_counter.count_operators()}")
