@@ -1,6 +1,6 @@
 from discrete_fuzzy_operators.counters.aggregation_functions.discrete_aggregation_function_counter import DiscreteAggregationFunctionsCounter
 from math import comb
-from typing import Generator, List
+from typing import Dict, Generator, List
 
 import numpy
 
@@ -26,53 +26,63 @@ class DiscreteNeutralityPrincipleConjunctionsCounter(DiscreteAggregationFunction
         Returns:
             An integer, representing the cardinality of the set.
         """
-        identity = [i for i in range(self.n, 0, -1)]
-        return DiscreteNeutralityPrincipleConjunctionsCounter.__fixed_column_counter(n=self.n, restrictions=identity)
+        identity = [i for i in range(1, self.n + 1)]
+        np_count, _ = DiscreteNeutralityPrincipleConjunctionsCounter.fixed_column_counter(n=self.n, restrictions=identity)
+        return np_count
 
     @staticmethod
-    def __fixed_column_counter(n: int, restrictions: List[int]) -> int:
+    def fixed_column_counter(n: int, restrictions: List[int]) -> (int, Dict[str, int]):
         """
-        Counts the number of plane partitions whose first column is equal to a given vector.
+        Counts how many plane partitions there are such that their first column is equal to a given decreasing sequence.
+        The computation is carried out using the recursive expression proposed by the authors; since the recursion
+        repeats the previous terms, each recursive value is stored in a dictionary in order to avoid repeating computations.
 
         Args:
-            n: An integer, representing the size of the plane partition.
-            restrictions: A list of integers, representing the values to be set in the first column.
+            n: An integer, representing the length of the restrictions.
+            restrictions: An increasing sequence of integers, representing the restrictions of the first column. Its
+                          length must match the parameter n.
 
         Returns:
-            An integer, representing the number of plane partitions whose first column is given.
+            An integer, representing the number of plane partitions whose first column is equal to a given sequence of restrictions.
         """
-        if DiscreteNeutralityPrincipleConjunctionsCounter.__is_reduced_sequence(vector=restrictions):
-            return comb(n + restrictions[0] - 1, restrictions[0])
-        else:
-            sum_value = DiscreteNeutralityPrincipleConjunctionsCounter.__bounded_plane_partition_counter(n, restrictions)
-            rev_restrictions = restrictions.copy()
-            rev_restrictions.reverse()
-            for vector in DiscreteNeutralityPrincipleConjunctionsCounter.__generate_decreasing_sequences(upper_bounds=rev_restrictions,
-                                                                                                         max_size=n):
-                sum_value -= DiscreteNeutralityPrincipleConjunctionsCounter.__fixed_column_counter(n=n, restrictions=vector)
-            return sum_value
+        partial_fixed_column_values = {}
+
+        decreasing_sequences = [dec_seq for dec_seq in DiscreteNeutralityPrincipleConjunctionsCounter.generate_decreasing_sequences(upper_bounds=restrictions, max_size=n)]
+        decreasing_sequences.sort()
+
+        for decreasing_sequence in decreasing_sequences:
+            string_representation = ",".join(str(x) for x in decreasing_sequence)
+            partial_fixed_column_values[string_representation] = 0
+
+        for i in range(0, n + 1):
+            reduced_sequence = "0," * (n - 1) + f"{i}"
+            partial_fixed_column_values[reduced_sequence] = comb(n + i - 1, i)
+
+        values_keys = list(partial_fixed_column_values.keys())
+        for i in range(n + 1, len(values_keys)):
+
+            vector = [int(x) for x in values_keys[i].split(",")]
+            vector.reverse()
+
+            column_vector_value = DiscreteNeutralityPrincipleConjunctionsCounter.bounded_plane_partition_counter(n=n, restrictions=vector)
+            for j in range(0, i):
+                s1 = values_keys[j][::-1]
+                s2 = values_keys[i][::-1]
+
+                if DiscreteNeutralityPrincipleConjunctionsCounter.__lexicographic_order(s1, s2):
+                    column_vector_value -= partial_fixed_column_values[values_keys[j]]
+
+            partial_fixed_column_values[values_keys[i]] = column_vector_value
+
+        reverse_restrictions = restrictions.copy()
+        reverse_restrictions.reverse()
+
+        fixed_column_count = DiscreteNeutralityPrincipleConjunctionsCounter.bounded_plane_partition_counter(n=n, restrictions=reverse_restrictions) - sum(list(partial_fixed_column_values.values()))
+
+        return fixed_column_count, partial_fixed_column_values
 
     @staticmethod
-    def __bounded_plane_partition_counter(n: int, restrictions: List[int]) -> int:
-        """
-        Counts the number of plane partitions whose first column is upper-bounded by a vector.
-
-        Args:
-            n: An integer, representing the size of the plane partition.
-            restrictions: A list of integers, decreasingly sorted, representing the upper bound of the first column.
-
-        Returns:
-            An integer, representing the number of plane partitions with bounded column.
-        """
-        combination_matrix = numpy.zeros((n, n))
-        for s in range(1, n + 1):
-            for t in range(1, n + 1):
-                combination_matrix[s - 1, t - 1] = comb(n + restrictions[t - 1], n - s + t)
-
-        return round(numpy.linalg.det(combination_matrix))
-
-    @staticmethod
-    def __generate_decreasing_sequences(upper_bounds: List[int], max_size: int, recursion_depth: int = 0, restrictions: List[int] = None) -> Generator[List[int], None, None]:
+    def generate_decreasing_sequences(upper_bounds: List[int], max_size: int, recursion_depth: int = 0, restrictions: List[int] = None) -> Generator[List[int], None, None]:
         """
         Generates all possible vectors of size n whose entries are decreasing and each value is less than or equal to the
         restriction of the same position.
@@ -92,35 +102,58 @@ class DiscreteNeutralityPrincipleConjunctionsCounter(DiscreteAggregationFunction
             for x in range(0, upper_bounds[recursion_depth] + 1):
                 temp_restrictions = restrictions.copy()
                 temp_restrictions.append(x)
-                yield from DiscreteNeutralityPrincipleConjunctionsCounter.__generate_decreasing_sequences(upper_bounds=upper_bounds,
-                                                                                                          max_size=max_size,
-                                                                                                          recursion_depth=recursion_depth + 1,
-                                                                                                          restrictions=temp_restrictions)
+                yield from DiscreteNeutralityPrincipleConjunctionsCounter.generate_decreasing_sequences(upper_bounds=upper_bounds,
+                                                                                                        max_size=max_size,
+                                                                                                        recursion_depth=recursion_depth + 1,
+                                                                                                        restrictions=temp_restrictions)
         elif 0 < recursion_depth < max_size:
             for x in range(restrictions[recursion_depth - 1], upper_bounds[recursion_depth] + 1):
                 temp_restrictions = restrictions.copy()
                 temp_restrictions.append(x)
-                yield from DiscreteNeutralityPrincipleConjunctionsCounter.__generate_decreasing_sequences(upper_bounds=upper_bounds,
-                                                                                                          max_size=max_size,
-                                                                                                          recursion_depth=recursion_depth + 1,
-                                                                                                          restrictions=temp_restrictions)
+                yield from DiscreteNeutralityPrincipleConjunctionsCounter.generate_decreasing_sequences(upper_bounds=upper_bounds,
+                                                                                                        max_size=max_size,
+                                                                                                        recursion_depth=recursion_depth + 1,
+                                                                                                        restrictions=temp_restrictions)
         else:
             if restrictions != upper_bounds:
-                restrictions.reverse()
                 yield restrictions
 
     @staticmethod
-    def __is_reduced_sequence(vector: List[int]) -> bool:
+    def bounded_plane_partition_counter(n: int, restrictions: List[int]) -> int:
         """
-        Checks if a decreasing sequence is reduced; that is, if all entries from the second position to the end are equal to zero.
+        Counts the number of plane partitions whose first column is upper-bounded by a vector.
 
         Args:
-            vector: A sequence of integers, decreasingly sorted.
+            n: An integer, representing the size of the plane partition.
+            restrictions: A list of integers, decreasingly sorted, representing the upper bound of the first column.
 
         Returns:
-            A boolean, representing if the sequence of vectors is reduced.
+            An integer, representing the number of plane partitions with bounded column.
         """
-        for i in range(1, len(vector)):
-            if vector[i] != 0:
+        combination_matrix = numpy.zeros((n, n))
+        for s in range(1, n + 1):
+            for t in range(1, n + 1):
+                combination_matrix[s - 1, t - 1] = comb(n + restrictions[t - 1], n - s + t)
+
+        return round(numpy.linalg.det(combination_matrix))
+
+    @staticmethod
+    def __lexicographic_order(s1: str, s2: str):
+        """
+        Compares two decreasing sequences of integers, represented as comma-separated strings. ç
+        By default, the order is the lexicographic.
+
+        Args:
+            s1: A string, representing the string representation of a decreasing vector.
+            s2: A string, representing the string representation of a decreasing vector.
+
+        Returns:
+            A boolean, indicating if the first vector is less than or equal to the second one.
+        """
+        s1_values = [int(x) for x in s1.split(",")]
+        s2_values = [int(x) for x in s2.split(",")]
+
+        for i in range(0, len(s1_values)):
+            if s1_values[i] > s2_values[i]:
                 return False
         return True
