@@ -3,7 +3,7 @@ import numpy
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_operator import \
     DiscreteAggregationBinaryOperator
 from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unary_operator import \
-    FuzzyDiscreteUnaryOperator
+    DiscreteUnaryOperator
 from typing import Callable
 
 
@@ -28,8 +28,8 @@ class Toperator(DiscreteAggregationBinaryOperator):
 
         super(Toperator, self).__init__(n, operator_matrix, operator_expression)
 
-        f0 = FuzzyDiscreteUnaryOperator(n=self.n, operator_vector=self.operator_matrix[:, 0].flatten())
-        fn = FuzzyDiscreteUnaryOperator(n=self.n, operator_vector=self.operator_matrix[:, self.n].flatten())
+        f0 = DiscreteUnaryOperator(n=self.n, operator_vector=self.operator_matrix[:, 0].flatten())
+        fn = DiscreteUnaryOperator(n=self.n, operator_vector=self.operator_matrix[:, self.n].flatten())
         if not(self.is_associative() and self.is_commutative() and f0.is_smooth() and fn.is_smooth()):
             raise Exception("With the input arguments, the generated operator is not a t-operator since not verifies "
                             "the associativity, the commutativity or the minimum-internal condition.")

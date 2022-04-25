@@ -9,7 +9,7 @@ from discrete_fuzzy_operators.base.exceptions.operators.operator_size_exception 
 from typing import Callable, List, Tuple
 
 
-class FuzzyDiscreteUnaryOperator:
+class DiscreteUnaryOperator:
 
     def __init__(self, n: int, operator_vector: numpy.array = None,
                  operator_expression: Callable[[int, int], int] = None):
@@ -19,7 +19,7 @@ class FuzzyDiscreteUnaryOperator:
 
         Args:
             n: An integer, representing the size of the finite chain.
-            operator_vector: A list of integers, representing the vector in its vector expression.
+            operator_vector: A list of integers, representing the function in its vector expression.
             operator_expression: A function, representing the analytical expression.
         """
         if operator_vector is None and operator_expression is None:
@@ -90,12 +90,21 @@ class FuzzyDiscreteUnaryOperator:
         """
         return [self.operator_expression(x, self.n) for x in range(0, self.n+1)]
 
-    def is_decreasing(self):
+    def is_decreasing(self) -> bool:
         """
-        Checks if the operator is decreasing.
+        Checks if the operator is monotone decreasing.
         """
         for x in range(0, self.n):
             if not self.operator_vector[x+1] <= self.operator_vector[x]:
+                return False
+        return True
+
+    def is_increasing(self) -> bool:
+        """
+        Checks if the operator is monotone increasing.
+        """
+        for x in range(0, self.n):
+            if not self.operator_vector[x+1] >= self.operator_vector[x]:
                 return False
         return True
 

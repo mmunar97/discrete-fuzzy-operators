@@ -1,11 +1,11 @@
 import numpy
 
 from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unary_operator import \
-    FuzzyDiscreteUnaryOperator
+    DiscreteUnaryOperator
 from typing import Callable
 
 
-class YagerGeneratorOperator(FuzzyDiscreteUnaryOperator):
+class YagerGeneratorOperator(DiscreteUnaryOperator):
 
     def __init__(self, n: int,
                  operator_vector: numpy.array = None,
@@ -21,7 +21,7 @@ class YagerGeneratorOperator(FuzzyDiscreteUnaryOperator):
         """
         super(YagerGeneratorOperator, self).__init__(n, operator_vector, operator_expression)
 
-    def get_pseudoinverse(self) -> FuzzyDiscreteUnaryOperator:
+    def get_pseudoinverse(self) -> DiscreteUnaryOperator:
         """
         Computes the pseudo-inverse of a decreasing function. By definition, it is given by
         Returns:
@@ -35,4 +35,4 @@ class YagerGeneratorOperator(FuzzyDiscreteUnaryOperator):
                 if (self.evaluate_operator(i)-t)*(self.evaluate_operator(self.n)-self.evaluate_operator(0)) <= 0:
                     candidates.append(i)
             pseudoinverse_vector.append(max(candidates))
-        return FuzzyDiscreteUnaryOperator(n=self.n, operator_vector=numpy.array(pseudoinverse_vector))
+        return DiscreteUnaryOperator(n=self.n, operator_vector=numpy.array(pseudoinverse_vector))

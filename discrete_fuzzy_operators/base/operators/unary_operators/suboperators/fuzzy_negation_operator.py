@@ -2,21 +2,21 @@ import numpy
 import warnings
 
 from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unary_operator import \
-    FuzzyDiscreteUnaryOperator
+    DiscreteUnaryOperator
 from typing import Callable
 
 
-class DiscreteNegation(FuzzyDiscreteUnaryOperator):
+class DiscreteNegation(DiscreteUnaryOperator):
 
     def __init__(self, n: int,
                  operator_vector: numpy.array = None,
                  operator_expression: Callable[[int, int], int] = None):
         """
-        Initializes the object representing the fuzzy discrete negation from its vector expression or its analytical
+        Initializes the object representing the discrete negation from its vector expression or its analytical
         expression.
 
         Args:
-            n: n: An integer, representing the size of the finite chain.
+            n: An integer, representing the size of the finite chain.
             operator_vector: A list of integers, representing the operator in its vector expression.
             operator_expression: A function, representing the analytical expression.
         """
@@ -27,15 +27,16 @@ class DiscreteNegation(FuzzyDiscreteUnaryOperator):
                           "not decreasing and satisfies the boundary conditions.")
 
     # region Basic properties of negations
-    def is_negation(self):
+    def is_negation(self) -> bool:
         """
-        Chechs if the operator is a fuzzy negation.
+        Checks if the operator is a discrete negation; that is, if it is monotone decreasing and satisfies the
+        boundary conditions.
         """
         return self.is_decreasing() and self.verifies_boundary_conditions()
 
-    def verifies_boundary_conditions(self):
+    def verifies_boundary_conditions(self) -> bool:
         """
-        Checks if the operator verifies the boundary conditions of a discrete fuzzy negation; that is, if N(0)=n and
+        Checks if the operator verifies the boundary conditions of a discrete negation; that is, if N(0)=n and
         N(n)=0.
         """
         if self.evaluate_operator(0) == self.n and self.evaluate_operator(self.n) == 0:

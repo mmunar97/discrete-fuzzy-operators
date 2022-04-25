@@ -117,7 +117,7 @@ if __name__ == "__main__":
     """
 
     from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unary_operator import \
-        FuzzyDiscreteUnaryOperator
+        DiscreteUnaryOperator
 
     def g(x, n):
         if x == 0 or x == 1:
@@ -129,5 +129,5 @@ if __name__ == "__main__":
         else:
             return 0
 
-    func = FuzzyDiscreteUnaryOperator(n=6, operator_expression=g)
+    func = DiscreteUnaryOperator(n=6, operator_expression=g)
     print(func.compute_completed_graph())

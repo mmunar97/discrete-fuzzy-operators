@@ -1,9 +1,9 @@
 from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unary_operator import \
-    FuzzyDiscreteUnaryOperator
+    DiscreteUnaryOperator
 import numpy
 
 from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unary_operator import \
-    FuzzyDiscreteUnaryOperator
+    DiscreteUnaryOperator
 from discrete_fuzzy_operators.base.operators.unary_operators.suboperators.yager_generator_operator import \
     YagerGeneratorOperator
 
@@ -46,8 +46,8 @@ if __name__ == "__main__":
         composition1.append(generator.evaluate_operator(generator.get_pseudoinverse().evaluate_operator(x)))
         composition2.append(generator.get_pseudoinverse().evaluate_operator(generator.evaluate_operator(x)))
 
-    ff1 = FuzzyDiscreteUnaryOperator(n=n, operator_vector=numpy.array(composition1))
-    f1f = FuzzyDiscreteUnaryOperator(n=n, operator_vector=numpy.array(composition2))
+    ff1 = DiscreteUnaryOperator(n=n, operator_vector=numpy.array(composition1))
+    f1f = DiscreteUnaryOperator(n=n, operator_vector=numpy.array(composition2))
 
     generator.plot_operator(figure_size=(800, 700))
     generator.get_pseudoinverse().plot_operator(figure_size=(800, 700))
