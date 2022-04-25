@@ -1,5 +1,5 @@
-from discrete_fuzzy_operators.base.generators.discrete_operator_counter import DiscreteOperatorCounter
 from discrete_fuzzy_operators.counters.aggregation_functions.discrete_commutative_aggregation_function_counter import DiscreteCommutativeAggregationFunctionsCounter
+import decimal
 
 
 class DiscreteCommutativeConjunctionsCounter(DiscreteCommutativeAggregationFunctionsCounter):
@@ -21,4 +21,5 @@ class DiscreteCommutativeConjunctionsCounter(DiscreteCommutativeAggregationFunct
         Returns:
             An integer, representing the cardinality of the set of commutative discrete conjunctions.
         """
-        return self.symmetric_plane_partition_counter(a=self.n, c=self.n)-self.symmetric_plane_partition_counter(a=self.n, c=self.n-1)
+        count = self.symmetric_plane_partition_counter(a=self.n, c=self.n)-self.symmetric_plane_partition_counter(a=self.n, c=self.n-1)
+        return int(count.to_integral(rounding=decimal.ROUND_HALF_DOWN))

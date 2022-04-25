@@ -1,13 +1,13 @@
 import numpy
 
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_operator import \
-    DiscreteFuzzyAggregationBinaryOperator
+    DiscreteAggregationBinaryOperator
 from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unary_operator import \
     FuzzyDiscreteUnaryOperator
 from typing import Callable
 
 
-class Toperator(DiscreteFuzzyAggregationBinaryOperator):
+class Toperator(DiscreteAggregationBinaryOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,

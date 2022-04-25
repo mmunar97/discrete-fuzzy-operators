@@ -26,6 +26,8 @@ class DiscreteNeutralityPrincipleConjunctionsCounter(DiscreteAggregationFunction
         Returns:
             An integer, representing the cardinality of the set.
         """
+        if self.n == 1:
+            return 1
         identity = [i for i in range(1, self.n + 1)]
         np_count, _ = DiscreteNeutralityPrincipleConjunctionsCounter.fixed_column_counter(n=self.n, restrictions=identity)
         return np_count
@@ -130,6 +132,7 @@ class DiscreteNeutralityPrincipleConjunctionsCounter(DiscreteAggregationFunction
         Returns:
             An integer, representing the number of plane partitions with bounded column.
         """
+
         combination_matrix = numpy.zeros((n, n))
         for s in range(1, n + 1):
             for t in range(1, n + 1):

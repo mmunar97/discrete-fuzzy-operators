@@ -1,11 +1,11 @@
 import numpy
 
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_operator import \
-    DiscreteFuzzyAggregationBinaryOperator
+    DiscreteAggregationBinaryOperator
 from typing import Callable
 
 
-class Nullnorm(DiscreteFuzzyAggregationBinaryOperator):
+class Nullnorm(DiscreteAggregationBinaryOperator):
 
     def __init__(self, n: int,
                  k: int,

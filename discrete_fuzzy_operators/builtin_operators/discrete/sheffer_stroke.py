@@ -1,7 +1,7 @@
 from enum import Enum
 
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_sheffer_stoke_operator import \
-    DiscreteFuzzyShefferStrokeOperator
+    DiscreteShefferStrokeOperator
 
 
 class ShefferStroke(Enum):
@@ -12,7 +12,7 @@ class ShefferStroke(Enum):
     MAX = "max_sheffer_stroke"
 
     @staticmethod
-    def get_sheffer_stroke(operation: "ShefferStroke", n: int) -> DiscreteFuzzyShefferStrokeOperator:
+    def get_sheffer_stroke(operation: "ShefferStroke", n: int) -> DiscreteShefferStrokeOperator:
         """
         Returns a DiscreteFuzzyShefferStrokeOperator object representing the selected negation.
 
@@ -24,9 +24,9 @@ class ShefferStroke(Enum):
             A DiscreteFuzzyShefferStrokeOperator object.
         """
         if operation == ShefferStroke.MIN:
-            return DiscreteFuzzyShefferStrokeOperator(n=n, operator_expression=ShefferStroke.__min_sheffer_stroke)
+            return DiscreteShefferStrokeOperator(n=n, operator_expression=ShefferStroke.__min_sheffer_stroke)
         elif operation == ShefferStroke.MAX:
-            return DiscreteFuzzyShefferStrokeOperator(n=n, operator_expression=ShefferStroke.__max_sheffer_stroke)
+            return DiscreteShefferStrokeOperator(n=n, operator_expression=ShefferStroke.__max_sheffer_stroke)
 
     @staticmethod
     def __min_sheffer_stroke(x: int, y: int, n: int) -> int:

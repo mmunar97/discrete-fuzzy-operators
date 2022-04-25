@@ -2,11 +2,11 @@ import numpy
 import warnings
 
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.fuzzy_discrete_binary_operator import \
-    FuzzyDiscreteBinaryOperator
+    DiscreteBinaryOperator
 from typing import Callable
 
 
-class DiscreteFuzzyShefferStrokeOperator(FuzzyDiscreteBinaryOperator):
+class DiscreteShefferStrokeOperator(DiscreteBinaryOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,
@@ -20,7 +20,7 @@ class DiscreteFuzzyShefferStrokeOperator(FuzzyDiscreteBinaryOperator):
                              in the row x and column y, the entry (x,y) represents the value of H(x, y).
             operator_expression: A Callable method with three integer arguments (x,y,n) returning an integer value.
         """
-        super(DiscreteFuzzyShefferStrokeOperator, self).__init__(n, operator_matrix, operator_expression)
+        super(DiscreteShefferStrokeOperator, self).__init__(n, operator_matrix, operator_expression)
 
         if not(self.is_decreasing() and self.satisfies_boundary_conditions()):
             warnings.warn("With the input arguments, the generated operator is not a discrete Sheffer stroke operation "

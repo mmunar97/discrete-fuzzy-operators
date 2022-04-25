@@ -8,7 +8,7 @@ from discrete_fuzzy_operators.base.exceptions.operators.operator_size_exception 
 from typing import Callable, List, Tuple
 
 
-class FuzzyDiscreteBinaryOperator:
+class DiscreteBinaryOperator:
 
     def __init__(self, n: int, operator_matrix: numpy.ndarray = None,
                  operator_expression: Callable[[int, int, int], int] = None):

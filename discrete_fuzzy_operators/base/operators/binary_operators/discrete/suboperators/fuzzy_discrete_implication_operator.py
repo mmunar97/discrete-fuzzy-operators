@@ -3,15 +3,15 @@ import plotly.graph_objects as go
 import warnings
 
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.fuzzy_discrete_binary_operator import \
-    FuzzyDiscreteBinaryOperator
+    DiscreteBinaryOperator
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_suboperators.tnorm import \
     Tnorm
 from discrete_fuzzy_operators.base.operators.unary_operators.suboperators.fuzzy_negation_operator import \
-    DiscreteFuzzyNegation
+    DiscreteNegation
 from typing import Callable, List, Tuple
 
 
-class DiscreteFuzzyImplicationOperator(FuzzyDiscreteBinaryOperator):
+class DiscreteImplicationOperator(DiscreteBinaryOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,
@@ -24,7 +24,7 @@ class DiscreteFuzzyImplicationOperator(FuzzyDiscreteBinaryOperator):
             operator_matrix: A two-dimensional matrix of integers, representing the images of the operator; that is,
                              in the row x and column y, the entry (x,y) represents the value of I(x, y).
         """
-        super(DiscreteFuzzyImplicationOperator, self).__init__(n, operator_matrix, operator_expression)
+        super(DiscreteImplicationOperator, self).__init__(n, operator_matrix, operator_expression)
 
         if not self.is_implication():
             warnings.warn("With the given parameters, the initialized operator is not a discrete implication.")
@@ -80,7 +80,7 @@ class DiscreteFuzzyImplicationOperator(FuzzyDiscreteBinaryOperator):
                 return False
         return True
 
-    def satisfies_contrapositive_symmetry(self, negation: DiscreteFuzzyNegation) -> bool:
+    def satisfies_contrapositive_symmetry(self, negation: DiscreteNegation) -> bool:
         """
         Checks if the operator satisfies the contrapositive symmetry with respect to a fuzzy negation; that is, if
         I(x,y)=I(N(y),N(x)) for all x,y in the domain.
@@ -140,7 +140,7 @@ class DiscreteFuzzyImplicationOperator(FuzzyDiscreteBinaryOperator):
                     return False
         return True
 
-    def satisfies_modus_tollens(self, negation: DiscreteFuzzyNegation,
+    def satisfies_modus_tollens(self, negation: DiscreteNegation,
                                 t_norm: Tnorm) -> bool:
         """
         Checks if the operator satisfies the modus tollens with respect to a discrete t-norm T and a discrete negation N;

@@ -1,11 +1,11 @@
 import numpy
 import warnings
 
-from discrete_fuzzy_operators.base.operators.binary_operators.discrete.fuzzy_discrete_binary_operator import FuzzyDiscreteBinaryOperator
+from discrete_fuzzy_operators.base.operators.binary_operators.discrete.fuzzy_discrete_binary_operator import DiscreteBinaryOperator
 from typing import Callable
 
 
-class DiscreteFuzzyAggregationBinaryOperator(FuzzyDiscreteBinaryOperator):
+class DiscreteAggregationBinaryOperator(DiscreteBinaryOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,
@@ -19,7 +19,7 @@ class DiscreteFuzzyAggregationBinaryOperator(FuzzyDiscreteBinaryOperator):
                              in the row x and column y, the entry (x,y) represents the value of F(x, y).
             operator_expression: A Callable method with three integer arguments (x,y,n) returning an integer value.
         """
-        super(DiscreteFuzzyAggregationBinaryOperator, self).__init__(n, operator_matrix, operator_expression)
+        super(DiscreteAggregationBinaryOperator, self).__init__(n, operator_matrix, operator_expression)
 
         if not(self.is_increasing() and self.evaluate_operator(0, 0) == 0 and
                self.evaluate_operator(self.n, self.n) == self.n):

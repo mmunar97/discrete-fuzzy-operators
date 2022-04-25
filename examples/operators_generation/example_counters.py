@@ -6,15 +6,13 @@ from discrete_fuzzy_operators.counters.conjunctions.discrete_consequent_boundary
 from discrete_fuzzy_operators.counters.conjunctions.discrete_identity_principle_conjunctions_counter import DiscreteIdentityPrincipleConjunctionsCounter
 from discrete_fuzzy_operators.counters.conjunctions.discrete_neutrality_principle_conjunctions_counter import DiscreteNeutralityPrincipleConjunctionsCounter
 from discrete_fuzzy_operators.counters.conjunctions.discrete_ordering_principle_conjunctions_counter import DiscreteOrderingPrincipleConjunctionsCounter
-from discrete_fuzzy_operators.counters.conjunctions.discrete_smooth_conjunctions_counter import DiscreteSmoothConjunctionsCounter
 from discrete_fuzzy_operators.counters.implications.discrete_consequent_boundary_implications_counter import DiscreteConsequentBoundaryImplicationsCounter
 from discrete_fuzzy_operators.counters.implications.discrete_identity_principle_implications_counter import DiscreteIdentityPrincipleImplicationsCounter
 from discrete_fuzzy_operators.counters.implications.discrete_ordering_principle_implications_counter import DiscreteOrderingPrincipleImplicationsCounter
-from discrete_fuzzy_operators.counters.implications.discrete_smooth_implications_counter import DiscreteSmoothImplicationsCounter
 
 if __name__ == "__main__":
 
-    n = 7
+    n = 4
 
     aggregation_function_counter = DiscreteAggregationFunctionsCounter(n=n)
     print(f"Number of discrete aggregation functions with n={n}: {aggregation_function_counter.count_operators()}")
@@ -27,12 +25,6 @@ if __name__ == "__main__":
 
     commutative_conjunctions_counter = DiscreteCommutativeConjunctionsCounter(n=n)
     print(f"Number of commutative discrete conjunctions with n={n}: {commutative_conjunctions_counter.count_operators()}")
-
-    smooth_conjunction_counter = DiscreteSmoothConjunctionsCounter(n=n)
-    print(f"Number of smooth discrete conjunctions with n={n}: {smooth_conjunction_counter.count_operators()}")
-
-    smooth_implications_counter = DiscreteSmoothImplicationsCounter(n=n)
-    print(f"Number of smooth discrete implications with n={n}: {smooth_implications_counter.count_operators()}")
 
     op_conjunctions_counter = DiscreteOrderingPrincipleConjunctionsCounter(n=n)
     print(f"Number of discrete conjunctions which satisfy OP with n={n}: {op_conjunctions_counter.count_operators()}")

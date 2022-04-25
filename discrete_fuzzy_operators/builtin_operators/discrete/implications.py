@@ -1,6 +1,6 @@
 from enum import Enum
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_implication_operator import \
-    DiscreteFuzzyImplicationOperator
+    DiscreteImplicationOperator
 
 
 class DiscreteImplicationExamples(Enum):
@@ -15,7 +15,7 @@ class DiscreteImplicationExamples(Enum):
     FODOR = "fodor_implication"
 
     @staticmethod
-    def get_discrete_implication(implication: "DiscreteImplicationExamples", n: int) -> DiscreteFuzzyImplicationOperator:
+    def get_discrete_implication(implication: "DiscreteImplicationExamples", n: int) -> DiscreteImplicationOperator:
         """
         Returns a DiscreteFuzzyImplicationOperator object representing the selected implication.
 
@@ -27,17 +27,17 @@ class DiscreteImplicationExamples(Enum):
             A DiscreteFuzzyImplicationOperator object.
         """
         if implication == DiscreteImplicationExamples.LARGEST:
-            return DiscreteFuzzyImplicationOperator(n=n, operator_expression=DiscreteImplicationExamples.__largest_implication)
+            return DiscreteImplicationOperator(n=n, operator_expression=DiscreteImplicationExamples.__largest_implication)
         elif implication == DiscreteImplicationExamples.LUKASIEWICZ:
-            return DiscreteFuzzyImplicationOperator(n=n, operator_expression=DiscreteImplicationExamples.__lukasiewicz_implication)
+            return DiscreteImplicationOperator(n=n, operator_expression=DiscreteImplicationExamples.__lukasiewicz_implication)
         elif implication == DiscreteImplicationExamples.GODEL:
-            return DiscreteFuzzyImplicationOperator(n=n, operator_expression=DiscreteImplicationExamples.__godel_implication)
+            return DiscreteImplicationOperator(n=n, operator_expression=DiscreteImplicationExamples.__godel_implication)
         elif implication == DiscreteImplicationExamples.RESCHER:
-            return DiscreteFuzzyImplicationOperator(n=n, operator_expression=DiscreteImplicationExamples.__rescher_implication)
+            return DiscreteImplicationOperator(n=n, operator_expression=DiscreteImplicationExamples.__rescher_implication)
         elif implication == DiscreteImplicationExamples.WEBER:
-            return DiscreteFuzzyImplicationOperator(n=n, operator_expression=DiscreteImplicationExamples.__weber_implication)
+            return DiscreteImplicationOperator(n=n, operator_expression=DiscreteImplicationExamples.__weber_implication)
         elif implication == DiscreteImplicationExamples.FODOR:
-            return DiscreteFuzzyImplicationOperator(n=n, operator_expression=DiscreteImplicationExamples.__fodor_implication)
+            return DiscreteImplicationOperator(n=n, operator_expression=DiscreteImplicationExamples.__fodor_implication)
 
     @staticmethod
     def __largest_implication(x: int, y: int, n: int) -> int:

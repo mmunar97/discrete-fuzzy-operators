@@ -7,7 +7,7 @@ from discrete_fuzzy_operators.base.exceptions.decision_making.discrete_fuzzy_num
 from discrete_fuzzy_operators.base.exceptions.decision_making.discrete_fuzzy_numbers.dfn_membership_out_bounds import \
     DiscreteFuzzyNumberMembershipOutOfBounds
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_operator import \
-    DiscreteFuzzyAggregationBinaryOperator
+    DiscreteAggregationBinaryOperator
 from numpy import linspace
 from typing import Callable, Dict, List, Set, Tuple
 
@@ -299,7 +299,7 @@ class DiscreteFuzzyNumber:
     # region Aggregation with respect to a discrete fuzzy aggregation function
     def aggregate_cut(self,
                       other: "DiscreteFuzzyNumber",
-                      discrete_aggregation_function: DiscreteFuzzyAggregationBinaryOperator,
+                      discrete_aggregation_function: DiscreteAggregationBinaryOperator,
                       alpha: float) -> Set:
         """
         Computes the alpha-cuts of the aggregation of two discrete fuzzy numbers.
@@ -327,7 +327,7 @@ class DiscreteFuzzyNumber:
 
     def aggregate(self,
                   other: "DiscreteFuzzyNumber",
-                  discrete_aggregation_function: DiscreteFuzzyAggregationBinaryOperator,
+                  discrete_aggregation_function: DiscreteAggregationBinaryOperator,
                   number_trials: int = 100) -> "DiscreteFuzzyNumber":
         """
         Computes the discrete fuzzy number in the aggregation. A range of possible alpha values is generated, and for

@@ -6,17 +6,17 @@ from typing import Callable
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_suboperators.tconorm import \
     Tconorm
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_implication_operator import \
-    DiscreteFuzzyImplicationOperator
+    DiscreteImplicationOperator
 from discrete_fuzzy_operators.base.operators.unary_operators.suboperators.fuzzy_negation_operator import \
-    DiscreteFuzzyNegation
+    DiscreteNegation
 
 
-class SNImplication(DiscreteFuzzyImplicationOperator):
+class SNImplication(DiscreteImplicationOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,
                  operator_expression: Callable[[int, int, int], int] = None,
-                 operator_tconorm: Tconorm = None, operator_negation: DiscreteFuzzyNegation = None):
+                 operator_tconorm: Tconorm = None, operator_negation: DiscreteNegation = None):
         """
         Initializes the object that represents an SN-implication I: L x L -> L over a finite chain
         L={0, 1, ..., n} from its matrix representation, its analytical expression or its components.
@@ -41,7 +41,7 @@ class SNImplication(DiscreteFuzzyImplicationOperator):
     @staticmethod
     def __generate_implication_matrix_from_components(n: int,
                                                       operator_tconorm: Tconorm,
-                                                      operator_negation: DiscreteFuzzyNegation) -> numpy.ndarray:
+                                                      operator_negation: DiscreteNegation) -> numpy.ndarray:
         """
         Generates the SN-implication matrix representation from its components: a discrete t-conorm and a discrete
         negation. The implication is defined as I(x,y)=S(N(x),y).

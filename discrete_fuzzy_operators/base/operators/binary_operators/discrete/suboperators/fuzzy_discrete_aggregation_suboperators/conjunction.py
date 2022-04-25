@@ -2,11 +2,11 @@ import numpy
 import warnings
 
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_operator import \
-    DiscreteFuzzyAggregationBinaryOperator
+    DiscreteAggregationBinaryOperator
 from typing import Callable
 
 
-class Conjunction(DiscreteFuzzyAggregationBinaryOperator):
+class Conjunction(DiscreteAggregationBinaryOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,

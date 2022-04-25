@@ -6,11 +6,11 @@ from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperat
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_suboperators.tnorm import \
     Tnorm
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_implication_operator import \
-    DiscreteFuzzyImplicationOperator
+    DiscreteImplicationOperator
 from typing import Callable
 
 
-class QLOperator(DiscreteFuzzyImplicationOperator):
+class QLOperator(DiscreteImplicationOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,

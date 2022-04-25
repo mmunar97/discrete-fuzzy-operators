@@ -1,7 +1,7 @@
-from discrete_fuzzy_operators.counters.conjunctions.discrete_neutrality_principle_conjunctions_counter import DiscreteNeutralityPrincipleConjunctionsCounter
+from discrete_fuzzy_operators.counters.conjunctions.discrete_consequent_boundary_conjunctions_counter import DiscreteConsequentBoundaryConjunctionsCounter
 
 
-class DiscreteConsequentBoundaryImplicationsCounter(DiscreteNeutralityPrincipleConjunctionsCounter):
+class DiscreteConsequentBoundaryImplicationsCounter(DiscreteConsequentBoundaryConjunctionsCounter):
 
     def __init__(self, n: int):
         """

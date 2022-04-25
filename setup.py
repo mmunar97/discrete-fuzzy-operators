@@ -19,7 +19,7 @@ except ImportError:
 
 setup(
     name='discrete_fuzzy_operators',
-    version='1.11',
+    version='1.12',
     packages=['discrete_fuzzy_operators'],
     url='https://github.com/mmunar97/discrete-fuzzy-operators',
     license='mit',

@@ -6,7 +6,7 @@ from math import ceil, floor
 from typing import Callable, List, Tuple
 
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.fuzzy_discrete_binary_operator import \
-    FuzzyDiscreteBinaryOperator
+    DiscreteBinaryOperator
 
 
 class FuzzyUnitBinaryOperator:
@@ -42,7 +42,7 @@ class FuzzyUnitBinaryOperator:
         return self.operator_expression(x, y)
 
     # region Discretization
-    def get_upper_discretized_operator(self, n: int) -> FuzzyDiscreteBinaryOperator:
+    def get_upper_discretized_operator(self, n: int) -> DiscreteBinaryOperator:
         """
         Computes the upper discretization of a binary operator, defined as Ceil(n*F(x/n,y/n)), and represents it as a
         FuzzyDiscreteBinaryOperator object.
@@ -60,9 +60,9 @@ class FuzzyUnitBinaryOperator:
                     a = 2
                 operator_matrix[y, x] = ceil(round(n*self.evaluate_operator(x/n, y/n), 5))
 
-        return FuzzyDiscreteBinaryOperator(n=n, operator_matrix=operator_matrix)
+        return DiscreteBinaryOperator(n=n, operator_matrix=operator_matrix)
 
-    def get_lower_discretized_operator(self, n: int) -> FuzzyDiscreteBinaryOperator:
+    def get_lower_discretized_operator(self, n: int) -> DiscreteBinaryOperator:
         """
         Computes the upper discretization of a binary operator, defined as Ceil(n*F(x/n,y/n)), and represents it as a
         FuzzyDiscreteBinaryOperator object.
@@ -78,7 +78,7 @@ class FuzzyUnitBinaryOperator:
             for y in range(0, n + 1):
                 operator_matrix[y, x] = floor(round(n*self.evaluate_operator(x/n, y/n), 5))
 
-        return FuzzyDiscreteBinaryOperator(n=n, operator_matrix=operator_matrix)
+        return DiscreteBinaryOperator(n=n, operator_matrix=operator_matrix)
     # endregion
 
     # region Plot of the operators

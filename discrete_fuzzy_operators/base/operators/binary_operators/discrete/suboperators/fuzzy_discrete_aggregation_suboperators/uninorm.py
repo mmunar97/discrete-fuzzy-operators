@@ -1,11 +1,11 @@
 import numpy
 
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_operator import \
-    DiscreteFuzzyAggregationBinaryOperator
+    DiscreteAggregationBinaryOperator
 from typing import Callable, Dict
 
 
-class Uninorm(DiscreteFuzzyAggregationBinaryOperator):
+class Uninorm(DiscreteAggregationBinaryOperator):
 
     def __init__(self, n: int, e: int,
                  operator_matrix: numpy.ndarray = None,

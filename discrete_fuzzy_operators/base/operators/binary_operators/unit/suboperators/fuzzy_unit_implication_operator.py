@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 from decimal import Decimal
 
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_implication_operator import \
-    DiscreteFuzzyImplicationOperator
+    DiscreteImplicationOperator
 from discrete_fuzzy_operators.base.operators.binary_operators.unit.fuzzy_unit_binary_operator import \
     FuzzyUnitBinaryOperator
 
@@ -22,7 +22,7 @@ class FuzzyUnitImplicationOperator(FuzzyUnitBinaryOperator):
         """
         super(FuzzyUnitImplicationOperator, self).__init__(operator_expression)
 
-    def get_upper_discretized_operator(self, n: int) -> DiscreteFuzzyImplicationOperator:
+    def get_upper_discretized_operator(self, n: int) -> DiscreteImplicationOperator:
         """
         Computes the upper discretization of an implication, defined as Ceil(n*I(x/n,y/n)), and represents it as a
         DiscreteFuzzyImplicationOperator object.
@@ -33,10 +33,10 @@ class FuzzyUnitImplicationOperator(FuzzyUnitBinaryOperator):
         Returns:
             A DiscreteFuzzyImplicationOperator object, representing the discrete implication.
         """
-        return DiscreteFuzzyImplicationOperator(n=n, operator_matrix=super(FuzzyUnitImplicationOperator,
-                                                                           self).get_upper_discretized_operator(n).operator_matrix)
+        return DiscreteImplicationOperator(n=n, operator_matrix=super(FuzzyUnitImplicationOperator,
+                                                                      self).get_upper_discretized_operator(n).operator_matrix)
 
-    def get_lower_discretized_operator(self, n: int) -> DiscreteFuzzyImplicationOperator:
+    def get_lower_discretized_operator(self, n: int) -> DiscreteImplicationOperator:
         """
         Computes the lower discretization of an implication, defined as Floor(n*I(x/n,y/n)), and represents it as a
         DiscreteFuzzyImplicationOperator object.
@@ -47,8 +47,8 @@ class FuzzyUnitImplicationOperator(FuzzyUnitBinaryOperator):
         Returns:
             A DiscreteFuzzyImplicationOperator object, representing the discrete implication.
         """
-        return DiscreteFuzzyImplicationOperator(n=n, operator_matrix=super(FuzzyUnitImplicationOperator,
-                                                                           self).get_lower_discretized_operator(n).operator_matrix)
+        return DiscreteImplicationOperator(n=n, operator_matrix=super(FuzzyUnitImplicationOperator,
+                                                                      self).get_lower_discretized_operator(n).operator_matrix)
 
     # region Plot of the discretizations
     def plot_lower_discretization(self, n: int, figure_title: str = "Lower discretization of the implication",
