@@ -7,7 +7,7 @@ class DiscreteOrderingPrincipleImplicationsCounter(DiscreteOperatorCounter):
     def __init__(self, n: int):
         """
         Initializes the object that counts all possible discrete implications which satisfy the ordering
-        principle over the finite chain Ln; that is, the discrete implications such that I(x,y)=0 if, and
+        principle over the finite chain Ln; that is, the discrete implications such that I(x,y)=n if, and
         only if, x <= y.
 
         Args:

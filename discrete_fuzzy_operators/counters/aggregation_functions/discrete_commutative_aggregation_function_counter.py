@@ -19,7 +19,7 @@ class DiscreteCommutativeAggregationFunctionsCounter(DiscreteOperatorCounter):
         Counts the number of discrete commutative aggregation functions defined over the finite chain Ln.
 
         Returns:
-            An integer, representing the cardinality of the set of commutative discrete conjunctions.
+            An integer, representing the cardinality of the set of commutative discrete aggregation functions.
         """
         count = self.symmetric_plane_partition_counter(a=self.n + 1, c=self.n) - 2 * self.symmetric_plane_partition_counter(a=self.n + 1, c=self.n - 1) + \
                 self.symmetric_plane_partition_counter(a=self.n + 1, c=self.n - 2)

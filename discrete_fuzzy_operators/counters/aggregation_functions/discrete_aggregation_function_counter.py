@@ -14,12 +14,12 @@ class DiscreteAggregationFunctionsCounter(DiscreteOperatorCounter):
         super(DiscreteAggregationFunctionsCounter, self).__init__(n)
         self.n = n
 
-    def count_operators(self, **kwargs) -> int:
+    def count_operators(self) -> int:
         """
         Counts the number of discrete aggregation functions defined over the finite chain Ln.
 
         Returns:
-            An integer, representing the cardinality of the set of discrete conjunctions.
+            An integer, representing the cardinality of the set of discrete aggregation functions.
         """
         if self.n == 1:
             return 4
@@ -33,7 +33,7 @@ class DiscreteAggregationFunctionsCounter(DiscreteOperatorCounter):
     @staticmethod
     def plane_partition_counter(a: int, b: int, c: int) -> decimal.Decimal:
         """
-        Computes the number of (a,b,c)-cubic plane partitions, given by the formula:
+        Computes the number of (a,b,c)-cubic plane partitions, given by:
                     prod_{i=1}^a prod_{j=1}^b prod_{k=1}^c (i+j+k-1)/(i+j+k-2)
 
         Args:
@@ -42,7 +42,8 @@ class DiscreteAggregationFunctionsCounter(DiscreteOperatorCounter):
             c: An integer, representing the upper bound of the elements of the plane partition.
 
         Returns:
-            An integer, representing the cardinality of the set of (a,b,c)-cubic plane partitions.
+            An integer, expressed by a Decimal object, representing the cardinality of the set
+            of all (a,b,c)-cubic plane partitions.
         """
         value = decimal.Decimal(1)
         for i in range(1, a + 1):

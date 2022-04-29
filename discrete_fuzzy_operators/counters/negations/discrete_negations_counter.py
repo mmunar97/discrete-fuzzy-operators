@@ -19,6 +19,6 @@ class DiscreteNegationsCounter(DiscreteOperatorCounter):
         Counts the number of discrete negations defined over the finite chain Ln.
 
         Returns:
-            An integer, representing the cardinality of the set of discrete conjunctions.
+            An integer, representing the cardinality of the set of discrete negations.
         """
         return comb(2*self.n-1, self.n)

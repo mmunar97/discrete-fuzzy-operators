@@ -16,6 +16,7 @@ if __name__ == "__main__":
                            [0, 1, 2, 3]])
 
     operator = DiscreteAggregationBinaryOperator(n=3, operator_matrix=minimum)
+    operator.plot_operator()
 
     print(f"Annihilator: {operator.checks_annihilator_element(element=0)}")
     print(f"Boundary condition: {operator.checks_boundary_condition(element=3)}")
