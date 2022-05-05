@@ -9,7 +9,6 @@ try:
     long_description = pypandoc.convert_file(r'PROJECT_DESCRIPTION.md', "rst", format='md')
 
 except ImportError:
-    import pypandoc
     here = path.abspath(path.dirname(__file__))
 
     # Get the long description from the relevant file
@@ -19,7 +18,7 @@ except ImportError:
 
 setup(
     name='discrete_fuzzy_operators',
-    version='1.13',
+    version='1.13.1',
     packages=['discrete_fuzzy_operators'],
     url='https://github.com/mmunar97/discrete-fuzzy-operators',
     license='mit',
