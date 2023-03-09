@@ -25,6 +25,8 @@ class DiscreteAggregationBinaryOperator(DiscreteBinaryOperator):
                self.evaluate_operator(self.n, self.n) == self.n):
             warnings.warn("With the input arguments, the generated operator is not a discrete aggregation function "
                           "since is not increasing or the the boundary conditions are not satisfied.")
+            if not self.is_increasing():
+                print(operator_matrix)
 
     def checks_annihilator_element(self, element: int) -> bool:
         """

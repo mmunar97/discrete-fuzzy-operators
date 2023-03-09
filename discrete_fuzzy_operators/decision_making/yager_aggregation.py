@@ -1,7 +1,7 @@
 from typing import Callable, List, Tuple
 
 
-def yager_aggregation_decision_making(assessments: List[List[int]], aggregation_function: Callable[[List[int]], int]) -> Tuple[int, int]:
+def yager_aggregation_decision_making(assessments: List[List[int]], aggregation_function: Callable[[List[int]], int]) -> Tuple[List[int], Tuple[int, int]]:
     """
     Computes the best alternative from a matrix of assessments. The matrix contains, in each row, the assessment made
     in a certain alternative for all the experts.
@@ -23,8 +23,11 @@ def yager_aggregation_decision_making(assessments: List[List[int]], aggregation_
                               integer.
 
     Returns:
-        A tuple of two values: the first, representing the index of the alternative that has the best value; the second,
-        the value of the aggregation function that reaches the maximum.
+        A tuple of two values:
+            - The first one, the aggregations of each alternative with respect to all experts, in the same order as
+               provided. If the aggregation_function parameter is not associative, the results are not order-free.
+            - The second one, a tuple of two vañues. The first, representing the index of the alternative that
+               has the best value; the second, the value of the aggregation function that reaches the maximum.
     """
     aggregation_values = [aggregation_function(alternative_assessment) for alternative_assessment in assessments]
-    return aggregation_values.index(max(aggregation_values)), max(aggregation_values)
+    return aggregation_values, (aggregation_values.index(max(aggregation_values)), max(aggregation_values))

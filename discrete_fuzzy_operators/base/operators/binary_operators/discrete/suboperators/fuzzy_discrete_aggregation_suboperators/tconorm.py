@@ -25,9 +25,9 @@ class Tconorm(Disjunction):
 
         super(Tconorm, self).__init__(n, operator_matrix, operator_expression)
 
-        if not(self.is_associative() and self.is_commutative() and self.checks_boundary_condition(element=0)):
+        if not(self.is_associative() and self.is_commutative() and self.checks_boundary_condition(element=0) and self.is_increasing()):
             raise Exception("With the input arguments, the generated operator is not a t-conorm since not verifies "
-                            "the associativity, the commutativity or the neutral element.")
+                            "the associativity, the commutativity, the neutral element n or the monotonicity in each argument.")
 
     def is_divisible(self, **kwargs) -> bool:
         """

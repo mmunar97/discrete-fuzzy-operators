@@ -28,7 +28,7 @@ class Uninorm(DiscreteAggregationBinaryOperator):
             raise Exception("To initialise a uninorm it is necessary to provide its matrix expression, a callable "
                             "method or its components.")
 
-        if not(operator_matrix is None or operator_expression is None):
+        if operator_matrix is None or operator_expression is None:
             super(Uninorm, self).__init__(n, operator_matrix, operator_expression)
             self.e = e
         else:

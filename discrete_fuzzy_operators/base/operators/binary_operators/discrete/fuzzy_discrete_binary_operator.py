@@ -106,6 +106,18 @@ class DiscreteBinaryOperator:
                 return False
         return True
 
+    def is_idempotent(self) -> bool:
+        """
+        Checks if the operator is idempotent; that is, if F(x,x)=x for all x in Lm.
+
+        Returns:
+            A boolean, indicating if the operator is idempotent.
+        """
+        for x in range(0, self.n+1):
+            if not self.evaluate_operator(x,x) == x:
+                return False
+        return True
+
     # region Increasing property
     def is_increasing_first_argument(self) -> bool:
         """

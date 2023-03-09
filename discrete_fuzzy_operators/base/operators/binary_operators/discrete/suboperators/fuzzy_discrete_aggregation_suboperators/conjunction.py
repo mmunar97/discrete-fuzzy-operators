@@ -30,7 +30,7 @@ class Conjunction(DiscreteAggregationBinaryOperator):
             warnings.warn("With the input arguments, the generated operator is not a conjunction since not verifies "
                           "the boundary conditions or is not monotone increasing.")
 
-    def is_conjunction(self):
+    def is_conjunction(self) -> bool:
         """
         Checks if the defined operator is a discrete conjunction; that is, if it is decreasing in the first argument,
         increasing in the second argument and satisfies some boundary conditions.
@@ -43,3 +43,21 @@ class Conjunction(DiscreteAggregationBinaryOperator):
             return False
         else:
             return True
+
+    def get_asm_representation(self) -> numpy.ndarray:
+        """
+        Computes the Alternating Sign Matrix representation of a smooth conjunction.  If the smooth is not smooth,
+        an Exception is raised.
+
+        Returns:
+            An nxn matrix, representing the associated alternating sign matrix of the operator.
+        """
+        if not self.is_smooth():
+            raise Exception("To initialise a conjunction it is necessary to provide its matrix expression or a callable"
+                            " method.")
+
+        asm = numpy.zeros(shape=(self.n, self.n), dtype=int)
+        for i in range(1, self.n+1):
+            for j in range(1, self.n+1):
+                asm[i-1, j-1] = self.evaluate_operator(i, j)-self.evaluate_operator(i, j-1)-self.evaluate_operator(i-1, j)+self.evaluate_operator(i-1, j-1)
+        return asm
