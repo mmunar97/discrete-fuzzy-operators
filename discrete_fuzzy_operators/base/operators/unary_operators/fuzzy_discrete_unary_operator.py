@@ -12,7 +12,8 @@ from typing import Callable, List, Tuple
 class DiscreteUnaryOperator:
 
     def __init__(self, n: int, operator_vector: numpy.array = None,
-                 operator_expression: Callable[[int, int], int] = None):
+                 operator_expression: Callable[[int, int], int] = None,
+                 check_properties_in_load: bool = True):
         """
         Initializes the base object representing the unary operator from its vector expression or its analytical
         expression.
@@ -21,7 +22,10 @@ class DiscreteUnaryOperator:
             n: An integer, representing the size of the finite chain.
             operator_vector: A list of integers, representing the function in its vector expression.
             operator_expression: A function, representing the analytical expression.
+            check_properties_in_load: A boolean, indicating if the operator has to be loaded without checking the properties that define that class of operators.
+                                      By default, is set to True, indicating that the properties have to be checked.
         """
+        self.check_properties_in_load = check_properties_in_load
         if operator_vector is None and operator_expression is None:
             raise FuzzyOperatorBadDefinition()
 
@@ -30,7 +34,7 @@ class DiscreteUnaryOperator:
             self.operator_expression = operator_expression
 
         if operator_vector is not None:
-            if not len(operator_vector) == self.n+1:
+            if not len(operator_vector) == (self.n+1):
                 raise FuzzyOperatorSizeException()
 
             if not ((operator_vector >= 0).all() and (operator_vector <= n).all()):

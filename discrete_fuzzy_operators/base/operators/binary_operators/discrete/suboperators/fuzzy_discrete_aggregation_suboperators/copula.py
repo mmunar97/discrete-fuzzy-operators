@@ -13,7 +13,7 @@ class Copula(DiscreteAggregationBinaryOperator):
                  permutation: List[int] = None):
         """
         Initializes the object that represents a copula C: L x L -> L over a finite chain
-        L={0, 1, ..., n} from its matrix or its analytical expression.
+        L={0, 1, ..., n} from its matrix, its analytical expression or a permutation of n elements represented as a vector.
 
         Args:
             operator_matrix: A two-dimensional matrix of integers, representing the images of the operator; that is,

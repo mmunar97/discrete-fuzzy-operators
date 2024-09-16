@@ -1,3 +1,4 @@
+from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_suboperators.copula import Copula
 from discrete_fuzzy_operators.counters.aggregation_functions.discrete_aggregation_function_counter import DiscreteAggregationFunctionsCounter
 from discrete_fuzzy_operators.counters.aggregation_functions.discrete_commutative_aggregation_function_counter import DiscreteCommutativeAggregationFunctionsCounter
 from discrete_fuzzy_operators.counters.conjunctions.discrete_commutative_conjunctions_counter import DiscreteCommutativeConjunctionsCounter
@@ -11,15 +12,46 @@ from discrete_fuzzy_operators.counters.implications.discrete_identity_principle_
 from discrete_fuzzy_operators.counters.implications.discrete_ordering_principle_implications_counter import DiscreteOrderingPrincipleImplicationsCounter
 from discrete_fuzzy_operators.counters.negations.discrete_negations_counter import DiscreteNegationsCounter
 
+from sklearn.linear_model import LinearRegression
+import numpy as np
+from math import log, exp
+
 if __name__ == "__main__":
 
-    n = 4
 
-    for i in range(1, 16):
-        aggregation_function_counter = DiscreteOrderingPrincipleConjunctionsCounter(n=i)
-        print(f"Number of discrete aggregations with n={i}: {aggregation_function_counter.count_operators()}")
+    n_values = []
+    count_values = []
 
-    r"""
+    for n in range(2, 40):
+
+        negations_counter = DiscreteConjunctionsCounter(n=n)
+
+        n_values.append([n])
+        count_values.append(log(negations_counter.count_operators()))
+
+    X = np.array(n_values)
+    y = np.array(count_values)
+
+    model = LinearRegression().fit(X, y)
+
+    print(model.score(X, y))
+    print(exp(model.coef_))
+    print(exp(model.intercept_))
+
+    """
+    import itertools
+
+    n = 7
+    number_archimedean = 0
+    for permutation in itertools.permutations(range(1, n+1)):
+
+        copula = Copula(n=n, permutation=list(permutation))
+        if copula.is_archimedean():
+            number_archimedean += 1
+    print(number_archimedean)
+    """
+
+    """
     negations_counter = DiscreteNegationsCounter(n=n)
     print(f"Number of discrete negations with n={n}: {negations_counter.count_operators()}")
 

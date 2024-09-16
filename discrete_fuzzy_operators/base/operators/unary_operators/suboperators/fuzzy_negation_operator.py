@@ -10,7 +10,8 @@ class DiscreteNegation(DiscreteUnaryOperator):
 
     def __init__(self, n: int,
                  operator_vector: numpy.array = None,
-                 operator_expression: Callable[[int, int], int] = None):
+                 operator_expression: Callable[[int, int], int] = None,
+                 check_properties_in_load: bool = False):
         """
         Initializes the object representing the discrete negation from its vector expression or its analytical
         expression.
@@ -20,9 +21,9 @@ class DiscreteNegation(DiscreteUnaryOperator):
             operator_vector: A list of integers, representing the operator in its vector expression.
             operator_expression: A function, representing the analytical expression.
         """
-        super(DiscreteNegation, self).__init__(n, operator_vector, operator_expression)
+        super(DiscreteNegation, self).__init__(n, operator_vector, operator_expression, check_properties_in_load)
 
-        if not self.is_negation():
+        if check_properties_in_load and not self.is_negation():
             warnings.warn("With the input arguments, the generated operator is not a discrete negation since it is "
                           "not decreasing and satisfies the boundary conditions.")
 

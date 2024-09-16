@@ -9,7 +9,8 @@ class DiscreteAggregationBinaryOperator(DiscreteBinaryOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,
-                 operator_expression: Callable[[int, int, int], int] = None):
+                 operator_expression: Callable[[int, int, int], int] = None,
+                 check_properties_in_load: bool = True):
         """
         Initializes the object that represents a binary fuzzy aggregation function F: L x L -> L over a finite chain
         L={0, 1, ..., n} from its matrix.
@@ -19,14 +20,11 @@ class DiscreteAggregationBinaryOperator(DiscreteBinaryOperator):
                              in the row x and column y, the entry (x,y) represents the value of F(x, y).
             operator_expression: A Callable method with three integer arguments (x,y,n) returning an integer value.
         """
-        super(DiscreteAggregationBinaryOperator, self).__init__(n, operator_matrix, operator_expression)
+        super(DiscreteAggregationBinaryOperator, self).__init__(n, operator_matrix, operator_expression, check_properties_in_load)
 
-        if not(self.is_increasing() and self.evaluate_operator(0, 0) == 0 and
-               self.evaluate_operator(self.n, self.n) == self.n):
+        if check_properties_in_load and not(self.is_increasing() and self.evaluate_operator(0, 0) == 0 and self.evaluate_operator(self.n, self.n) == self.n):
             warnings.warn("With the input arguments, the generated operator is not a discrete aggregation function "
                           "since is not increasing or the the boundary conditions are not satisfied.")
-            if not self.is_increasing():
-                print(operator_matrix)
 
     def checks_annihilator_element(self, element: int) -> bool:
         """

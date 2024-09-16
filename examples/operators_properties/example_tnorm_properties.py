@@ -6,6 +6,7 @@ from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperat
 if __name__ == "__main__":
 
     # EXAMPLE: Check if Lukasiewicz and minimum t-norms verify some of the properties.
+    """
     lukasiewicz = numpy.array([[0, 0, 0, 0],
                                [0, 0, 0, 1],
                                [0, 0, 1, 2],
@@ -29,3 +30,24 @@ if __name__ == "__main__":
     print(f"Archimedean: {operator.is_archimedean(tnorm_condition=True, integer_limit=100)}")
     print(f"Lipschitz: {operator.is_lipschitz()}")
     print(f"2-increasing: {operator.checks_two_increasing_condition()}")
+    """
+
+    def is_archimedean(tnorm: numpy.ndarray, n: int) -> bool:
+        for x in range(1, n):
+            if tnorm[x, x] != x:
+                return False
+        return True
+
+    import numpy
+
+    discrete_dataset_path = r"C:\Users\Usuario\OneDrive - Universitat de les Illes Balears\UIB\Tesi\Experiments\DiscreteDataset"
+
+    for n in range(2, 11 + 1):
+        tnorms = numpy.load(discrete_dataset_path + rf"\N={n}\tnorms.npy", allow_pickle=True)
+        count = 0
+
+        for tnorm in tnorms:
+            if is_archimedean(tnorm, n):
+                count += 1
+
+        print(count)

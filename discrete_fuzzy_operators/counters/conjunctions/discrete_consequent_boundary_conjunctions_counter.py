@@ -32,5 +32,4 @@ class DiscreteConsequentBoundaryConjunctionsCounter(DiscreteNeutralityPrincipleC
                 cb_count += partial_fixed_column_counts[string_representation]
 
         cb_count += np_count
-
         return cb_count

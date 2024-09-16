@@ -15,7 +15,8 @@ class DiscreteImplicationOperator(DiscreteBinaryOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,
-                 operator_expression: Callable[[int, int, int], int] = None):
+                 operator_expression: Callable[[int, int, int], int] = None,
+                 check_properties_in_load: bool = True):
         """
         Initializes the object that represents a binary fuzzy implication I: L x L -> L over a finite chain
         L={0, 1, ..., n} from its matrix.
@@ -24,9 +25,9 @@ class DiscreteImplicationOperator(DiscreteBinaryOperator):
             operator_matrix: A two-dimensional matrix of integers, representing the images of the operator; that is,
                              in the row x and column y, the entry (x,y) represents the value of I(x, y).
         """
-        super(DiscreteImplicationOperator, self).__init__(n, operator_matrix, operator_expression)
+        super(DiscreteImplicationOperator, self).__init__(n, operator_matrix, operator_expression, check_properties_in_load)
 
-        if not self.is_implication():
+        if check_properties_in_load and not self.is_implication():
             warnings.warn("With the given parameters, the initialized operator is not a discrete implication.")
 
     # region Basic properties of implications
@@ -112,7 +113,9 @@ class DiscreteImplicationOperator(DiscreteBinaryOperator):
         """
         for x in range(0, self.n + 1):
             for y in range(0, self.n + 1):
-                if not (self.evaluate_operator(x, y) == self.n and x <= y):
+                if x <= y and self.evaluate_operator(x, y) != self.n:
+                    return False
+                if x > y and self.evaluate_operator(x, y) == self.n:
                     return False
         return True
 

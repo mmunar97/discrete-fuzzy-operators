@@ -1,5 +1,9 @@
 from typing import Tuple
 
+from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_suboperators.disjunction import Disjunction
+from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_suboperators.tconorm import Tconorm
+
+import numpy
 
 def custom_idempotent_uninorm(x, y, n) -> int:
     if y <= 8 - x:
@@ -116,18 +120,50 @@ if __name__ == "__main__":
     print(f"The evaluation U1 is less than or equal to the evaluation U2: {u1.total_order_less_equal(u2, order=xu_yager_order)}")
     """
 
-    from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unary_operator import \
-        DiscreteUnaryOperator
-
-    def g(x, n):
-        if x == 0 or x == 1:
-            return 6
-        elif x == 2:
-            return 5
-        elif x == 3 or x == 4 or x == 5:
-            return 2
+    def custom_op(x: int, y: int, n: int) -> int:
+        if 0 <= x <= 2 and 0 <= y <= 2:
+            return min(2, x+y)
+        elif 2 <= x <= 4 and 2 <= y <= 4:
+            return min(4, x+y-2)
+        elif 4 <= x <= 6 and 4 <= y <= 6:
+            return min(6, x+y-4)
+        elif 6 <= x <= 8 and 6 <= y <= 8:
+            return min(8, x+y-6)
+        elif 8 <= x <= 10 and 8 <= y <= 10:
+            return min(10, x+y-8)
         else:
-            return 0
+            return max(x, y)
 
-    func = DiscreteUnaryOperator(n=6, operator_expression=g)
-    print(func.compute_completed_graph())
+
+    op = Disjunction(n=10, operator_expression=custom_op)
+    print(numpy.flipud(op.operator_matrix))
+    # how_many = 0
+    # for x1 in range(3, 6+1):
+    #     for x2 in range(max(x1, 4), 6+1):
+    #         for x3 in range(x2, 6+1):
+    #             for x4 in range(max(x2, 5), 6+1):
+    #                 for x5 in range(max(x3, x4), 6+1):
+    #                     for x6 in range(x5, 6+1):
+    #                         template = op.operator_matrix.copy()
+    #
+    #                         template[3, 3] = x1
+    #                         template[3, 4] = x2
+    #                         template[3, 5] = x4
+    #
+    #                         template[4, 3] = x2
+    #                         template[4, 4] = x3
+    #                         template[4, 5] = x5
+    #
+    #                         template[5, 3] = x4
+    #                         template[5, 4] = x5
+    #                         template[5, 5] = x6
+    #
+    #                         try:
+    #                             new_tconorm = Tconorm(n=8, operator_matrix=template)
+    #                             if new_tconorm.is_smooth():
+    #                                 how_many += 1
+    #                                 print(numpy.flipud(new_tconorm.operator_matrix))
+    #                         except:
+    #                             pass
+    #
+    # print(how_many)

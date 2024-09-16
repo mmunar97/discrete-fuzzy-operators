@@ -11,7 +11,8 @@ from typing import Callable, List, Tuple
 class DiscreteBinaryOperator:
 
     def __init__(self, n: int, operator_matrix: numpy.ndarray = None,
-                 operator_expression: Callable[[int, int, int], int] = None):
+                 operator_expression: Callable[[int, int, int], int] = None,
+                 check_properties_in_load: bool = True):
         """
         Initializes the base object representing the operator from its matrix expression or its analytical expression.
 
@@ -19,7 +20,10 @@ class DiscreteBinaryOperator:
             n: An integer, representing the size of the finite chain.
             operator_matrix: A numpy array, representing the operator in its matrix expression.
             operator_expression: A function, representing the analytical expression.
+            check_properties_in_load: A boolean, indicating if the operator has to be loaded without checking the properties that define that class of operators.
+                                      By default, is set to True, indicating that the properties have to be checked.
         """
+        self.check_properties_in_load = check_properties_in_load
         if operator_matrix is None and operator_expression is None:
             raise FuzzyOperatorBadDefinition()
 

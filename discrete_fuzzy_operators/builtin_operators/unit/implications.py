@@ -31,6 +31,7 @@ class UnitImplicationExamples(Enum):
         """
         if implication == UnitImplicationExamples.LUKASIEWICZ:
             return FuzzyUnitImplicationOperator(UnitImplicationExamples.__lukasiewicz_implication)
+
         elif implication == UnitImplicationExamples.GODEL:
             return FuzzyUnitImplicationOperator(UnitImplicationExamples.__godel_implication)
         elif implication == UnitImplicationExamples.REICHENBACH:

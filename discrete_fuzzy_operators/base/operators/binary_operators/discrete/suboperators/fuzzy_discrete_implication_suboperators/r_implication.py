@@ -23,7 +23,7 @@ class RImplication(DiscreteImplicationOperator):
             operator_expression: A callable method with three parameters (x, y, n), which returns an integer value.
             operator_tnorm: A Tnorm object, representing the t-norm.
         """
-        if operator_matrix is None and operator_expression is None and operator_tnorm:
+        if operator_matrix is None and operator_expression is None and operator_tnorm is None:
             raise Exception("To initialise an R-implication it is necessary to provide its matrix expression, a "
                             "callable method or a t-norm.")
 

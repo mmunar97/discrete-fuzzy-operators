@@ -5,12 +5,15 @@ from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperat
     DiscreteAggregationBinaryOperator
 from typing import Callable
 
+from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_suboperators.disjunction import Disjunction
+
 
 class Conjunction(DiscreteAggregationBinaryOperator):
 
     def __init__(self, n: int,
                  operator_matrix: numpy.ndarray = None,
-                 operator_expression: Callable[[int, int, int], int] = None):
+                 operator_expression: Callable[[int, int, int], int] = None,
+                 check_properties_in_load: bool = True):
         """
         Initializes the object that represents a conjunction C: L x L -> L over a finite chain
         L={0, 1, ..., n} from its matrix or its analytical expression.
@@ -24,9 +27,9 @@ class Conjunction(DiscreteAggregationBinaryOperator):
             raise Exception("To initialise a conjunction it is necessary to provide its matrix expression or a callable"
                             " method.")
 
-        super(Conjunction, self).__init__(n, operator_matrix, operator_expression)
+        super(Conjunction, self).__init__(n, operator_matrix, operator_expression, check_properties_in_load)
 
-        if not self.is_conjunction():
+        if check_properties_in_load and not self.is_conjunction():
             warnings.warn("With the input arguments, the generated operator is not a conjunction since not verifies "
                           "the boundary conditions or is not monotone increasing.")
 
@@ -46,18 +49,27 @@ class Conjunction(DiscreteAggregationBinaryOperator):
 
     def get_asm_representation(self) -> numpy.ndarray:
         """
-        Computes the Alternating Sign Matrix representation of a smooth conjunction.  If the smooth is not smooth,
+        Computes the Alternating Sign Matrix representation of a smooth conjunction.  If the conjunction is not smooth,
         an Exception is raised.
 
         Returns:
             An nxn matrix, representing the associated alternating sign matrix of the operator.
         """
         if not self.is_smooth():
-            raise Exception("To initialise a conjunction it is necessary to provide its matrix expression or a callable"
-                            " method.")
+            raise Exception("To compute the alternating sign matrix associated with the conjunction, it needs to be smooth. ")
 
         asm = numpy.zeros(shape=(self.n, self.n), dtype=int)
         for i in range(1, self.n+1):
             for j in range(1, self.n+1):
                 asm[i-1, j-1] = self.evaluate_operator(i, j)-self.evaluate_operator(i, j-1)-self.evaluate_operator(i-1, j)+self.evaluate_operator(i-1, j-1)
         return asm
+
+    def get_dual_disjunction(self) -> Disjunction:
+        """
+        Computes the dual disjunction associated to the conjunction; that is, the discrete binary operator D
+        given by D(x,y)=n-C(n-x,n-y), for all x,y in L.
+
+        Returns:
+            A Disjunction object, representing the dual operator.
+        """
+        return Disjunction(n=self.n, operator_matrix=self.n-numpy.flipud(numpy.fliplr(self.operator_matrix)))
