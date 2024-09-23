@@ -2,7 +2,7 @@ import numpy
 
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_operator import \
     DiscreteAggregationBinaryOperator
-from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unary_operator import \
+from discrete_fuzzy_operators.base.operators.unary_operators.discrete.fuzzy_discrete_unary_operator import \
     DiscreteUnaryOperator
 from typing import Callable
 

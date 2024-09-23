@@ -7,7 +7,7 @@ from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperat
     Tconorm
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_implication_operator import \
     DiscreteImplicationOperator
-from discrete_fuzzy_operators.base.operators.unary_operators.suboperators.fuzzy_negation_operator import \
+from discrete_fuzzy_operators.base.operators.unary_operators.discrete.suboperators.fuzzy_negation_operator import \
     DiscreteNegation
 
 

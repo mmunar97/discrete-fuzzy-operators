@@ -6,7 +6,7 @@ from discrete_fuzzy_operators.base.operators.binary_operators.discrete.fuzzy_dis
     DiscreteBinaryOperator
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_implication_operator import \
     DiscreteImplicationOperator
-from discrete_fuzzy_operators.base.operators.unary_operators.suboperators.yager_generator_operator import \
+from discrete_fuzzy_operators.base.operators.unary_operators.discrete.suboperators.yager_generator_operator import \
     YagerGeneratorOperator
 
 

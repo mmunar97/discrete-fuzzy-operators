@@ -6,7 +6,7 @@ from discrete_fuzzy_operators.base.operators.binary_operators.discrete.fuzzy_dis
     DiscreteBinaryOperator
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_aggregation_suboperators.tnorm import \
     Tnorm
-from discrete_fuzzy_operators.base.operators.unary_operators.suboperators.fuzzy_negation_operator import \
+from discrete_fuzzy_operators.base.operators.unary_operators.discrete.suboperators.fuzzy_negation_operator import \
     DiscreteNegation
 from typing import Callable, List, Tuple
 

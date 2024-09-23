@@ -1,7 +1,7 @@
 import numpy
 import warnings
 
-from discrete_fuzzy_operators.base.operators.unary_operators.fuzzy_discrete_unary_operator import \
+from discrete_fuzzy_operators.base.operators.unary_operators.discrete.fuzzy_discrete_unary_operator import \
     DiscreteUnaryOperator
 from typing import Callable
 
