@@ -36,7 +36,7 @@ class NegationExamples(Enum):
 
         Args:
             x: An integer, representing the coordinate of the evaluation point.
-            n: n integer, representing the dimension of the domain where the t-norm is defined.
+            n: n integer, representing the dimension of the domain where the negation is defined.
 
         Returns:
             An integer, representing the value of the negation in the point.
@@ -50,7 +50,7 @@ class NegationExamples(Enum):
 
         Args:
             x: An integer, representing the coordinate of the evaluation point.
-            n: n integer, representing the dimension of the domain where the t-norm is defined.
+            n: n integer, representing the dimension of the domain where the negation is defined.
 
         Returns:
             An integer, representing the value of the negation in the point.
@@ -67,7 +67,7 @@ class NegationExamples(Enum):
 
         Args:
             x: An integer, representing the coordinate of the evaluation point.
-            n: n integer, representing the dimension of the domain where the t-norm is defined.
+            n: n integer, representing the dimension of the domain where the negation is defined.
 
         Returns:
             An integer, representing the value of the negation in the point.
