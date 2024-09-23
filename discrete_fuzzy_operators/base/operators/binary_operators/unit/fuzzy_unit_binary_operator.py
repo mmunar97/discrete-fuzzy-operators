@@ -11,7 +11,9 @@ from discrete_fuzzy_operators.base.operators.binary_operators.discrete.fuzzy_dis
 
 class FuzzyUnitBinaryOperator:
 
-    def __init__(self, operator_expression: Callable[[float, float], float] = None):
+    def __init__(self,
+                 operator_expression: Callable[[float, float], float] = None,
+                 check_properties_in_load: bool = True):
         """
         Initializes the base object representing the operator defined in the unit interval from its analytical
         expression. Since the class works with numbers between 0 and 1, in order to prevent rounding errors the
@@ -19,7 +21,11 @@ class FuzzyUnitBinaryOperator:
 
         Args:
             operator_expression: A function, representing the analytical expression.
+            check_properties_in_load: A boolean, indicating if the operator has to be loaded without checking the
+            properties that define that class of operators. By default, is set to True, indicating that the properties
+            have to be checked.
         """
+        self.check_properties_in_load = check_properties_in_load
         if operator_expression is None:
             raise Exception("In order to define a binary operator, its analytical expression must be provided.")
 

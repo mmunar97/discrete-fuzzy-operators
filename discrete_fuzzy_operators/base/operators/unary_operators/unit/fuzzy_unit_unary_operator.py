@@ -7,7 +7,8 @@ from typing import Callable, List, Tuple
 
 
 class FuzzyUnitUnaryOperator:
-    def __init__(self, operator_expression: Callable[[float], float] = None):
+    def __init__(self, operator_expression: Callable[[float], float] = None,
+                 check_properties_in_load: bool = True):
         """
         Initializes the base object representing the operator defined in the unit interval from its analytical
         expression. Since the class works with numbers between 0 and 1, in order to prevent rounding errors the
@@ -16,6 +17,7 @@ class FuzzyUnitUnaryOperator:
         Args:
             operator_expression: A function, representing the analytical expression.
         """
+        self.check_properties_in_load = check_properties_in_load
         if operator_expression is None:
             raise Exception("In order to define a unary operator, its analytical expression must be provided.")
 
@@ -54,3 +56,33 @@ class FuzzyUnitUnaryOperator:
         figure = plot_express.line(x=x, y=y)
         figure.update_layout(autosize=True, width=figure_size[0], height=figure_size[1])
         figure.show()
+
+    def is_decreasing(self, scatter_grid_x: int = 50) -> bool:
+        """
+        Checks if the operator is monotone decreasing in a grid of a specified size.
+
+        Args:
+            scatter_grid_x: An integer, representing the number of points to consider in the X grid.
+        """
+
+        x = numpy.linspace(0, 1, scatter_grid_x)
+
+        for i in range(0,scatter_grid_x-1):
+            if not self.evaluate_operator(x[i+1]) <= self.evaluate_operator(x[i]):
+                return False
+        return True
+
+    def is_increasing(self, scatter_grid_x: int = 50) -> bool:
+        """
+        Checks if the operator is monotone increasing in a grid of a specified size.
+
+        Args:
+            scatter_grid_x: An integer, representing the number of points to consider in the X grid.
+        """
+
+        x = numpy.linspace(0, 1, scatter_grid_x)
+
+        for i in range(0,scatter_grid_x-1):
+            if not self.evaluate_operator(x[i+1]) >= self.evaluate_operator(x[i]):
+                return False
+        return True
