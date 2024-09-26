@@ -47,46 +47,6 @@ class FuzzyUnitBinaryOperator:
                             "0 and 1.")
         return self.operator_expression(x, y)
 
-    # region Discretization
-    def get_upper_discretized_operator(self, n: int) -> DiscreteBinaryOperator:
-        """
-        Computes the upper discretization of a binary operator, defined as Ceil(n*F(x/n,y/n)), and represents it as a
-        FuzzyDiscreteBinaryOperator object.
-
-        Args:
-            n: An integer, representing the dimension of the finite chain where the discrete operator is defined.
-
-        Returns:
-            A FuzzyDiscreteBinaryOperator object, representing the discrete operator.
-        """
-        operator_matrix = numpy.zeros((n+1, n+1), dtype=int)
-        for x in range(0, n + 1):
-            for y in range(0, n + 1):
-                if x == 2 and y == 1:
-                    a = 2
-                operator_matrix[y, x] = ceil(round(n*self.evaluate_operator(x/n, y/n), 5))
-
-        return DiscreteBinaryOperator(n=n, operator_matrix=operator_matrix)
-
-    def get_lower_discretized_operator(self, n: int) -> DiscreteBinaryOperator:
-        """
-        Computes the upper discretization of a binary operator, defined as Ceil(n*F(x/n,y/n)), and represents it as a
-        FuzzyDiscreteBinaryOperator object.
-
-        Args:
-            n: An integer, representing the dimension of the finite chain where the discrete operator is defined.
-
-        Returns:
-            A FuzzyDiscreteBinaryOperator object, representing the discrete operator.
-        """
-        operator_matrix = numpy.zeros((n + 1, n + 1), dtype=int)
-        for x in range(0, n + 1):
-            for y in range(0, n + 1):
-                operator_matrix[y, x] = floor(round(n*self.evaluate_operator(x/n, y/n), 5))
-
-        return DiscreteBinaryOperator(n=n, operator_matrix=operator_matrix)
-    # endregion
-
     # region Plot of the operators
     def plot_operator(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50,
                       figure_size: Tuple[int, int] = (700, 700)):
@@ -106,7 +66,9 @@ class FuzzyUnitBinaryOperator:
             for y_idx, y_val in enumerate(y):
                 z[y_idx, x_idx] = self.evaluate_operator(x_val, y_val)
 
-        figure = go.Figure(data=[go.Surface(x=x, y=y, z=z, cmin=0, cmax=1, showscale=False)]+self.generate_unit_cube_contour(draw_diagonal=False))
+        figure = go.Figure(
+            data=[go.Surface(x=x, y=y, z=z, cmin=0, cmax=1, showscale=False)] + self.generate_unit_cube_contour(
+                draw_diagonal=False))
         figure.update_layout(
             autosize=True,
             width=figure_size[0],
@@ -122,6 +84,158 @@ class FuzzyUnitBinaryOperator:
         )
 
         figure.show()
+
+    def is_decreasing_x(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50) -> bool:
+        """
+        Checks if the operator is monotone decreasing with respect to the 1st variable in a grid of a specified size.
+
+        Args:
+            scatter_grid_x: An integer, representing the number of points to consider in the X grid.
+            scatter_grid_y: An integer, representing the number of points to consider in the Y grid.
+        """
+
+        x = numpy.linspace(0, 1, scatter_grid_x)
+        y = numpy.linspace(0, 1, scatter_grid_y)
+
+        for i in range(0, scatter_grid_x - 1):
+            for j in range(0, scatter_grid_y):
+                if not self.evaluate_operator(x[i + 1], y[j]) <= self.evaluate_operator(x[i], y[j]):
+                    return False
+        return True
+
+    def is_decreasing_y(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50) -> bool:
+        """
+        Checks if the operator is monotone decreasing with respect to the 2nd variable in a grid of a specified size.
+
+        Args:
+            scatter_grid_x: An integer, representing the number of points to consider in the X grid.
+            scatter_grid_y: An integer, representing the number of points to consider in the Y grid.
+        """
+
+        x = numpy.linspace(0, 1, scatter_grid_x)
+        y = numpy.linspace(0, 1, scatter_grid_y)
+
+        for i in range(0, scatter_grid_x):
+            for j in range(0, scatter_grid_y-1):
+                if not self.evaluate_operator(x[i], y[j+1]) <= self.evaluate_operator(x[i], y[j]):
+                    return False
+        return True
+
+    def is_increasing_x(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50) -> bool:
+        """
+        Checks if the operator is monotone increasing with respect to the 1st variable in a grid of a specified size.
+
+        Args:
+            scatter_grid_x: An integer, representing the number of points to consider in the X grid.
+            scatter_grid_y: An integer, representing the number of points to consider in the Y grid.
+        """
+
+        x = numpy.linspace(0, 1, scatter_grid_x)
+        y = numpy.linspace(0, 1, scatter_grid_y)
+
+        for i in range(0, scatter_grid_x - 1):
+            for j in range(0, scatter_grid_y):
+                if not self.evaluate_operator(x[i + 1], y[j]) >= self.evaluate_operator(x[i], y[j]):
+                    return False
+        return True
+
+    def is_increasing_y(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50) -> bool:
+        """
+        Checks if the operator is monotone increasing with respect to the 2nd variable in a grid of a specified size.
+
+        Args:
+            scatter_grid_x: An integer, representing the number of points to consider in the X grid.
+            scatter_grid_y: An integer, representing the number of points to consider in the Y grid.
+        """
+
+        x = numpy.linspace(0, 1, scatter_grid_x)
+        y = numpy.linspace(0, 1, scatter_grid_y)
+
+        for i in range(0, scatter_grid_x):
+            for j in range(0, scatter_grid_y-1):
+                if not self.evaluate_operator(x[i], y[j+1]) >= self.evaluate_operator(x[i], y[j]):
+                    return False
+        return True
+
+    def is_commutative(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50) -> bool:
+        """
+        Checks if the operator is commutative in a grid of a specified size.
+
+        Args:
+            scatter_grid_x: An integer, representing the number of points to consider in the X grid.
+            scatter_grid_y: An integer, representing the number of points to consider in the Y grid.
+        """
+
+        x = numpy.linspace(0, 1, scatter_grid_x)
+        y = numpy.linspace(0, 1, scatter_grid_y)
+
+        for x_idx, x_val in enumerate(x):
+            for y_idx, y_val in enumerate(y):
+                if not self.evaluate_operator(x_val, y_val) == self.evaluate_operator(y_val, x_val):
+                    return False
+        return True
+
+    def is_associative(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50, scatter_grid_z: int = 50) -> bool:
+        """
+        Checks if the operator is commutative in a grid of a specified size.
+
+        Args:
+            scatter_grid_x: An integer, representing the number of points to consider in the X grid.
+            scatter_grid_y: An integer, representing the number of points to consider in the Y grid.
+            scatter_grid_z: An integer, representing the number of points to consider in the Z grid.
+        """
+
+        x = numpy.linspace(0, 1, scatter_grid_x)
+        y = numpy.linspace(0, 1, scatter_grid_y)
+        z = numpy.linspace(0, 1, scatter_grid_y)
+
+        for x_idx, x_val in enumerate(x):
+            for y_idx, y_val in enumerate(y):
+                for z_idx, z_val in enumerate(z):
+                    if not self.evaluate_operator(x_val, self.evaluate_operator(y_val,z_val)) == self.evaluate_operator(self.evaluate_operator(x_val,y_val), z_val):
+                        return False
+        return True
+
+    # region Discretization
+    def get_upper_discretized_operator(self, n: int) -> DiscreteBinaryOperator:
+        """
+        Computes the upper discretization of a binary operator, defined as Ceil(n*F(x/n,y/n)), and represents it as a
+        FuzzyDiscreteBinaryOperator object.
+
+        Args:
+            n: An integer, representing the dimension of the finite chain where the discrete operator is defined.
+
+        Returns:
+            A FuzzyDiscreteBinaryOperator object, representing the discrete operator.
+        """
+        operator_matrix = numpy.zeros((n + 1, n + 1), dtype=int)
+        for x in range(0, n + 1):
+            for y in range(0, n + 1):
+                if x == 2 and y == 1:
+                    a = 2
+                operator_matrix[y, x] = ceil(round(n * self.evaluate_operator(x / n, y / n), 5))
+
+        return DiscreteBinaryOperator(n=n, operator_matrix=operator_matrix)
+
+    def get_lower_discretized_operator(self, n: int) -> DiscreteBinaryOperator:
+        """
+        Computes the upper discretization of a binary operator, defined as Ceil(n*F(x/n,y/n)), and represents it as a
+        FuzzyDiscreteBinaryOperator object.
+
+        Args:
+            n: An integer, representing the dimension of the finite chain where the discrete operator is defined.
+
+        Returns:
+            A FuzzyDiscreteBinaryOperator object, representing the discrete operator.
+        """
+        operator_matrix = numpy.zeros((n + 1, n + 1), dtype=int)
+        for x in range(0, n + 1):
+            for y in range(0, n + 1):
+                operator_matrix[y, x] = floor(round(n * self.evaluate_operator(x / n, y / n), 5))
+
+        return DiscreteBinaryOperator(n=n, operator_matrix=operator_matrix)
+
+    # endregion
 
     @staticmethod
     def generate_unit_cube_contour(draw_diagonal: bool) -> List[go.Scatter3d]:
