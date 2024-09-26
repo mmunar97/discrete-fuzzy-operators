@@ -14,13 +14,13 @@ class NegationExamples(Enum):
     YAGER = "yager"
 
     @staticmethod
-    def get_negation(negation: "NegationExamples", k=float) -> FuzzyNegation:
+    def get_negation(negation: "NegationExamples", **kwargs) -> FuzzyNegation:
         """
         Returns a FuzzyNegation object representing the selected negation.
 
         Args:
             negation: A Negation value, representing the chosen negation.
-            k: A float value, representing the corresponding parameter for sugeno or yagers negation
+            **kwargs: Parameters
 
         Returns:
             A FuzzyNegation object.
@@ -32,9 +32,9 @@ class NegationExamples(Enum):
         elif negation == NegationExamples.GREATEST:
             return FuzzyNegation(operator_expression=NegationExamples.__greatest_negation)
         elif negation == NegationExamples.SUGENO:
-            return FuzzyNegation(operator_expression=lambda x: NegationExamples.__sugeno(x=x, k=k))
+            return FuzzyNegation(operator_expression=lambda x: NegationExamples.__sugeno(x=x, **kwargs))
         elif negation == NegationExamples.YAGER:
-            return FuzzyNegation(operator_expression=lambda x: NegationExamples.__yager(x=x, k=k))
+            return FuzzyNegation(operator_expression=lambda x: NegationExamples.__yager(x=x, **kwargs))
 
     @staticmethod
     def __classical_negation(x: float) -> float:
