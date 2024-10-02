@@ -1,10 +1,6 @@
 import warnings
 from typing import Callable
 from discrete_fuzzy_operators.base.operators.binary_operators.unit.suboperators.fuzzy_unit_aggregation_operator import FuzzyUnitAggregationBinaryOperator
-from discrete_fuzzy_operators.base.operators.binary_operators.unit.suboperators.fuzzy_unit_aggregation_suboperators.unit_disjunction import \
-    FuzzyUnitDisjunction
-from discrete_fuzzy_operators.base.operators.unary_operators.unit.suboperators.fuzzy_negation_operator import FuzzyNegation
-
 
 class FuzzyUnitConjunction(FuzzyUnitAggregationBinaryOperator):
 
