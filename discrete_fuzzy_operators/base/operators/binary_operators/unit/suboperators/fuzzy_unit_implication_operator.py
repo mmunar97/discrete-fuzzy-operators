@@ -1,6 +1,7 @@
 import plotly.graph_objects as go
 
 from decimal import Decimal
+import warnings
 
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_implication_operator import \
     DiscreteImplicationOperator
@@ -12,15 +13,40 @@ from typing import Callable, Tuple
 
 class FuzzyUnitImplicationOperator(FuzzyUnitBinaryOperator):
 
-    def __init__(self, operator_expression: Callable[[float, float], float] = None):
+    def __init__(self, operator_expression: Callable[[float, float], float] = None,
+                 check_properties_in_load: bool = True):
         """
         Initializes the object that represents a binary fuzzy implication I: [0,1]x[0,1] -> [0,1] from its analytical
         expression.
 
         Args:
-            operator_expression:
+            operator_expression: A function, representing the analytical expression.
+            check_properties_in_load: A boolean, indicating if the operator has to be loaded without checking the
+            properties that define that class of operators. By default, is set to True, indicating that the properties
+            have to be checked.
         """
-        super(FuzzyUnitImplicationOperator, self).__init__(operator_expression)
+        self.check_properties_in_load = check_properties_in_load
+        super(FuzzyUnitImplicationOperator, self).__init__(operator_expression, check_properties_in_load)
+
+        if check_properties_in_load and not self.is_fuzzy_implication():
+            warnings.warn("With the input arguments, the generated operator is not a fuzzy negation since it is "
+                          "not decreasing and/or satisfies the boundary conditions.")
+
+    def is_fuzzy_implication(self) -> bool:
+        """
+        Checks if the operator is a fuzzy implication; that is, if it is monotone decreasing with respect to the
+        1st variable, increasing with respect to the 2nd variable and satisfies the boundary conditions.
+        """
+        return self.is_decreasing_x() and self.is_increasing_y() and self.verifies_boundary_conditions()
+
+    def verifies_boundary_conditions(self) -> bool:
+        """
+        Checks if the operator verifies the boundary conditions of a fuzzy implication; that is, if I(1,0)=0 and
+        I(1,1)=I(0,0)=1.
+        """
+        if self.evaluate_operator(1, 0) == 0 and self.evaluate_operator(0, 0) == 1 and self.evaluate_operator(1, 1) == 1:
+            return True
+        return False
 
     def get_upper_discretized_operator(self, n: int) -> DiscreteImplicationOperator:
         """

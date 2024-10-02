@@ -187,7 +187,7 @@ class FuzzyUnitBinaryOperator:
 
         x = numpy.linspace(0, 1, scatter_grid_x)
         y = numpy.linspace(0, 1, scatter_grid_y)
-        z = numpy.linspace(0, 1, scatter_grid_y)
+        z = numpy.linspace(0, 1, scatter_grid_z)
 
         for x_idx, x_val in enumerate(x):
             for y_idx, y_val in enumerate(y):

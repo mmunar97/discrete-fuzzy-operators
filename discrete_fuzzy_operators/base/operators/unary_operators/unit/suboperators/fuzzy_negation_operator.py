@@ -9,8 +9,7 @@ class FuzzyNegation(FuzzyUnitUnaryOperator):
                  operator_expression: Callable[[float], float] = None,
                  check_properties_in_load: bool = True):
         """
-        Initializes the object representing the discrete negation from its vector expression or its analytical
-        expression.
+        Initializes the object representing the fuzzy negation from its analytical expression.
 
         Args:
             operator_expression: A function, representing the analytical expression.
@@ -35,8 +34,8 @@ class FuzzyNegation(FuzzyUnitUnaryOperator):
 
     def verifies_boundary_conditions(self) -> bool:
         """
-        Checks if the operator verifies the boundary conditions of a fuzzy negation; that is, if N(0)=n and
-        N(n)=0.
+        Checks if the operator verifies the boundary conditions of a fuzzy negation; that is, if N(0)=1 and
+        N(1)=0.
         """
         if self.evaluate_operator(0) == 1 and self.evaluate_operator(1) == 0:
             return True
