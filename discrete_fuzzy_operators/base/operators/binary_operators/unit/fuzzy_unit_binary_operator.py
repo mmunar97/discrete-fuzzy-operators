@@ -1,10 +1,8 @@
 import numpy
 import plotly.graph_objects as go
-
 from decimal import Decimal
-from math import ceil, floor
+from math import ceil, floor, isclose
 from typing import Callable, List, Tuple
-
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.fuzzy_discrete_binary_operator import \
     DiscreteBinaryOperator
 
@@ -171,7 +169,7 @@ class FuzzyUnitBinaryOperator:
 
         for x_idx, x_val in enumerate(x):
             for y_idx, y_val in enumerate(y):
-                if not self.evaluate_operator(x_val, y_val) == self.evaluate_operator(y_val, x_val):
+                if not isclose(self.evaluate_operator(x_val, y_val), self.evaluate_operator(y_val, x_val)):
                     return False
         return True
 
@@ -192,7 +190,7 @@ class FuzzyUnitBinaryOperator:
         for x_idx, x_val in enumerate(x):
             for y_idx, y_val in enumerate(y):
                 for z_idx, z_val in enumerate(z):
-                    if not self.evaluate_operator(x_val, self.evaluate_operator(y_val,z_val)) == self.evaluate_operator(self.evaluate_operator(x_val,y_val), z_val):
+                    if not isclose(self.evaluate_operator(x_val, self.evaluate_operator(y_val,z_val)), self.evaluate_operator(self.evaluate_operator(x_val,y_val), z_val)):
                         return False
         return True
 

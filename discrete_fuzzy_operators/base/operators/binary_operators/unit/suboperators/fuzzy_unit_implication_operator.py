@@ -29,8 +29,8 @@ class FuzzyUnitImplicationOperator(FuzzyUnitBinaryOperator):
         super(FuzzyUnitImplicationOperator, self).__init__(operator_expression, check_properties_in_load)
 
         if check_properties_in_load and not self.is_fuzzy_implication():
-            warnings.warn("With the input arguments, the generated operator is not a fuzzy negation since it is "
-                          "not decreasing and/or satisfies the boundary conditions.")
+            warnings.warn("With the input arguments, the generated operator is not a fuzzy implication since it is "
+                          "not decreasing/increasing and/or satisfies the boundary conditions.")
 
     def is_fuzzy_implication(self) -> bool:
         """

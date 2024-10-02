@@ -1,8 +1,11 @@
 import numpy
+import math
 import warnings
 from typing import Callable
 
-from discrete_fuzzy_operators.base.operators.unary_operators.unit.fuzzy_unit_unary_operator import FuzzyUnitUnaryOperator
+from discrete_fuzzy_operators.base.operators.unary_operators.unit.fuzzy_unit_unary_operator import \
+    FuzzyUnitUnaryOperator
+
 
 class FuzzyNegation(FuzzyUnitUnaryOperator):
     def __init__(self,
@@ -40,4 +43,20 @@ class FuzzyNegation(FuzzyUnitUnaryOperator):
         if self.evaluate_operator(0) == 1 and self.evaluate_operator(1) == 0:
             return True
         return False
+
     # endregion
+
+    def is_strong(self, scatter_grid_x: int = 50) -> bool:
+        """
+        Checks if the fuzzy negation is strong; that is, N(N(x))=x for all x in [0,1], in a grid of a specified size.
+
+        Args:
+            scatter_grid_x: An integer, representing the number of points to consider in the X grid.
+        """
+
+        x = numpy.linspace(0, 1, scatter_grid_x)
+
+        for x_idx, x_val in enumerate(x):
+            if not math.isclose(self.evaluate_operator(self.evaluate_operator(x_val)), x_val):
+                return False
+        return True
