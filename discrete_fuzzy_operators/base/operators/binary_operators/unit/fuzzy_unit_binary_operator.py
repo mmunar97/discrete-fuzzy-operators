@@ -40,7 +40,7 @@ class FuzzyUnitBinaryOperator:
         Returns:
             A float, representing the value of the function in the given point.
         """
-        if not 0 <= x <= 1 and 0 <= y <= 1:
+        if not (0 <= x <= 1 and 0 <= y <= 1):
             raise Exception("To evaluate a binary operator defined in the unit interval, the arguments must be between "
                             "0 and 1.")
         return self.operator_expression(x, y)
