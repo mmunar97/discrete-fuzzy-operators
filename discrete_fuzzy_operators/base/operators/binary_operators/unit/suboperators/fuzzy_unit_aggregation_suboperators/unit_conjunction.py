@@ -1,7 +1,7 @@
 import warnings
 from typing import Callable
 from discrete_fuzzy_operators.base.operators.binary_operators.unit.suboperators.fuzzy_unit_aggregation_operator import FuzzyUnitAggregationBinaryOperator
-
+from discrete_fuzzy_operators.base.numeric_comparator.numeric_comparator import NumericComparator
 class FuzzyUnitConjunction(FuzzyUnitAggregationBinaryOperator):
 
     def __init__(self, operator_expression: Callable[[float, float], float] = None,
@@ -34,6 +34,6 @@ class FuzzyUnitConjunction(FuzzyUnitAggregationBinaryOperator):
         """
         Checks if the operator verifies the boundary conditions of a fuzzy conjunction; that is, if C(1,0)=C(0,1)=0.
         """
-        if self.evaluate_operator(1, 0) == 0 and self.evaluate_operator(0, 1) == 0:
+        if NumericComparator.compare_equal(self.evaluate_operator(1, 0),0) and NumericComparator.compare_equal(self.evaluate_operator(0, 1),0):
             return True
         return False

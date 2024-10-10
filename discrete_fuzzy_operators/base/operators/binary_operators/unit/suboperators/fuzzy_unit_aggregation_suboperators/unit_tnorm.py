@@ -4,6 +4,7 @@ from math import isclose
 from typing import Callable
 from discrete_fuzzy_operators.base.operators.binary_operators.unit.suboperators.fuzzy_unit_aggregation_suboperators.unit_conjunction import \
     FuzzyUnitConjunction
+from discrete_fuzzy_operators.base.numeric_comparator.numeric_comparator import NumericComparator
 
 
 class FuzzyUnitTnorm(FuzzyUnitConjunction):
@@ -50,6 +51,6 @@ class FuzzyUnitTnorm(FuzzyUnitConjunction):
         x = numpy.linspace(0, 1, scatter_grid_x)
 
         for x_idx, x_val in enumerate(x):
-            if not isclose(self.evaluate_operator(x_val, 1), x_val):
+            if not NumericComparator.compare_equal(self.evaluate_operator(x_val, 1), x_val):
                 return False
         return True

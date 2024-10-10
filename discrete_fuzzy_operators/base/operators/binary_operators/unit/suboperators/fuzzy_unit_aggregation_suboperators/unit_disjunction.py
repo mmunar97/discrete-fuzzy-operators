@@ -2,6 +2,7 @@ import warnings
 from typing import Callable
 from discrete_fuzzy_operators.base.operators.binary_operators.unit.suboperators.fuzzy_unit_aggregation_operator import \
     FuzzyUnitAggregationBinaryOperator
+from discrete_fuzzy_operators.base.numeric_comparator.numeric_comparator import NumericComparator
 
 
 class FuzzyUnitDisjunction(FuzzyUnitAggregationBinaryOperator):
@@ -36,6 +37,6 @@ class FuzzyUnitDisjunction(FuzzyUnitAggregationBinaryOperator):
         """
         Checks if the operator verifies the boundary conditions of a fuzzy disjunction; that is, if D(1,0)=D(0,1)=1.
         """
-        if self.evaluate_operator(1, 0) == 1 and self.evaluate_operator(0, 1) == 1:
+        if NumericComparator.compare_equal(self.evaluate_operator(1, 0),1) and NumericComparator.compare_equal(self.evaluate_operator(0, 1),1):
             return True
         return False

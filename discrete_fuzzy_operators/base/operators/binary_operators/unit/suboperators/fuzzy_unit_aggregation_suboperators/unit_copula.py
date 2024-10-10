@@ -47,21 +47,20 @@ class FuzzyUnitCopula(FuzzyUnitConjunction):
         y2 = numpy.linspace(0, 1, scatter_grid_y)
 
         for x1_idx, x1_val in enumerate(x1):
-            if not isclose(self.evaluate_operator(x1_val, 1), x1_val):
+            if not NumericComparator.compare_equal(self.evaluate_operator(x1_val, 1), x1_val):
                 return False
                 print("Cond2")
             for y1_idx, y1_val in enumerate(y1):
-                if not isclose(self.evaluate_operator(x1_val, 0), self.evaluate_operator(0, y1_val)):
+                if not NumericComparator.compare_equal(self.evaluate_operator(x1_val, 0), self.evaluate_operator(0, y1_val)):
                     print("Cond1")
                     return False
-                if not isclose(self.evaluate_operator(1, y1_val), y1_val):
+                if not NumericComparator.compare_equal(self.evaluate_operator(1, y1_val), y1_val):
                     print("Cond3")
                     return False
                 for x2_idx, x2_val in enumerate(x2):
                     for y2_idx, y2_val in enumerate(y2):
-                        if x1_val <= x2_val and y1_val <= y2_val:
-                            if not (self.evaluate_operator(x2_val, y2_val)-self.evaluate_operator(x2_val,y1_val)-self.evaluate_operator(x1_val,y2_val)+self.evaluate_operator(x1_val,y1_val)>0\
-                                    or isclose(self.evaluate_operator(x2_val, y2_val)-self.evaluate_operator(x2_val,y1_val)-self.evaluate_operator(x1_val,y2_val)+self.evaluate_operator(x1_val,y1_val),0)):
+                        if NumericComparator.compare_less_equal(x1_val, x2_val) and NumericComparator.compare_less_equal(y1_val, y2_val):
+                            if not NumericComparator.compare_greater_equal(self.evaluate_operator(x2_val,y2_val)-self.evaluate_operator(x2_val,y1_val)-self.evaluate_operator(x1_val,y2_val)+self.evaluate_operator(x1_val,y1_val),0):
                                 return False
 
         return True

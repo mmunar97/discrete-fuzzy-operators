@@ -1,7 +1,7 @@
 import numpy
 import plotly.express as plot_express
-import plotly.graph_objects as go
-from typing import Callable, List, Tuple
+from typing import Callable, Tuple
+from discrete_fuzzy_operators.base.numeric_comparator.numeric_comparator import NumericComparator
 
 
 
@@ -68,7 +68,7 @@ class FuzzyUnitUnaryOperator:
         x = numpy.linspace(0, 1, scatter_grid_x)
 
         for i in range(0,scatter_grid_x-1):
-            if not self.evaluate_operator(x[i+1]) <= self.evaluate_operator(x[i]):
+            if not NumericComparator.compare_less_equal(self.evaluate_operator(x[i+1]),self.evaluate_operator(x[i])):
                 return False
         return True
 
@@ -83,6 +83,6 @@ class FuzzyUnitUnaryOperator:
         x = numpy.linspace(0, 1, scatter_grid_x)
 
         for i in range(0,scatter_grid_x-1):
-            if not self.evaluate_operator(x[i+1]) >= self.evaluate_operator(x[i]):
+            if not NumericComparator.compare_greater_equal(self.evaluate_operator(x[i+1]),self.evaluate_operator(x[i])):
                 return False
         return True

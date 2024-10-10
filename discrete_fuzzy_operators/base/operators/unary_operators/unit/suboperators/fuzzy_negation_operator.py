@@ -5,6 +5,7 @@ from typing import Callable
 
 from discrete_fuzzy_operators.base.operators.unary_operators.unit.fuzzy_unit_unary_operator import \
     FuzzyUnitUnaryOperator
+from discrete_fuzzy_operators.base.numeric_comparator.numeric_comparator import NumericComparator
 
 
 class FuzzyNegation(FuzzyUnitUnaryOperator):
@@ -40,7 +41,7 @@ class FuzzyNegation(FuzzyUnitUnaryOperator):
         Checks if the operator verifies the boundary conditions of a fuzzy negation; that is, if N(0)=1 and
         N(1)=0.
         """
-        if self.evaluate_operator(0) == 1 and self.evaluate_operator(1) == 0:
+        if NumericComparator.compare_equal(self.evaluate_operator(0),1) and NumericComparator.compare_equal(self.evaluate_operator(1),0):
             return True
         return False
 
@@ -57,6 +58,6 @@ class FuzzyNegation(FuzzyUnitUnaryOperator):
         x = numpy.linspace(0, 1, scatter_grid_x)
 
         for x_idx, x_val in enumerate(x):
-            if not math.isclose(self.evaluate_operator(self.evaluate_operator(x_val)), x_val):
+            if not NumericComparator.compare_equal(self.evaluate_operator(self.evaluate_operator(x_val)), x_val):
                 return False
         return True

@@ -1,6 +1,4 @@
-import plotly.graph_objects as go
-
-from decimal import Decimal
+from discrete_fuzzy_operators.base.numeric_comparator.numeric_comparator import NumericComparator
 import warnings
 
 from discrete_fuzzy_operators.base.operators.binary_operators.unit.fuzzy_unit_binary_operator import \
@@ -43,7 +41,7 @@ class FuzzyUnitAggregationBinaryOperator(FuzzyUnitBinaryOperator):
         Checks if the operator verifies the boundary conditions of a fuzzy aggregation function; that is, if A(0,0)=0 and
         A(1,1)=1.
         """
-        if self.evaluate_operator(0, 0) == 0 and self.evaluate_operator(1, 1) == 1:
+        if NumericComparator.compare_equal(self.evaluate_operator(0, 0),0) and NumericComparator.compare_equal(self.evaluate_operator(1, 1),1):
             return True
         return False
 

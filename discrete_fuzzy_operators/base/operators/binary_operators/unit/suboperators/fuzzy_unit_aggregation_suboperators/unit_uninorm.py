@@ -1,6 +1,7 @@
 import warnings
 import numpy
 from math import isclose
+from discrete_fuzzy_operators.base.numeric_comparator.numeric_comparator import NumericComparator
 from typing import Callable
 from discrete_fuzzy_operators.base.operators.binary_operators.unit.suboperators.fuzzy_unit_aggregation_operator import \
     FuzzyUnitAggregationBinaryOperator
@@ -44,6 +45,6 @@ class FuzzyUnitUninorm(FuzzyUnitAggregationBinaryOperator):
         """
         x = numpy.linspace(0, 1, scatter_grid_x)
         for x_idx, x_val in enumerate(x):
-            if isclose(self.evaluate_operator(x_val, self.e), x):
+            if NumericComparator.compare_equal(self.evaluate_operator(x_val, self.e), x):
                 return True
             return False

@@ -1,6 +1,6 @@
 import numpy
 import plotly.graph_objects as go
-from decimal import Decimal
+from discrete_fuzzy_operators.base.numeric_comparator.numeric_comparator import NumericComparator
 from math import ceil, floor, isclose
 from typing import Callable, List, Tuple
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.fuzzy_discrete_binary_operator import \
@@ -97,7 +97,7 @@ class FuzzyUnitBinaryOperator:
 
         for i in range(0, scatter_grid_x - 1):
             for j in range(0, scatter_grid_y):
-                if not self.evaluate_operator(x[i + 1], y[j]) <= self.evaluate_operator(x[i], y[j]):
+                if not NumericComparator.compare_less_equal(self.evaluate_operator(x[i + 1], y[j]),self.evaluate_operator(x[i], y[j])):
                     return False
         return True
 
@@ -115,7 +115,7 @@ class FuzzyUnitBinaryOperator:
 
         for i in range(0, scatter_grid_x):
             for j in range(0, scatter_grid_y-1):
-                if not self.evaluate_operator(x[i], y[j+1]) <= self.evaluate_operator(x[i], y[j]):
+                if not NumericComparator.compare_less_equal(self.evaluate_operator(x[i], y[j+1]),self.evaluate_operator(x[i], y[j])):
                     return False
         return True
 
@@ -133,7 +133,7 @@ class FuzzyUnitBinaryOperator:
 
         for i in range(0, scatter_grid_x - 1):
             for j in range(0, scatter_grid_y):
-                if not self.evaluate_operator(x[i + 1], y[j]) >= self.evaluate_operator(x[i], y[j]):
+                if not NumericComparator.compare_greater_equal(self.evaluate_operator(x[i + 1], y[j]),self.evaluate_operator(x[i], y[j])):
                     return False
         return True
 
@@ -151,7 +151,7 @@ class FuzzyUnitBinaryOperator:
 
         for i in range(0, scatter_grid_x):
             for j in range(0, scatter_grid_y-1):
-                if not self.evaluate_operator(x[i], y[j+1]) >= self.evaluate_operator(x[i], y[j]):
+                if not NumericComparator.compare_greater_equal(self.evaluate_operator(x[i], y[j+1]),self.evaluate_operator(x[i], y[j])):
                     return False
         return True
 
@@ -169,7 +169,7 @@ class FuzzyUnitBinaryOperator:
 
         for x_idx, x_val in enumerate(x):
             for y_idx, y_val in enumerate(y):
-                if not isclose(self.evaluate_operator(x_val, y_val), self.evaluate_operator(y_val, x_val)):
+                if not NumericComparator.compare_equal(self.evaluate_operator(x_val, y_val), self.evaluate_operator(y_val, x_val)):
                     return False
         return True
 
@@ -190,7 +190,7 @@ class FuzzyUnitBinaryOperator:
         for x_idx, x_val in enumerate(x):
             for y_idx, y_val in enumerate(y):
                 for z_idx, z_val in enumerate(z):
-                    if not isclose(self.evaluate_operator(x_val, self.evaluate_operator(y_val,z_val)), self.evaluate_operator(self.evaluate_operator(x_val,y_val), z_val)):
+                    if not NumericComparator.compare_equal(self.evaluate_operator(x_val, self.evaluate_operator(y_val,z_val)), self.evaluate_operator(self.evaluate_operator(x_val,y_val), z_val)):
                         return False
         return True
 

@@ -2,7 +2,7 @@ import numpy
 
 
 class NumericComparator:
-    def __init__(self, rtol: float = 1e-15, atol: float = 0):
+    def __init__(self, rtol: float = 1e-05, atol: float = 1e-08):
         self.rtol = rtol
         self.atol = atol
 
@@ -10,7 +10,7 @@ class NumericComparator:
     def compare_equal(a: float, b: float) -> bool:
         rtol = NumericComparator().rtol
         atol = NumericComparator().atol
-        return abs(a - b) <= max(rtol * max(abs(a), abs(b)), atol)
+        return abs(a - b) <= (atol + rtol * abs(b))
 
     @staticmethod
     def compare_less_equal(a: float, b: float) -> bool:

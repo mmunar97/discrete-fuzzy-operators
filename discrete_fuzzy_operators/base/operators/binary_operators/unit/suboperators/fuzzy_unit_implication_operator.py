@@ -1,6 +1,4 @@
-import plotly.graph_objects as go
-
-from decimal import Decimal
+from discrete_fuzzy_operators.base.numeric_comparator.numeric_comparator import NumericComparator
 import warnings
 
 from discrete_fuzzy_operators.base.operators.binary_operators.discrete.suboperators.fuzzy_discrete_implication_operator import \
@@ -44,7 +42,7 @@ class FuzzyUnitImplicationOperator(FuzzyUnitBinaryOperator):
         Checks if the operator verifies the boundary conditions of a fuzzy implication; that is, if I(1,0)=0 and
         I(1,1)=I(0,0)=1.
         """
-        if self.evaluate_operator(1, 0) == 0 and self.evaluate_operator(0, 0) == 1 and self.evaluate_operator(1, 1) == 1:
+        if NumericComparator.compare_equal(self.evaluate_operator(1, 0),0) and NumericComparator.compare_equal(self.evaluate_operator(0, 0),1) and NumericComparator.compare_equal(self.evaluate_operator(1, 1),1):
             return True
         return False
 
