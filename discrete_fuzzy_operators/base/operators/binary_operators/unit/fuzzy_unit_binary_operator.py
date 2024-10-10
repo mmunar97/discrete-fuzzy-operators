@@ -83,6 +83,40 @@ class FuzzyUnitBinaryOperator:
 
         figure.show()
 
+    def contour_plot_operator(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50,
+                      figure_size: Tuple[int, int] = (700, 700)):
+        """
+        Plots the operator.
+
+        Args:
+            scatter_grid_x: An integer, representing the number of points to consider in the X grid.
+            scatter_grid_y: An integer, representing the number of points to consider in the Y grid.
+            figure_size: A tuple, representing the size of the figure as WIDTHxHEIGHT.
+        """
+        x = numpy.linspace(0, 1, scatter_grid_x)
+        y = numpy.linspace(0, 1, scatter_grid_y)
+        z = numpy.zeros((len(x), len(y)))
+
+        for x_idx, x_val in enumerate(x):
+            for y_idx, y_val in enumerate(y):
+                z[y_idx, x_idx] = self.evaluate_operator(x_val, y_val)
+
+        figure = go.Figure(
+            data=[go.Contour(x=x, y=y, z=z, contours=dict(start=0,end=1,size=0.05,))])
+        figure.update_layout(
+            autosize=True,
+            width=figure_size[0],
+            height=figure_size[1],
+            scene=dict(
+                xaxis_title=r'X',
+                xaxis=dict(nticks=3, range=[0, 1]),
+                yaxis_title=r'Y',
+                yaxis=dict(nticks=3, range=[0, 1]),
+            )
+        )
+
+        figure.show()
+
     def is_decreasing_x(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50) -> bool:
         """
         Checks if the operator is monotone decreasing with respect to the 1st variable in a grid of a specified size.
