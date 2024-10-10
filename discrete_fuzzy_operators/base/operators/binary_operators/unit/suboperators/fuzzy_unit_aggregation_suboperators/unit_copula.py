@@ -1,6 +1,6 @@
 import warnings
 import numpy
-from numpy import isclose
+from discrete_fuzzy_operators.base.numeric_comparator.numeric_comparator import NumericComparator
 from typing import Callable
 from discrete_fuzzy_operators.base.operators.binary_operators.unit.suboperators.fuzzy_unit_aggregation_suboperators.unit_conjunction import \
     FuzzyUnitConjunction
