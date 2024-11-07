@@ -45,6 +45,25 @@ class FuzzyUnitBinaryOperator:
                             "0 and 1.")
         return self.operator_expression(x, y)
 
+    def evaluate_operator_power(self, x: float, n: int) -> float:
+        """
+        Evaluates the n-th power of the operator for the given number.
+
+        Args:
+            x: A float expressed as Decimal, representing the number to be powered.
+            n: A int, representing the exponent of the power.
+
+        Returns:
+            A float, representing the value of the n-th power of x.
+        """
+
+        if not n > 1:
+            raise Exception("Introduce an exponent bigger than 1.")
+        xn = x
+        for i in range(0,n):
+            xn = self.evaluate_operator(x, xn)
+        return xn
+
     # region Plot of the operators
     def plot_operator(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50,
                       figure_size: Tuple[int, int] = (700, 700)):
@@ -84,7 +103,7 @@ class FuzzyUnitBinaryOperator:
         figure.show()
 
     def contour_plot_operator(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50,
-                      figure_size: Tuple[int, int] = (700, 700)):
+                              figure_size: Tuple[int, int] = (700, 700)):
         """
         Plots the operator.
 
@@ -102,7 +121,7 @@ class FuzzyUnitBinaryOperator:
                 z[y_idx, x_idx] = self.evaluate_operator(x_val, y_val)
 
         figure = go.Figure(
-            data=[go.Contour(x=x, y=y, z=z, contours=dict(start=0,end=1,size=0.05,))])
+            data=[go.Contour(x=x, y=y, z=z, contours=dict(start=0, end=1, size=0.025, ))])
         figure.update_layout(
             autosize=True,
             width=figure_size[0],
@@ -116,6 +135,8 @@ class FuzzyUnitBinaryOperator:
         )
 
         figure.show()
+
+        return figure
 
     def is_decreasing_x(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50) -> bool:
         """
@@ -131,7 +152,8 @@ class FuzzyUnitBinaryOperator:
 
         for i in range(0, scatter_grid_x - 1):
             for j in range(0, scatter_grid_y):
-                if not NumericComparator.compare_less_equal(self.evaluate_operator(x[i + 1], y[j]),self.evaluate_operator(x[i], y[j])):
+                if not NumericComparator.compare_less_equal(self.evaluate_operator(x[i + 1], y[j]),
+                                                            self.evaluate_operator(x[i], y[j])):
                     return False
         return True
 
@@ -148,8 +170,9 @@ class FuzzyUnitBinaryOperator:
         y = numpy.linspace(0, 1, scatter_grid_y)
 
         for i in range(0, scatter_grid_x):
-            for j in range(0, scatter_grid_y-1):
-                if not NumericComparator.compare_less_equal(self.evaluate_operator(x[i], y[j+1]),self.evaluate_operator(x[i], y[j])):
+            for j in range(0, scatter_grid_y - 1):
+                if not NumericComparator.compare_less_equal(self.evaluate_operator(x[i], y[j + 1]),
+                                                            self.evaluate_operator(x[i], y[j])):
                     return False
         return True
 
@@ -167,7 +190,8 @@ class FuzzyUnitBinaryOperator:
 
         for i in range(0, scatter_grid_x - 1):
             for j in range(0, scatter_grid_y):
-                if not NumericComparator.compare_greater_equal(self.evaluate_operator(x[i + 1], y[j]),self.evaluate_operator(x[i], y[j])):
+                if not NumericComparator.compare_greater_equal(self.evaluate_operator(x[i + 1], y[j]),
+                                                               self.evaluate_operator(x[i], y[j])):
                     return False
         return True
 
@@ -184,8 +208,9 @@ class FuzzyUnitBinaryOperator:
         y = numpy.linspace(0, 1, scatter_grid_y)
 
         for i in range(0, scatter_grid_x):
-            for j in range(0, scatter_grid_y-1):
-                if not NumericComparator.compare_greater_equal(self.evaluate_operator(x[i], y[j+1]),self.evaluate_operator(x[i], y[j])):
+            for j in range(0, scatter_grid_y - 1):
+                if not NumericComparator.compare_greater_equal(self.evaluate_operator(x[i], y[j + 1]),
+                                                               self.evaluate_operator(x[i], y[j])):
                     return False
         return True
 
@@ -203,7 +228,8 @@ class FuzzyUnitBinaryOperator:
 
         for x_idx, x_val in enumerate(x):
             for y_idx, y_val in enumerate(y):
-                if not NumericComparator.compare_equal(self.evaluate_operator(x_val, y_val), self.evaluate_operator(y_val, x_val)):
+                if not NumericComparator.compare_equal(self.evaluate_operator(x_val, y_val),
+                                                       self.evaluate_operator(y_val, x_val)):
                     return False
         return True
 
@@ -224,7 +250,9 @@ class FuzzyUnitBinaryOperator:
         for x_idx, x_val in enumerate(x):
             for y_idx, y_val in enumerate(y):
                 for z_idx, z_val in enumerate(z):
-                    if not NumericComparator.compare_equal(self.evaluate_operator(x_val, self.evaluate_operator(y_val,z_val)), self.evaluate_operator(self.evaluate_operator(x_val,y_val), z_val)):
+                    if not NumericComparator.compare_equal(
+                            self.evaluate_operator(x_val, self.evaluate_operator(y_val, z_val)),
+                            self.evaluate_operator(self.evaluate_operator(x_val, y_val), z_val)):
                         return False
         return True
 

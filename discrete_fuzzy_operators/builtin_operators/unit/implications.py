@@ -2,6 +2,7 @@ from enum import Enum
 
 from discrete_fuzzy_operators.base.operators.binary_operators.unit.suboperators.fuzzy_unit_implication_operator import \
     FuzzyUnitImplicationOperator
+from discrete_fuzzy_operators.base.numeric_comparator.numeric_comparator import NumericComparator
 
 
 class UnitImplicationExamples(Enum):
@@ -80,7 +81,7 @@ class UnitImplicationExamples(Enum):
         Returns:
             A float, representing the value of the implication in the point (x,y).
         """
-        if x <= y:
+        if NumericComparator.compare_less_equal(x, y):
             return 1
         else:
             return y

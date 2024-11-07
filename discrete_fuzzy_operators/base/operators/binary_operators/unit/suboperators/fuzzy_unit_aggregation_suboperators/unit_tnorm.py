@@ -54,3 +54,27 @@ class FuzzyUnitTnorm(FuzzyUnitConjunction):
             if not NumericComparator.compare_equal(self.evaluate_operator(x_val, 1), x_val):
                 return False
         return True
+
+    def is_archimedean(self, scatter_grid_x: int = 50, scatter_grid_y: int = 50, max_it: int = 50) -> bool:
+        """
+        Checks if the operator satisfies the Archimedean property
+
+        Args:
+            scatter_grid_x: An integer, representing the number of points to consider in the X grid.
+            scatter_grid_y: An integer, representing the number of points to consider in the Y grid.
+            max_it: An integer, representing the biggest exponent to try.
+        """
+        x = numpy.linspace(0, 1, scatter_grid_x)[1:scatter_grid_x-1]
+        y = numpy.linspace(0, 1, scatter_grid_y)[1:scatter_grid_y-1]
+
+        for x_idx, x_val in enumerate(x):
+            for y_idx, y_val in enumerate(y):
+                n = 2
+                while n < max_it:
+                    if self.evaluate_operator_power(x_val, n) < y_val:
+                        break
+                    n += 1
+                if n == max_it:
+                    return False
+
+        return True
